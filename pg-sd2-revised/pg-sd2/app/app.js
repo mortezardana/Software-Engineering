@@ -87,6 +87,26 @@ app.get("/hello/:name", function(req, res) {
     res.send("Hello " + req.params.name);
 });
 
+app.get("/userlistpage", function(req,res){
+    res.send("This is the User List Page");
+});
+
+app.get("/userprofilepage", function(req,res){
+    res.send("This is the User Profile Page");
+});
+
+app.get("/listingpage", function(req,res){
+    res.send("This is the listing page, containing all activities on a feed")
+});
+
+app.get("/detailpage", function(req,res){
+    res.send("This is a detail page, showing one instance of any activity")
+});
+
+app.get("tags-categories", function(req,res){
+    res.send("This is a tages and categories page, used to search activities based on their type (running, cycling, walking)")
+});
+
 // Start server on port 3000
 app.listen(3000,function(){
     console.log(`Server running at http://127.0.0.1:3000/`);
