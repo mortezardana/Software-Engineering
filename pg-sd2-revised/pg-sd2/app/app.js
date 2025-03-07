@@ -103,7 +103,7 @@ app.get("/detailpage", function(req,res){
     res.send("This is a detail page, showing one instance of any activity")
 });
 
-app.get("tags-categories", function(req,res){
+app.get("/tags-categories", function(req,res){
     res.send("This is a tages and categories page, used to search activities based on their type (running, cycling, walking)")
 });
 
