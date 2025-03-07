@@ -1,3 +1,4 @@
+
 -- Create members table
 CREATE TABLE member (
     id VARCHAR(255) PRIMARY KEY,
