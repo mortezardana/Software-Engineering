@@ -8,7 +8,7 @@ var app = express();
 app.use(express.static("static"));
 
 // Get the functions in the db.js file to use
-const db = require('./services/db');
+const db = require('./service/db');
 
 // Create a route for root - /
 app.get("/", function(req, res) {
