@@ -17,80 +17,83 @@ app.get("/", function(req, res) {
 
 //Create a route for /roehampton
 
-app.get("/roehampton",function(req,res){
-    console.log(req.url)
-    let path = req.url;
-    res.send(path.substring(0,3));
-});
+// app.get("/roehampton",function(req,res){
+//     console.log(req.url)
+//     let path = req.url;
+//     res.send(path.substring(0,3));
+// });
 
-app.get("/hello/:name", function(req,res){
-    console.log(req.params);
-    res.send("Hello " + req.params.name);
-});
+// app.get("/hello/:name", function(req,res){
+//     console.log(req.params);
+//     res.send("Hello " + req.params.name);
+// });
 
-app.get("/user/:id", function(req,res){
-    console.log(req.params);
-    res.send(req.params.id);
-});
+// app.get("/user/:id", function(req,res){
+//     console.log(req.params);
+//     res.send(req.params.id);
+// });
 
-app.get("/student/:name/:id", function(req,res){
-    console.log(req.params);
-    let name = req.params.name;
-    let id = req.params.id;
-    let output = "";
+// app.get("/student/:name/:id", function(req,res){
+//     console.log(req.params);
+//     let name = req.params.name;
+//     let id = req.params.id;
+//     let output = "";
 
-    output += `<HTML>
-    <table id="myTable" border=1>
-        <tr>
-            <td>name</td>
-            <td>id</td>
-        </tr>
-    </table>
-    </HTML>`;
+//     output += `<HTML>
+//     <table id="myTable" border=1>
+//         <tr>
+//             <td>name</td>
+//             <td>id</td>
+//         </tr>
+//     </table>
+//     </HTML>`;
     
-    res.send(output);
-});
+//     res.send(output);
+// });
 
-app.get("/db_test/:id", function(req,res){
-    console.log(req.params);
-    let sql = ("SELECT * from test_table WHERE id = " + req.params.id);
-    db.query(sql).then(results => {
-        console.log(results);
-        res.send(results)
-    });
-});
+// app.get("/db_test/:id", function(req,res){
+//     console.log(req.params);
+//     let sql = ("SELECT * from test_table WHERE id = " + req.params.id);
+//     db.query(sql).then(results => {
+//         console.log(results);
+//         res.send(results)
+//     });
+// });
 
 // Create a route for testing the db
-app.get("/db_test", function(req, res) {
-    // Assumes a table called test_table exists in your database
-    sql = 'select * from test_table';
-    db.query(sql).then(results => {
-        console.log(results);
-        res.send(results)
-    });
-});
+// app.get("/db_test", function(req, res) {
+//     // Assumes a table called test_table exists in your database
+//     sql = 'select * from test_table';
+//     db.query(sql).then(results => {
+//         console.log(results);
+//         res.send(results)
+//     });
+// });
 
 // Create a route for /goodbye
 // Responds to a 'GET' request
-app.get("/goodbye", function(req, res) {
-    res.send("Goodbye world!");
-});
+// app.get("/goodbye", function(req, res) {
+//     res.send("Goodbye world!");
+// });
 
 // Create a dynamic route for /hello/<name>, where name is any value provided by user
 // At the end of the URL
 // Responds to a 'GET' request
-app.get("/hello/:name", function(req, res) {
-    // req.params contains any parameters in the request
-    // We can examine it in the console for debugging purposes
-    console.log(req.params);
-    //  Retrieve the 'name' parameter and use it in a dynamically generated page
-    res.send("Hello " + req.params.name);
-});
+// app.get("/hello/:name", function(req, res) {
+//     // req.params contains any parameters in the request
+//     // We can examine it in the console for debugging purposes
+//     console.log(req.params);
+//     //  Retrieve the 'name' parameter and use it in a dynamically generated page
+//     res.send("Hello " + req.params.name);
+// });
 
+// create a root for a list of members
 app.get("/userlistpage", function(req,res){
     res.send("This is the User List Page");
 });
 
+
+//create a root for a 
 app.get("/userprofilepage", function(req,res){
     res.send("This is the User Profile Page");
 });
