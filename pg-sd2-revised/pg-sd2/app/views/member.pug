@@ -1,0 +1,30 @@
+doctype html
+html
+  head
+    title Member Profile
+    link(rel="stylesheet", href="/styles.css") 
+  body
+    h1 Member Profile
+    table(border="1")
+      tr
+        th ID
+        th Username
+        th Name
+        th Email
+        th Activities
+        th Comments
+        th Communities
+        th Likes
+        th Posts
+        th Rewards
+      tr
+        td= member.id
+        td= member.username
+        td= member.name
+        td= member.email
+        td= member.activities ? member.activities.length : 0
+        td= member.comments ? member.comments.length : 0
+        td= member.communities ? member.communities.length : 0
+        td= member.likes ? member.likes.length : 0
+        td= member.posts ? member.posts.length : 0
+        td= member.rewards ? member.rewards.length : 0

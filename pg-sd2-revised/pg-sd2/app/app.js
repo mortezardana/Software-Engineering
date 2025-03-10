@@ -7,8 +7,12 @@ var app = express();
 // Add static files location
 app.use(express.static("static"));
 
+app.set("view engine", "pug");
+app.set("views", __dirname + "/views");
+
 // Get the functions in the db.js file to use
 const db = require('./services/db');
+const { createPool } = require("mysql2");
 
 // Create a route for root - /
 app.get("/", function(req, res) {
@@ -63,7 +67,7 @@ app.get("/db_test/:id", function(req,res){
 // Create a route for testing the db
 app.get("/db_test", function(req, res) {
     // Assumes a table called test_table exists in your database
-    sql = 'select * from test_table';
+    sql = 'select * from member';
     db.query(sql).then(results => {
         console.log(results);
         res.send(results)
@@ -88,19 +92,57 @@ app.get("/hello/:name", function(req, res) {
 });
 
 app.get("/userlistpage", function(req,res){
-    res.send("This is the User List Page");
+    sql = "SELECT name, username FROM member";
+
+    db.query(sql).then(results =>{
+        console.log(results);
+        res.send(results)
+    });
 });
 
-app.get("/userprofilepage", function(req,res){
-    res.send("This is the User Profile Page");
+/*app.get("/userprofilepage/:username", function(req,res){
+    console.log(req.params);
+    sql = ("SELECT username, name FROM member WHERE username = ?");
+    
+    db.query(sql, [req.params.username]).then(results => {
+        console.log(results);
+        res.send(results);
+    })
+});*/
+
+app.get("/userprofilepage/:username", function(req, res) {
+    console.log("Views directory:", app.get("views"));
+    console.log(req.params);
+    sql = "SELECT username, name, email FROM member WHERE username = ?";
+    
+    db.query(sql, [req.params.username]).then(results => {
+        if (results.length > 0) {
+            res.render("member", { member: results[0] });
+        } else {
+            res.status(404).send("User not found");
+        }
+    }).catch(err => {
+        console.error(err);
+        res.status(500).send("Database error");
+    });
 });
+
 
 app.get("/listingpage", function(req,res){
-    res.send("This is the listing page, containing all activities on a feed")
+    sql = ("SELECT * FROM post")
+
+    db.query(sql).then(results =>{
+        console.log(results);
+        res.send(results);
+    });
 });
 
-app.get("/detailpage", function(req,res){
-    res.send("This is a detail page, showing one instance of any activity")
+app.get("/detailpage/:id", function(req,res){
+    sql = ("SELECT * FROM post WHERE id = ?");
+    db.query(sql, [req.params.id]).then(results =>{
+        console.log(results);
+        res.send(results);
+    });
 });
 
 app.get("/tags-categories", function(req,res){
