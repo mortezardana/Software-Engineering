@@ -98,6 +98,7 @@ app.get("/userlistpage", function(req,res){
     });
 });
 
+//create a root for a user profile page
 app.get("/userprofilepage/:username", function(req,res){
     console.log(req.params);
     sql = ("SELECT username, name FROM member WHERE username = ?");
@@ -108,6 +109,7 @@ app.get("/userprofilepage/:username", function(req,res){
     })
 });
 
+//create a root for a list of activities (Like a feed)
 app.get("/listingpage", function(req,res){
     sql = ("SELECT * FROM post")
 
@@ -117,6 +119,8 @@ app.get("/listingpage", function(req,res){
     });
 });
 
+
+//Create a page for a specific activity/post
 app.get("/detailpage/:id", function(req,res){
     sql = ("SELECT * FROM post WHERE id = ?");
     db.query(sql, [req.params.id]).then(results =>{
@@ -125,8 +129,14 @@ app.get("/detailpage/:id", function(req,res){
     });
 });
 
-app.get("/tags-categories", function(req,res){
-    res.send("This is a tages and categories page, used to search activities based on their type (running, cycling, walking)")
+
+//create a page for finding posts based on the category
+app.get("/tagscategories/:id", function(req,res){
+    sql = ("SELECT * FROM activity WHERE type = ?");
+    db.query (sql, [req.params.id]).then(results =>{
+        console.log(results);
+        res.send(results);
+    });
 });
 
 // Start server on port 3000
