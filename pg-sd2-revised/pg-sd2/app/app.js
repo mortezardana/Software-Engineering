@@ -112,8 +112,8 @@ app.get("/userlistpage", function(req,res){
 });*/
 
 
-// PUG template utilizing
-app.get("/userprofilepage/:username", function(req, res) {
+// ORIGINAL PUG template utilizing
+/*app.get("/userprofilepage/:username", function(req, res) {
     console.log("Views directory:", app.get("views"));
     console.log(req.params);
     sql = "SELECT username, name, email FROM member WHERE username = ?";
@@ -128,7 +128,61 @@ app.get("/userprofilepage/:username", function(req, res) {
         console.error(err);
         res.status(500).send("Database error");
     });
-});
+});*/
+
+//proposed pug template code
+app.get('/member/:username', async (req, res) => {
+    try {
+      const username = req.params.username;
+  
+      // First, get the member's ID using their username
+      const memberQuery = `SELECT * FROM members WHERE username = ?`;
+      const memberData = await db.query(memberQuery, [username]);
+  
+      // Check if the member exists
+      if (memberData.length === 0) {
+        return res.status(404).send('Member not found');
+      }
+  
+      // Get the member's ID
+      const memberId = memberData[0].id;
+  
+      // Now, fetch the data for activities, comments, likes, etc.
+      const activitiesQuery = `SELECT * FROM activities WHERE member_id = ?`;
+      const activities = await db.query(activitiesQuery, [memberId]);
+  
+      const commentsQuery = `SELECT * FROM comments WHERE member_id = ?`;
+      const comments = await db.query(commentsQuery, [memberId]);
+  
+      const communitiesQuery = `SELECT * FROM communities WHERE member_id = ?`;
+      const communities = await db.query(communitiesQuery, [memberId]);
+  
+      const likesQuery = `SELECT * FROM likes WHERE member_id = ?`;
+      const likes = await db.query(likesQuery, [memberId]);
+  
+      const postsQuery = `SELECT * FROM posts WHERE member_id = ?`;
+      const posts = await db.query(postsQuery, [memberId]);
+  
+      const rewardsQuery = `SELECT * FROM rewards WHERE member_id = ?`;
+      const rewards = await db.query(rewardsQuery, [memberId]);
+  
+      // Render the member profile page with the fetched data
+      res.render('member-profile', {
+        member: memberData[0],
+        activities: activities,
+        comments: comments,
+        communities: communities,
+        likes: likes,
+        posts: posts,
+        rewards: rewards
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error retrieving data');
+    }
+  });
+  
+
 
 
 app.get("/listingpage", function(req,res){
