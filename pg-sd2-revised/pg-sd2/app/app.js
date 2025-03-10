@@ -7,6 +7,9 @@ var app = express();
 // Add static files location
 app.use(express.static("static"));
 
+app.set("view engine", "pug");
+app.set("views", __dirname + "/views");
+
 // Get the functions in the db.js file to use
 const db = require('./services/db');
 const { createPool } = require("mysql2");
@@ -62,14 +65,14 @@ app.get("/", function(req, res) {
 // });
 
 // Create a route for testing the db
-// app.get("/db_test", function(req, res) {
-//     // Assumes a table called test_table exists in your database
-//     sql = 'select * from test_table';
-//     db.query(sql).then(results => {
-//         console.log(results);
-//         res.send(results)
-//     });
-// });
+app.get("/db_test", function(req, res) {
+    // Assumes a table called test_table exists in your database
+    sql = 'select * from member';
+    db.query(sql).then(results => {
+        console.log(results);
+        res.send(results)
+    });
+});
 
 // Create a route for /goodbye
 // Responds to a 'GET' request
@@ -98,8 +101,7 @@ app.get("/userlistpage", function(req,res){
     });
 });
 
-//create a root for a user profile page
-app.get("/userprofilepage/:username", function(req,res){
+/*app.get("/userprofilepage/:username", function(req,res){
     console.log(req.params);
     sql = ("SELECT username, name FROM member WHERE username = ?");
     
@@ -107,9 +109,28 @@ app.get("/userprofilepage/:username", function(req,res){
         console.log(results);
         res.send(results);
     })
+});*/
+
+
+// PUG template utilizing
+app.get("/userprofilepage/:username", function(req, res) {
+    console.log("Views directory:", app.get("views"));
+    console.log(req.params);
+    sql = "SELECT username, name, email FROM member WHERE username = ?";
+    
+    db.query(sql, [req.params.username]).then(results => {
+        if (results.length > 0) {
+            res.render("member", { member: results[0] });
+        } else {
+            res.status(404).send("User not found");
+        }
+    }).catch(err => {
+        console.error(err);
+        res.status(500).send("Database error");
+    });
 });
 
-//create a root for a list of activities (Like a feed)
+
 app.get("/listingpage", function(req,res){
     sql = ("SELECT * FROM post")
 
