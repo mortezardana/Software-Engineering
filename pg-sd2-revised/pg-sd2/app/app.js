@@ -9,6 +9,7 @@ app.use(express.static("static"));
 
 // Get the functions in the db.js file to use
 const db = require('./services/db');
+const { createPool } = require("mysql2");
 
 // Create a route for root - /
 app.get("/", function(req, res) {
@@ -89,21 +90,39 @@ app.get("/", function(req, res) {
 
 // create a root for a list of members
 app.get("/userlistpage", function(req,res){
-    res.send("This is the User List Page");
+    sql = "SELECT name, username FROM member";
+
+    db.query(sql).then(results =>{
+        console.log(results);
+        res.send(results)
+    });
 });
 
-
-//create a root for a 
-app.get("/userprofilepage", function(req,res){
-    res.send("This is the User Profile Page");
+app.get("/userprofilepage/:username", function(req,res){
+    console.log(req.params);
+    sql = ("SELECT username, name FROM member WHERE username = ?");
+    
+    db.query(sql, [req.params.username]).then(results => {
+        console.log(results);
+        res.send(results);
+    })
 });
 
 app.get("/listingpage", function(req,res){
-    res.send("This is the listing page, containing all activities on a feed")
+    sql = ("SELECT * FROM post")
+
+    db.query(sql).then(results =>{
+        console.log(results);
+        res.send(results);
+    });
 });
 
-app.get("/detailpage", function(req,res){
-    res.send("This is a detail page, showing one instance of any activity")
+app.get("/detailpage/:id", function(req,res){
+    sql = ("SELECT * FROM post WHERE id = ?");
+    db.query(sql, [req.params.id]).then(results =>{
+        console.log(results);
+        res.send(results);
+    });
 });
 
 app.get("/tags-categories", function(req,res){
