@@ -1,0 +1,21 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Momentum
+    link(rel="stylesheet", href="/styles.css")
+    script(defer src="/script.js")
+  body
+    header
+      h1 Momentum
+      button.menu-toggle#menuToggle &#9776;
+      button.post-btn#postBtn Post
+      button.account-btn#accountBtn 👤
+    nav.sidebar#sidebar
+      ul
+        li
+          a(href="#") Feed
+        li
+          a(href="#") Communities
+    block content

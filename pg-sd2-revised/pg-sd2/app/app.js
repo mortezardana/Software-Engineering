@@ -6,6 +6,7 @@ var app = express();
 
 // Add static files location
 app.use(express.static("static"));
+app.use(express.static('public'));
 
 app.set("view engine", "pug");
 app.set("views", __dirname + "/views");
@@ -112,14 +113,16 @@ app.get("/userlistpage", function(req,res){
 });*/
 
 
+
 // PUG template utilizing
 app.get("/userprofilepage/:username", function(req, res) {
     console.log("Views directory:", app.get("views"));
     console.log(req.params);
-    sql = "SELECT username, name, email FROM member WHERE username = ?";
+    sql = "SELECT id, username, name, email FROM member WHERE username = ?";
     
     db.query(sql, [req.params.username]).then(results => {
         if (results.length > 0) {
+            console.log("rendering data: ", results[0]);
             res.render("member", { member: results[0] });
         } else {
             res.status(404).send("User not found");

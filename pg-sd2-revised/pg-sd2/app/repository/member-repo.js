@@ -1,7 +1,7 @@
 
 
 const connection = require('./services/db'); // Import the database connection
-const Member = require('./Member');  // Import the Member class
+const Member = require('./member');  // Import the Member class
 
 
 // Function to get all members from the database
