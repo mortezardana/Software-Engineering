@@ -1,0 +1,21 @@
+extends index.pug
+ 
+block content
+    table(border="1")
+      tr
+        th ID
+        th Username
+        th Comments
+        th Posts
+      tr
+        td= member && member.username ? member.username : 'N/A'
+        td
+          include activity.pug
+        td
+          include comment.pug
+        td
+          include community.pug
+        td
+          include post.pug
+        td
+          include reward.pug

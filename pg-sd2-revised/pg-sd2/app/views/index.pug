@@ -5,17 +5,27 @@ html(lang="en")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Momentum
     link(rel="stylesheet", href="/styles.css")
-    script(defer src="/script.js")
+    
+    script.
+      function goToProfile() {
+        let username = "john_doe"; // Replace this dynamically if needed
+        window.location.href = "/member/" + username;
+      }
+
   body
     header
       h1 Momentum
-      button.menu-toggle#menuToggle &#9776;
-      button.post-btn#postBtn Post
-      button.account-btn#accountBtn 👤
+      div
+        button.menu-toggle#menuToggle ☰
+        button.post-btn#postBtn Post
+        button.account-btn#accountBtn(onclick="goToProfile()") 👤
+
     nav.sidebar#sidebar
       ul
         li
-          a(href="#") Feed
+          a(href="/feed/john_doe") Feed
         li
           a(href="#") Communities
-    block content
+
+    div.content
+      block content
