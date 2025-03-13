@@ -6,6 +6,7 @@ var app = express();
 
 // Add static files location
 app.use(express.static("static"));
+app.use(express.static('public'));
 
 app.set("view engine", "pug");
 app.set("views", __dirname + "/views");
@@ -116,10 +117,11 @@ app.get("/userlistpage", function(req,res){
 /*app.get("/userprofilepage/:username", function(req, res) {
     console.log("Views directory:", app.get("views"));
     console.log(req.params);
-    sql = "SELECT username, name, email FROM member WHERE username = ?";
+    sql = "SELECT id, username, name, email FROM member WHERE username = ?";
     
     db.query(sql, [req.params.username]).then(results => {
         if (results.length > 0) {
+            console.log("rendering data: ", results[0]);
             res.render("member", { member: results[0] });
         } else {
             res.status(404).send("User not found");
@@ -194,6 +196,8 @@ app.get("/listingpage", function(req,res){
     });
 });
 
+
+//Create a page for a specific activity/post
 app.get("/detailpage/:id", function(req,res){
     sql = ("SELECT * FROM post WHERE id = ?");
     db.query(sql, [req.params.id]).then(results =>{
@@ -202,8 +206,14 @@ app.get("/detailpage/:id", function(req,res){
     });
 });
 
-app.get("/tags-categories", function(req,res){
-    res.send("This is a tages and categories page, used to search activities based on their type (running, cycling, walking)")
+
+//create a page for finding posts based on the category
+app.get("/tagscategories/:id", function(req,res){
+    sql = ("SELECT * FROM activity WHERE type = ?");
+    db.query (sql, [req.params.id]).then(results =>{
+        console.log(results);
+        res.send(results);
+    });
 });
 
 // Start server on port 3000
