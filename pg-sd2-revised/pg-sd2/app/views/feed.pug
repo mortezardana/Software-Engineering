@@ -1,21 +1,25 @@
 extends index.pug
- 
+
 block content
-    table(border="1")
-      tr
-        th ID
-        th Username
-        th Comments
-        th Posts
-      tr
-        td= member && member.username ? member.username : 'N/A'
-        td
-          include activity.pug
-        td
-          include comment.pug
-        td
-          include community.pug
-        td
-          include post.pug
-        td
-          include reward.pug
+  h2 Feed
+
+  // Container for all feed items
+  .feed-container
+    // Loop through each post in "posts"
+    each post in posts
+      .feed-item
+        .feed-header
+          // Placeholder profile pic (replace with actual user image if available)
+          img.profile-pic(src="/images/default-profile.png", alt="Profile Picture")
+
+          // Display the username from each post
+          .feed-username= post.username
+
+        .feed-content
+          // The main text of the post
+          p= post.text
+
+        .feed-footer
+          // For now, just show placeholder likes/comments or actual fields if you have them
+          span.likes 0 Likes
+          span.comments 0 Comments

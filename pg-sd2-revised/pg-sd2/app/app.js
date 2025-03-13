@@ -122,36 +122,46 @@ app.get('/member/:username', async (req, res) => {
     }
   });
   
+
+// feed route
 app.get('/feed/:username', async (req, res) => {
-    try{
-        const username = req.params.username;
+    try {
+
+      const username = req.params.username;
+      const memberQuery = `SELECT * FROM member WHERE username = ?`;
+      const memberData = await db.query(memberQuery, [username]);
   
-         const memberQuery = `SELECT * FROM post`;
+      if (memberData.length === 0) {
+        return res.status(404).send('Member not found');
+      }
+      
+    const postsQuery = `
+    SELECT p.text, m.username
+    FROM post p
+    JOIN member m ON p.writer_id = m.id
+    ORDER BY p.id DESC
+     `;
+    const posts = await db.query(postsQuery);
+      const memberId = memberData[0].id;
   
-      // Get the member's ID
-         const memberId = memberData[0].id;
+      // For demonstration, let's just select the posts from this member.
+      // If you want an "Instagram-like" feed from multiple members, you'd
+      // fetch more data. For now, we'll keep it simple.
+      // Comments, likes, communities, etc. can also be fetched here if you want
+      // to display them on the feed. For now, we’ll keep them minimal.
+      // e.g. const commentsQuery = `...`; etc.
   
-      // Now, fetch the data for activities, comments, likes, etc.
-         const commentsQuery = `SELECT * FROM comment WHERE member_id = ?`;
-         const comments = await db.query(commentsQuery, [memberId]);
-  
-  
-        const postsQuery = `SELECT text FROM post WHERE writer_id = ?`;
-         const posts = await db.query(postsQuery, [memberId]);
-  
-  
-      // Render the member profile page with the fetched data
-        res.render('member.pug', {
-            member: memberData[0],
-            comments: comments,
-        //likes: likes,
-            posts: posts,
+      // Render feed.pug
+      res.render('feed.pug', {
+        member: memberData[0],
+        posts: posts
       });
     } catch (err) {
       console.error(err);
       res.status(500).send('Error retrieving data');
     }
   });
+  
 
 
 app.get("/listingpage", function(req,res){
