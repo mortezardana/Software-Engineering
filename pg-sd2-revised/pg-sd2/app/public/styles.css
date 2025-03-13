@@ -13,47 +13,69 @@ header {
   color: white;
   padding: 15px 30px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center; /* Center title */
+  align-items: center; /* Center content vertically */
+  height: 60px; /* Increase header height to fit the buttons */
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 header h1 {
   margin: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
 }
 
-/* Buttons */
-button {
-  padding: 10px 15px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  margin: 0 5px;
+/* Navbar Layout */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: absolute;
+  right: 20px;
 }
 
+/* Hamburger Button */
 .menu-toggle {
   background: transparent;
   color: white;
   font-size: 24px;
   border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 50%; /* Center vertically */
+  left: 15px; /* Position from the left */
+  transform: translateY(-50%); /* Center the button vertically */
+  z-index: 1000;
 }
 
+/* Post Button */
 .post-btn {
   background: #28a745;
   color: white;
   border-radius: 5px;
+  padding: 10px 15px;
 }
 
+/* Account Button (Profile Pic) */
 .account-btn {
-  background: #dc3545;
-  color: white;
-  border-radius: 50%;
-  font-size: 18px;
+  background: transparent;
+  border: none;
   width: 40px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+}
+
+.account-btn img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 /* Sidebar Navigation */
@@ -64,8 +86,13 @@ button {
   height: 100vh;
   position: fixed;
   top: 0;
-  left: 0;
+  left: -220px; /* Initially hidden */
   padding-top: 60px;
+  transition: left 0.3s ease-in-out;
+}
+
+.sidebar.open {
+  left: 0; /* Show sidebar when open */
 }
 
 .sidebar ul {
@@ -93,6 +120,12 @@ button {
 .content {
   margin-left: 240px;
   padding: 20px;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* Adjust content when sidebar is hidden */
+.sidebar:not(.open) ~ .content {
+  margin-left: 0;
 }
 
 /* Profile Table */
@@ -118,14 +151,24 @@ th {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  header {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
   .sidebar {
-      width: 100%;
-      height: auto;
-      position: relative;
+    width: 100%;
+    height: auto;
+    position: fixed;
+    left: -100%; /* Hide sidebar */
+  }
+
+  .sidebar.open {
+    left: 0;
   }
 
   .content {
-      margin-left: 0;
+    margin-left: 0;
   }
 /* Feed Container */
 .feed-container {
