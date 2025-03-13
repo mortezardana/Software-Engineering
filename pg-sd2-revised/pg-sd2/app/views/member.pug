@@ -20,12 +20,12 @@ block content
       td= member && member.name ? member.name : 'N/A'
       td= member && member.email ? member.email : 'N/A'
       td
-        include activity.pug
+        a(href=`/activities/${member.username}`) View Activities
       td
-        include comment.pug
+        a(href=`/comments/${member.username}`) View Comments
       td
-        include community.pug
+        a(href=`/communities/${member.username}`) View Communities
       td
-        include post.pug
+        a(href=`/posts/${member.username}`) View Posts
       td
-        include reward.pug
+        a(href=`/rewards/${member.username}`) View Rewards
