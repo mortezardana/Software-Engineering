@@ -138,7 +138,7 @@ app.get('/member/:username', async (req, res) => {
       const username = req.params.username;
   
       // First, get the member's ID using their username
-      const memberQuery = `SELECT * FROM members WHERE username = ?`;
+      const memberQuery = `SELECT * FROM member WHERE username = ?`;
       const memberData = await db.query(memberQuery, [username]);
   
       // Check if the member exists
@@ -150,31 +150,31 @@ app.get('/member/:username', async (req, res) => {
       const memberId = memberData[0].id;
   
       // Now, fetch the data for activities, comments, likes, etc.
-      const activitiesQuery = `SELECT * FROM activities WHERE member_id = ?`;
+      const activitiesQuery = `SELECT * FROM activity WHERE member_id = ?`;
       const activities = await db.query(activitiesQuery, [memberId]);
   
-      const commentsQuery = `SELECT * FROM comments WHERE member_id = ?`;
+      const commentsQuery = `SELECT * FROM comment WHERE member_id = ?`;
       const comments = await db.query(commentsQuery, [memberId]);
-  
-      const communitiesQuery = `SELECT * FROM communities WHERE member_id = ?`;
+      
+      const communitiesQuery = `SELECT name FROM community WHERE id = (SELECT community_id FROM post WHERE writer_id = ?);`
       const communities = await db.query(communitiesQuery, [memberId]);
   
-      const likesQuery = `SELECT * FROM likes WHERE member_id = ?`;
-      const likes = await db.query(likesQuery, [memberId]);
+     /* const likesQuery = `SELECT * FROM likes_table WHERE member_id = ?`;
+      const likes = await db.query(likesQuery, [memberId]);*/
   
-      const postsQuery = `SELECT * FROM posts WHERE member_id = ?`;
+      const postsQuery = `SELECT text FROM post WHERE writer_id = ?`;
       const posts = await db.query(postsQuery, [memberId]);
   
-      const rewardsQuery = `SELECT * FROM rewards WHERE member_id = ?`;
+      const rewardsQuery = `SELECT name AND type FROM reward WHERE community_id = (SELECT community_id FROM post WHERE writer_id = ?)`;
       const rewards = await db.query(rewardsQuery, [memberId]);
   
       // Render the member profile page with the fetched data
-      res.render('member-profile', {
+      res.render('member.pug', {
         member: memberData[0],
         activities: activities,
         comments: comments,
         communities: communities,
-        likes: likes,
+        //likes: likes,
         posts: posts,
         rewards: rewards
       });
@@ -184,7 +184,11 @@ app.get('/member/:username', async (req, res) => {
     }
   });
   
+app.get('/feed/:username', async (req, res) => {
+    try{
 
+    }
+});
 
 
 app.get("/listingpage", function(req,res){
