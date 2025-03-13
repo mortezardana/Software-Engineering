@@ -13,10 +13,11 @@ html(lang="en")
       }
 
   body
+    script(src="/script.js")
     header
+      button.menu-toggle#menuToggle ☰
       h1 Momentum
-      div
-        button.menu-toggle#menuToggle ☰
+      .nav-right
         button.post-btn#postBtn Post
         button.account-btn#accountBtn(onclick="goToProfile()") 👤
 
@@ -25,7 +26,7 @@ html(lang="en")
         li
           a(href="/feed/john_doe") Feed
         li
-          a(href="#") Communities
+          a(href="/#") Communities
 
     div.content
       block content
