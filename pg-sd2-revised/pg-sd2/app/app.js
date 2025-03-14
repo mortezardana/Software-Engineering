@@ -301,7 +301,7 @@ app.get('/comment/:commentId/:username', async (req, res) => {
         }
 
         // Render the member profile page with the fetched data
-        res.render('post.pug', {
+        res.render('comment.pug', {
             member: memberData[0],
             comment: commentData });
     } catch (err) {
@@ -336,7 +336,7 @@ app.get('/comments/:username', async (req, res) => {
         }
 
         // Render the member profile page with the fetched data
-        res.render('post.pug', {
+        res.render('comments.pug', {
             member: memberData[0],
             comments: commentData });
     } catch (err) {
@@ -361,7 +361,7 @@ app.get('/community/:communityId', async (req, res) => {
         }
 
         // Render the member profile page with the fetched data
-        res.render('post.pug', {
+        res.render('community.pug', {
             community: communityData });
     } catch (err) {
         console.error(err);
@@ -382,8 +382,43 @@ app.get('/communities', async (req, res) => {
         }
 
         // Render the member profile page with the fetched data
-        res.render('post.pug', {
+        res.render('communities.pug', {
             communities: communityData });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving data');
+    }
+});
+
+app.get('/activity/:activityId/:username', async (req, res) => {
+    try {
+        const activityId = req.params.activityId;
+        const username = req.params.username;
+
+        const memberQuery = `SELECT * FROM member WHERE username = ?`;
+        const memberData = await db.query(memberQuery, [username]);
+
+        // Check if the member exists
+        if (memberData.length === 0) {
+            return res.status(404).send('Member not found');
+        }
+
+        // Get the member's ID
+        const memberId = memberData[0].id;
+        const activityQuery = `SELECT * FROM activity WHERE id = ?`;
+        const activityData = await db.query(commentQuery, [activityId]);
+
+
+        console.log("This is the postData: ", commentData)
+
+        // Check if the member exists
+        if (activityData.length === 0) {
+            return res.status(404).send('Activity not found');
+        }
+
+        // Render the member profile page with the fetched data
+        res.render('activity.pug', {
+            activity: activityData });
     } catch (err) {
         console.error(err);
         res.status(500).send('Error retrieving data');

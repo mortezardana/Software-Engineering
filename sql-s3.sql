@@ -7,7 +7,7 @@ CREATE TABLE member (
     password VARCHAR(255) NOT NULL,
     username VARCHAR(255) NOT NULL
 );
-
+-- TODO: Need to add type and date to this entity.
 -- Create activities table
 CREATE TABLE activity (
     id VARCHAR(255) PRIMARY KEY,
