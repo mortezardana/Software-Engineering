@@ -232,6 +232,13 @@ table {
   }
 
 .content {
+    margin-left: 240px;
+    padding: 20px;
     padding-top: 90px;
+    transition: margin-left 0.2s ease-in-out;
+}
+
+/* Adjust content when sidebar is hidden */
+.sidebar:not(.open) ~ .content {
     margin-left: 0;
 }
