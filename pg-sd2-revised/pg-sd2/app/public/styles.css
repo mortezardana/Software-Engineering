@@ -1,226 +1,223 @@
-/* General Styles */
+/* General body styling */
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f0f2f5;
-  color: #333;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
 }
 
-/* Header Styling */
+/* Header styling */
 header {
-  background: #007bff;
-  color: white;
-  padding: 15px 30px;
-  display: flex;
-  justify-content: center; /* Center title */
-  align-items: center; /* Center content vertically */
-  height: 60px; /* Increase header height to fit the buttons */
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  position: relative;
+    background: #E6505F;
+    position: relative;
+    display: flex;
+    justify-content: center; /* Center content horizontally */
+    align-items: center;     /* Center content vertically */
+    padding: 10px;
+    height: 60px;
 }
 
+/* Center the header text */
 header h1 {
-  margin: 0;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
+    color: white;
+    font-size: 28px;
+    margin: 0;
 }
 
-/* Navbar Layout */
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  position: absolute;
-  right: 20px;
-}
-
-/* Hamburger Button */
+/* Hamburger menu icon */
 .menu-toggle {
-  background: transparent;
-  color: white;
-  font-size: 24px;
-  border: none;
-  cursor: pointer;
-  position: absolute;
-  top: 50%; /* Center vertically */
-  left: 15px; /* Position from the left */
-  transform: translateY(-50%); /* Center the button vertically */
-  z-index: 1000;
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    z-index: 2;
 }
 
-/* Post Button */
+/* Rectangular Post Button */
 .post-btn {
-  background: #28a745;
-  color: white;
-  border-radius: 5px;
-  padding: 10px 15px;
+    position: fixed;
+    top: 20px;
+    right: 75px; /* Adjust the position of the Post button */
+    width: 60px;
+    height: 30px;
+    background-color: #50E673;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px; /* Slight rounded corners for the rectangular button */
+    transition: background 0.3s;
 }
 
-/* Account Button (Profile Pic) */
-.account-btn {
-  background: transparent;
-  border: none;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+.post-btn:hover {
+    background-color: #777;
 }
 
-.account-btn img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-/* Sidebar Navigation */
+/* Sidebar styling */
 .sidebar {
-  background: #343a40;
-  color: white;
-  width: 220px;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: -220px; /* Initially hidden */
-  padding-top: 60px;
-  transition: left 0.3s ease-in-out;
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    left: -250px;
+    top: 0;
+    background: #E6505F;
+    color: white;
+    transition: left 0.3s;
+    padding-top: 60px;
+    z-index: 1;
 }
 
 .sidebar.open {
-  left: 0; /* Show sidebar when open */
+    left: 0;
 }
 
 .sidebar ul {
-  list-style-type: none;
-  padding: 0;
+    list-style-type: none;
+    padding: 0;
 }
 
 .sidebar ul li {
-  padding: 15px;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
 }
 
 .sidebar ul li a {
-  color: white;
-  text-decoration: none;
-  display: block;
-  padding: 10px;
-  border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
 }
 
 .sidebar ul li a:hover {
-  background: #495057;
+    background: #333;
+    display: block;
 }
 
-/* Main Content */
-.content {
-  margin-left: 240px;
-  padding: 20px;
-  transition: margin-left 0.3s ease-in-out;
-}
-
-/* Adjust content when sidebar is hidden */
-.sidebar:not(.open) ~ .content {
-  margin-left: 0;
-}
-
-/* Profile Table */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-th, td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-th {
-  background: #007bff;
-  color: white;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  header {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .sidebar {
-    width: 100%;
-    height: auto;
+/* Account button styling */
+.account-btn {
     position: fixed;
-    left: -100%; /* Hide sidebar */
-  }
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    background-color: #FFFFFF;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: background 0.3s;
+}
 
-  .sidebar.open {
-    left: 0;
-  }
-
-  .content {
-    margin-left: 0;
-  }
+.account-btn:hover {
+    background-color: #777;
+}
 /* Feed Container */
 .feed-container {
-  max-width: 600px; /* Adjust as needed */
-  margin: 0 auto;   /* Center horizontally */
-  margin-top: 20px; /* Some spacing from header */
-}
+    max-width: 600px; /* Adjust as needed */
+    margin: 0 auto;   /* Center horizontally */
+    margin-top: 20px; /* Some spacing from header */
+  }
+  
+  /* Each Feed Item (like an Instagram post) */
+  .feed-item {
+    background: #fff;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.1);
+  }
+  
+  /* Header area: profile pic + username */
+  .feed-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover; /* If you have a real image, this helps fill the circle */
+  }
+  
+  .feed-username {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Post text area */
+  .feed-content {
+    margin-bottom: 10px;
+  }
+  
+  /* Footer (likes/comments) */
+  .feed-footer {
+    display: flex;
+    gap: 15px; /* spacing between likes and comments */
+  }
+  
+  .feed-footer .likes, 
+  .feed-footer .comments {
+    color: #888;
+    font-size: 14px;
+  }
+  
+  /* Profile Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background: #007bff;
+    color: white;
+  }
+  /* Account Button (Profile Pic) */
+.account-btn {
+    background: transparent;
+    border: none;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .account-btn img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
 
-/* Each Feed Item (like an Instagram post) */
-.feed-item {
-  background: #fff;
-  margin-bottom: 20px;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 0 4px rgba(0,0,0,0.1);
-}
-
-/* Header area: profile pic + username */
-.feed-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.profile-pic {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
-  object-fit: cover; /* If you have a real image, this helps fill the circle */
-}
-
-.feed-username {
-  font-weight: bold;
-  color: #333;
-}
-
-/* Post text area */
-.feed-content {
-  margin-bottom: 10px;
-}
-
-/* Footer (likes/comments) */
-.feed-footer {
-  display: flex;
-  gap: 15px; /* spacing between likes and comments */
-}
-
-.feed-footer .likes, 
-.feed-footer .comments {
-  color: #888;
-  font-size: 14px;
-}
-
-}
+  /* Post Button */
+.post-btn {
+    background: #28a745;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 15px;
+  }
