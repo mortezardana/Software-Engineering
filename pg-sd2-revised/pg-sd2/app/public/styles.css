@@ -18,6 +18,7 @@ header {
     width: 100%;    /* Center content vertically */
     padding: 10px;
     height: 60px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Center the header text */
@@ -26,6 +27,7 @@ header h1 {
     font-size: 28px;
     margin: 0;
     z-index: 1;
+    text-align: center;
 }
 
 /* Hamburger menu icon */
@@ -228,3 +230,8 @@ table {
     border-radius: 5px;
     padding: 10px 15px;
   }
+
+.content {
+    padding-top: 90px;
+    margin-left: 0;
+}
