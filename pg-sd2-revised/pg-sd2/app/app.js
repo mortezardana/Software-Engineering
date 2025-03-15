@@ -85,6 +85,54 @@ app.get('/member/:username', async (req, res) => {
   });
 
 //proposed pug template code
+app.get('/member/id/:memberId', async (req, res) => {
+    try {
+      const memberId = req.params.memberId;
+
+      const memberQuery = `SELECT * FROM member WHERE id = ?`;
+      const memberData = await db.query(memberQuery, [memberId]);
+
+      // Check if the member exists
+      if (memberData.length === 0) {
+        return res.status(404).send('Member not found');
+      }
+
+      // Now, fetch the data for activities, comments.pug, likes, etc.
+      const activitiesQuery = `SELECT * FROM activity WHERE member_id = ?`;
+      const activities = await db.query(activitiesQuery, [memberId]);
+
+      const commentsQuery = `SELECT * FROM comment WHERE member_id = ?`;
+      const comments = await db.query(commentsQuery, [memberId]);
+
+      const communitiesQuery = `SELECT * FROM community WHERE id in (SELECT community_id FROM post WHERE writer_id = ?);`
+      const communities = await db.query(communitiesQuery, [memberId]);
+
+     /* const likesQuery = `SELECT * FROM likes_table WHERE member_id = ?`;
+      const likes = await db.query(likesQuery, [memberId]);*/
+
+      const postsQuery = `SELECT text FROM post WHERE writer_id = ?`;
+      const posts = await db.query(postsQuery, [memberId]);
+
+      const rewardsQuery = `SELECT * FROM reward WHERE community_id in (SELECT community_id FROM post WHERE writer_id = ?)`;
+      const rewards = await db.query(rewardsQuery, [memberId]);
+
+      // Render the member profile page with the fetched data
+      res.render('member.pug', {
+        member: memberData[0],
+        activities: activities,
+        comments: comments,
+        communities: communities,
+        //likes: likes,
+        posts: posts,
+        rewards: rewards
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error retrieving data');
+    }
+  });
+
+//proposed pug template code
 app.get('/members', async (req, res) => {
     try {
         const memberQuery = `SELECT * FROM member`;
@@ -351,9 +399,9 @@ app.get('/community/:communityId', async (req, res) => {
         const communityId = req.params.communityId;
 
         const communityQuery = `SELECT * FROM community WHERE id = ?`;
-        const communityData = await db.query(commentQuery, [communityId]);
+        const communityData = await db.query(communityQuery, [communityId]);
 
-        console.log("This is the postData: ", commentData)
+        console.log("This is the postData: ", communityData)
 
         // Check if the member exists
         if (communityData.length === 0) {
@@ -406,10 +454,10 @@ app.get('/activity/:activityId/:username', async (req, res) => {
         // Get the member's ID
         const memberId = memberData[0].id;
         const activityQuery = `SELECT * FROM activity WHERE id = ?`;
-        const activityData = await db.query(commentQuery, [activityId]);
+        const activityData = await db.query(activityQuery, [activityId]);
 
 
-        console.log("This is the postData: ", commentData)
+        console.log("This is the postData: ", activityData)
 
         // Check if the member exists
         if (activityData.length === 0) {
@@ -418,7 +466,7 @@ app.get('/activity/:activityId/:username', async (req, res) => {
 
         // Render the member profile page with the fetched data
         res.render('activity.pug', {
-            activity: activityData });
+            activity: activityData[0] });
     } catch (err) {
         console.error(err);
         res.status(500).send('Error retrieving data');
