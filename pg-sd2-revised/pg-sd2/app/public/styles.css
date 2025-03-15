@@ -1,6 +1,8 @@
 /* General body styling */
 body {
-    margin: 0;
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
     font-family: Arial, sans-serif;
     background: #f4f4f4;
 }
@@ -8,10 +10,12 @@ body {
 /* Header styling */
 header {
     background: #E6505F;
-    position: relative;
+    position: fixed;
+    top: 0;
     display: flex;
     justify-content: center; /* Center content horizontally */
-    align-items: center;     /* Center content vertically */
+    align-items: center; 
+    width: 100%;    /* Center content vertically */
     padding: 10px;
     height: 60px;
 }
@@ -21,11 +25,12 @@ header h1 {
     color: white;
     font-size: 28px;
     margin: 0;
+    z-index: 1;
 }
 
 /* Hamburger menu icon */
 .menu-toggle {
-    position: absolute;
+    position: fixed;
     left: 15px;
     top: 15px;
     font-size: 24px;
@@ -33,7 +38,7 @@ header h1 {
     border: none;
     color: white;
     cursor: pointer;
-    z-index: 2;
+    z-index: 1;
 }
 
 /* Rectangular Post Button */
@@ -66,7 +71,7 @@ header h1 {
     height: 100vh;
     position: fixed;
     left: -250px;
-    top: 0;
+    top: 80px;
     background: #E6505F;
     color: white;
     transition: left 0.3s;
@@ -76,6 +81,8 @@ header h1 {
 
 .sidebar.open {
     left: 0;
+    top: 80px;
+    z-index: 1;
 }
 
 .sidebar ul {
@@ -126,7 +133,7 @@ header h1 {
 .feed-container {
     max-width: 600px; /* Adjust as needed */
     margin: 0 auto;   /* Center horizontally */
-    margin-top: 20px; /* Some spacing from header */
+    margin-top: 50px; /* Some spacing from header */
   }
   
   /* Each Feed Item (like an Instagram post) */

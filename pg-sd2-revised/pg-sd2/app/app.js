@@ -486,9 +486,12 @@ app.get('/feed/:username', async (req, res) => {
       }
       
     const postsQuery = `
-    SELECT p.text, m.username
+    SELECT p.text, m.username, COUNT(DISTINCT c.id) AS comment_count, COUNT(DISTINCT l.id) AS like_count
     FROM post p
     JOIN member m ON p.writer_id = m.id
+    LEFT JOIN comment c ON p.id = c.post_id
+    LEFT JOIN likes_table l ON p.id = l.post_id
+    GROUP BY p.id, p.text, m.username
     ORDER BY p.id DESC
      `;
     const posts = await db.query(postsQuery);
@@ -502,6 +505,7 @@ app.get('/feed/:username', async (req, res) => {
       // e.g. const commentsQuery = `...`; etc.
   
       // Render feed.pug
+      console.log(posts);
       res.render('feed.pug', {
         member: memberData[0],
         posts: posts
