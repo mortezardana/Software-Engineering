@@ -165,7 +165,7 @@ app.get('/activities/:username', async (req, res) => {
 
         // Check if the member exists
         if (memberData.length === 0) {
-            return res.status(404).send('Member not found');
+            return res.status(404).send('Member not found with username in activities list');
         }
 
         // Get the member's ID
@@ -175,7 +175,7 @@ app.get('/activities/:username', async (req, res) => {
 
         // Check if the member exists
         if (activityData.length === 0) {
-            return res.status(404).send('Member not found');
+            return res.status(404).send('Activity not found with username in activities list');
         }
 
         // Render the member profile page with the fetched data
@@ -196,7 +196,7 @@ app.get('/posts/:username', async (req, res) => {
 
         // Check if the member exists
         if (memberData.length === 0) {
-            return res.status(404).send('Member not found');
+            return res.status(404).send('Member not found with username in posts list');
         }
 
         // Get the member's ID
@@ -206,7 +206,7 @@ app.get('/posts/:username', async (req, res) => {
 
         // Check if the member exists
         if (postData.length === 0) {
-            return res.status(404).send('Member not found');
+            return res.status(404).send('Posts not found with username in posts list');
         }
 
         // Render the member profile page with the fetched data
@@ -229,7 +229,7 @@ app.get('/comments/:username', async (req, res) => {
 
         // Check if the member exists
         if (memberData.length === 0) {
-            return res.status(404).send('Member not found');
+            return res.status(404).send('Member not found in comments list with username');
         }
 
         // Get the member's ID
@@ -242,7 +242,7 @@ app.get('/comments/:username', async (req, res) => {
 
         // Check if the member exists
         if (commentData.length === 0) {
-            return res.status(404).send('Member not found');
+            return res.status(404).send('Comments not found with username in comment list');
         }
 
         // Render the member profile page with the fetched data
@@ -267,7 +267,7 @@ app.get('/comment/:commentId', async (req, res) => {
 
         // Check if the member exists
         if (memberData.length === 0) {
-            return res.status(404).send('Member not found');
+            return res.status(404).send('Member not found with comment id in single comment');
         }
 
         // Get the member's ID
@@ -277,7 +277,7 @@ app.get('/comment/:commentId', async (req, res) => {
 
         // Check if the member exists
         if (commentData.length === 0) {
-            return res.status(404).send('Member not found');
+            return res.status(404).send('Comment not found with id in single comment');
         }
 
         // Render the member profile page with the fetched data
@@ -301,7 +301,7 @@ app.get('/post/:postId/:username', async (req, res) => {
 
         // Check if the member exists
         if (memberData.length === 0) {
-            return res.status(404).send('Member not found');
+            return res.status(404).send('Member not found with username in single post');
         }
 
         // Get the member's ID
@@ -313,7 +313,7 @@ app.get('/post/:postId/:username', async (req, res) => {
 
         // Check if the member exists
         if (postData.length === 0) {
-            return res.status(404).send('Member not found');
+            return res.status(404).send('post not found with username and post id in single post');
         }
 
         // Render the member profile page with the fetched data
@@ -337,7 +337,7 @@ app.get('/post/id/:postId', async (req, res) => {
 
         // Check if the member exists
         if (postData.length === 0) {
-            return res.status(404).send('Member not found');
+            return res.status(404).send('post not found with id');
         }
 
         // Render the member profile page with the fetched data
@@ -361,7 +361,7 @@ app.get('/comment/:commentId/:username', async (req, res) => {
 
         // Check if the member exists
         if (memberData.length === 0) {
-            return res.status(404).send('Member not found');
+            return res.status(404).send('Member not found with username');
         }
 
         // Get the member's ID
@@ -373,7 +373,7 @@ app.get('/comment/:commentId/:username', async (req, res) => {
 
         // Check if the member exists
         if (commentData.length === 0) {
-            return res.status(404).send('Comment not found');
+            return res.status(404).send('Comment not found with id and username');
         }
 
         // Render the member profile page with the fetched data
@@ -396,7 +396,7 @@ app.get('/comments/:username', async (req, res) => {
 
         // Check if the member exists
         if (memberData.length === 0) {
-            return res.status(404).send('Member not found');
+            return res.status(404).send('member not found with username in comments list');
         }
 
         // Get the member's ID
@@ -408,7 +408,7 @@ app.get('/comments/:username', async (req, res) => {
 
         // Check if the member exists
         if (commentData.length === 0) {
-            return res.status(404).send('Comment not found');
+            return res.status(404).send('Comments not found in comments list');
         }
 
         // Render the member profile page with the fetched data
@@ -433,7 +433,7 @@ app.get('/community/:communityId', async (req, res) => {
 
         // Check if the member exists
         if (communityData.length === 0) {
-            return res.status(404).send('Community not found');
+            return res.status(404).send('Community not found with id');
         }
 
         // Render the member profile page with the fetched data
@@ -454,7 +454,7 @@ app.get('/communities', async (req, res) => {
 
         // Check if the member exists
         if (communityData.length === 0) {
-            return res.status(404).send('Community not found');
+            return res.status(404).send('Communities not found');
         }
 
         // Render the member profile page with the fetched data
@@ -481,7 +481,7 @@ app.get('/communities-membership/:communityId', async (req, res) => {
 
         // Check if the member exists
         if (communityMembershipData.length === 0) {
-            return res.status(404).send('Community not found');
+            return res.status(404).send('Community not found in communities for a member with community id');
         }
 
         // Render the member profile page with the fetched data
@@ -512,7 +512,7 @@ app.get('/member-communities/:memberId', async (req, res) => {
 
         // Check if the member exists
         if (communityMembershipData.length === 0) {
-            return res.status(404).send('Community not found');
+            return res.status(404).send('Community membership not found with member id');
         }
 
         // Render the member profile page with the fetched data
@@ -535,7 +535,7 @@ app.get('/activity/:activityId/:username', async (req, res) => {
 
         // Check if the member exists
         if (memberData.length === 0) {
-            return res.status(404).send('Member not found');
+            return res.status(404).send('Activity not found with id and username');
         }
 
         // Get the member's ID
@@ -560,6 +560,30 @@ app.get('/activity/:activityId/:username', async (req, res) => {
     }
 });
 
+app.get('/activity-id/:activityId', async (req, res) => {
+    try {
+        const activityId = req.params.activityId;
+
+        const activityQuery = `SELECT * FROM activity WHERE id = ?`;
+        const activityData = await db.query(activityQuery, [activityId]);
+
+
+        console.log("This is the activity data: ", activityData[0])
+
+        // Check if the member exists
+        if (activityData.length === 0) {
+            return res.status(404).send('Activity not found with id');
+        }
+
+        // Render the member profile page with the fetched data
+        res.render('activity.pug', {
+            activity: activityData[0] });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving data');
+    }
+});
+
 // feed route
 app.get('/feed/:username', async (req, res) => {
     try {
@@ -569,7 +593,7 @@ app.get('/feed/:username', async (req, res) => {
       const memberData = await db.query(memberQuery, [username]);
   
       if (memberData.length === 0) {
-        return res.status(404).send('Member not found');
+        return res.status(404).send('Member not found in feed with username');
       }
       
     const postsQuery = `
