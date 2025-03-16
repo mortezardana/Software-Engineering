@@ -160,6 +160,8 @@ VALUES ('f0d1b64e-9c9e-48c1-81b5-e4a3bbba8f7f', '10b34e4f-68e5-4631-bbb3-93176d4
 INSERT INTO community_membership (member_id, community_id, join_date, role)
 VALUES ('f2f5c081-6c97-4e8e-9a2d-b08d2c09c567', 'bc58d6a9-e83f-4a1a-b8cc-d93b20798998', '2025-03-07 09:00:00', 'member'),
        ('1b7f9f76-1c07-4e9b-a5a0-15c89e56f34a', 'f80e0b0c-0e9e-4db5-bb3b-cfa392b4e759', '2025-03-07 09:15:00', 'member'),
+       ('ad041052-527b-4a5c-b6d2-222a86a810be', 'f80e0b0c-0e9e-4db5-bb3b-cfa392b4e759', '2025-03-07 09:15:00', 'member'),
+       ('7c61b056-1ec4-4dbd-bbc1-6d01c9d4e033', 'f80e0b0c-0e9e-4db5-bb3b-cfa392b4e759', '2025-03-07 09:15:00', 'member'),
        ('b0cdeabe-4c43-4314-9f5c-b2419a2bff66', '2556de32-5cbe-4429-8f63-60c0a5bdf3ba', '2025-03-07 09:30:00', 'admin');
 
 
