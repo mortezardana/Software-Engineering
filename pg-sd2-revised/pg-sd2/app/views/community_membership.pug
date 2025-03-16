@@ -11,8 +11,9 @@ block content
       th Role
     tr
       td
-        a(href= `/member/${community.id} View Members`)
-      td= community && community.name ? community.name : 'N/A'
-      td= community && community.description ? community.description : 'N/A'
+        a(href= `/member/${communityMembership.member_id} View Members`)
       td
-        a(href= `/communities-membership/${community.id} View Members`)
+        a(href= `/community/${communityMembership.community_id}`)
+      td= communityMembership.join_date && communityMembership.join_date ? communityMembership.join_date : 'N/A'
+      td
+        a(href= `/communities-membership/${communityMembership.member_id} View Members`)

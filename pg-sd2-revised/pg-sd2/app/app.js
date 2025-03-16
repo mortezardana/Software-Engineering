@@ -457,7 +457,7 @@ app.get('/communities-membership/:communityId', async (req, res) => {
         }
 
         // Render the member profile page with the fetched data
-        res.render('communities.pug', {
+        res.render('community_membership.pug', {
             communityMembership: communityMembershipData,
             communityName: communityData[0].name,
         });
