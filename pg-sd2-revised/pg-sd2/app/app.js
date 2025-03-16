@@ -18,7 +18,11 @@ const { createPool } = require("mysql2");
 // TODO: Need to implement a home page with buttons/cards for each entity listing page and render it here in the root route.
 // Create a route for root - /
 app.get("/", function(req, res) {
-    res.send("Hello Dexter!");
+    res.render('home-page.pug');
+});
+
+app.get("/about-us", function(req, res) {
+    res.render('about-us.pug');
 });
 
 // TODO: This endpoint should either change to members (which is already implemented) or change the result that it returns.
@@ -410,7 +414,7 @@ app.get('/community/:communityId', async (req, res) => {
 
         // Render the member profile page with the fetched data
         res.render('community.pug', {
-            community: communityData });
+            community: communityData[0] });
     } catch (err) {
         console.error(err);
         res.status(500).send('Error retrieving data');
@@ -420,9 +424,9 @@ app.get('/community/:communityId', async (req, res) => {
 app.get('/communities', async (req, res) => {
     try {
         const communityQuery = `SELECT * FROM community`;
-        const communityData = await db.query(commentQuery);
+        const communityData = await db.query(communityQuery);
 
-        console.log("This is the postData: ", commentData)
+        console.log("This is the postData: ", communityData)
 
         // Check if the member exists
         if (communityData.length === 0) {
@@ -447,7 +451,7 @@ app.get('/communities-membership/:communityId', async (req, res) => {
 
 
         const communityQuery = `SELECT * FROM community WHERE id = ?`;
-        const communityData = await db.query(communityMembershipQuery, [communityId]);
+        const communityData = await db.query(communityQuery, [communityId]);
 
         console.log("This is the postData: ", communityMembershipData)
 
@@ -458,7 +462,7 @@ app.get('/communities-membership/:communityId', async (req, res) => {
 
         // Render the member profile page with the fetched data
         res.render('community_membership.pug', {
-            communityMembership: communityMembershipData,
+            communitiesMembership: communityMembershipData,
             communityName: communityData[0].name,
         });
     } catch (err) {
