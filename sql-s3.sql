@@ -115,6 +115,7 @@ INSERT INTO likes_table (id, comment_id, post_id) VALUES
 ('2edb9e84-7dbb-46a8-8c6f-488d835feb01', 'ed96003c-b29c-4e57-88ba-132e88f0d26e', NULL),
 ('a23cfe4a-ff7d-40d0-8726-fccf11832061', 'fc9ad78d-445b-47a0-a3d9-f52c81a7a763', NULL),
 ('f923edaf-3585-42c7-baf1-836f1b251748', '7e5bb02e-519e-4d93-bbe5-97ea33f8e019', NULL);
+('e8d5bee6-c34d-4b4d-8a3d-2e8642a79fdd', '7e5bb02e-519e-4d93-bbe5-97ea33f8e019', NULL);
 
 -- Insert rewards
 INSERT INTO reward (id, name, requirements, type, community_id) VALUES
