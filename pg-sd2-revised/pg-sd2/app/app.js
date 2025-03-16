@@ -438,6 +438,35 @@ app.get('/communities', async (req, res) => {
     }
 });
 
+app.get('/communities-membership/:communityId', async (req, res) => {
+    try {
+        const communityId = req.params.communityId;
+
+        const communityMembershipQuery = `SELECT * FROM community_membership WHERE community_id = ?`;
+        const communityMembershipData = await db.query(communityMembershipQuery, [communityId]);
+
+
+        const communityQuery = `SELECT * FROM community WHERE id = ?`;
+        const communityData = await db.query(communityMembershipQuery, [communityId]);
+
+        console.log("This is the postData: ", communityMembershipData)
+
+        // Check if the member exists
+        if (communityMembershipData.length === 0) {
+            return res.status(404).send('Community not found');
+        }
+
+        // Render the member profile page with the fetched data
+        res.render('communities.pug', {
+            communityMembership: communityMembershipData,
+            communityName: communityData[0].name,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving data');
+    }
+});
+
 app.get('/activity/:activityId/:username', async (req, res) => {
     try {
         const activityId = req.params.activityId;
