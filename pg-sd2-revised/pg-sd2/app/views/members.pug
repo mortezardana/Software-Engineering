@@ -1,0 +1,21 @@
+extends index.pug
+
+block content
+    h1 Members List
+
+    table
+        tr
+            th ID
+            th Username
+            th Name
+            th Email
+            th Actions
+
+        each member in memberData
+            tr
+                td= member.id || 'N/A'
+                td= member.username || 'N/A'
+                td= member.name || 'N/A'
+                td= member.email || 'N/A'
+                td
+                    a(href=`/member/${member.username}`) View Profile

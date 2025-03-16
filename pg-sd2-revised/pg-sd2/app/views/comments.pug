@@ -1,0 +1,22 @@
+extends index.pug
+
+block content
+    h1= `${member.username}'s Comments`
+
+    table
+        tr
+            th ID
+            th Date
+            th Text
+            th Member ID
+            th Post ID
+
+        each comment in comments
+            tr
+                td= comment.id || 'N/A'
+                td= comment.date || 'N/A'
+                td= comment.text || 'N/A'
+                td
+                    a(href=`/member/${member.username}`) View Profile
+                td
+                    a(href=`/post/${comment.post_id}/${member.username}`) View Post

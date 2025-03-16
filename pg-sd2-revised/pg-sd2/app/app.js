@@ -15,31 +15,13 @@ app.set("views", __dirname + "/views");
 const db = require('./services/db');
 const { createPool } = require("mysql2");
 
+// TODO: Need to implement a home page with buttons/cards for each entity listing page and render it here in the root route.
 // Create a route for root - /
 app.get("/", function(req, res) {
     res.send("Hello Dexter!");
 });
 
-// app.get("/db_test/:id", function(req,res){
-//     console.log(req.params);
-//     let sql = ("SELECT * from test_table WHERE id = " + req.params.id);
-//     db.query(sql).then(results => {
-//         console.log(results);
-//         res.send(results)
-//     });
-// });
-
-// Create a route for testing the db
-app.get("/db_test", function(req, res) {
-    // Assumes a table called test_table exists in your database
-    sql = 'select * from member';
-    db.query(sql).then(results => {
-        console.log(results);
-        res.send(results)
-    });
-});
-
-
+// TODO: This endpoint should either change to members (which is already implemented) or change the result that it returns.
 // create a root for a list of members
 app.get("/userlistpage", function(req,res){
     sql = "SELECT name, username FROM member";
@@ -50,62 +32,42 @@ app.get("/userlistpage", function(req,res){
     });
 });
 
-
-// ORIGINAL PUG template utilizing
-/*app.get("/userprofilepage/:username", function(req, res) {
-    console.log("Views directory:", app.get("views"));
-    console.log(req.params);
-    sql = "SELECT id, username, name, email FROM member WHERE username = ?";
-    
-    db.query(sql, [req.params.username]).then(results => {
-        if (results.length > 0) {
-            console.log("rendering data: ", results[0]);
-            res.render("member", { member: results[0] });
-        } else {
-            res.status(404).send("User not found");
-        }
-    }).catch(err => {
-        console.error(err);
-        res.status(500).send("Database error");
-    });
-});*/
-
 //proposed pug template code
 app.get('/member/:username', async (req, res) => {
     try {
       const username = req.params.username;
-  
+
       // First, get the member's ID using their username
       const memberQuery = `SELECT * FROM member WHERE username = ?`;
       const memberData = await db.query(memberQuery, [username]);
-  
+
       // Check if the member exists
       if (memberData.length === 0) {
         return res.status(404).send('Member not found');
       }
-  
+
       // Get the member's ID
       const memberId = memberData[0].id;
-  
-      // Now, fetch the data for activities, comments, likes, etc.
+
+      // Now, fetch the data for activities, comments.pug, likes, etc.
       const activitiesQuery = `SELECT * FROM activity WHERE member_id = ?`;
       const activities = await db.query(activitiesQuery, [memberId]);
-  
+
       const commentsQuery = `SELECT * FROM comment WHERE member_id = ?`;
       const comments = await db.query(commentsQuery, [memberId]);
-      
-      const communitiesQuery = `SELECT name FROM community WHERE id = (SELECT community_id FROM post WHERE writer_id = ?);`
+
+      const communitiesQuery = `SELECT * FROM community WHERE id in (SELECT community_id FROM post WHERE writer_id = ?);`
       const communities = await db.query(communitiesQuery, [memberId]);
-  
+
      /* const likesQuery = `SELECT * FROM likes_table WHERE member_id = ?`;
       const likes = await db.query(likesQuery, [memberId]);*/
-  
+
       const postsQuery = `SELECT text FROM post WHERE writer_id = ?`;
       const posts = await db.query(postsQuery, [memberId]);
-  
-      const rewardsQuery = `SELECT name AND type FROM reward WHERE community_id = (SELECT community_id FROM post WHERE writer_id = ?)`;
+
+      const rewardsQuery = `SELECT * FROM reward WHERE community_id in (SELECT community_id FROM post WHERE writer_id = ?)`;
       const rewards = await db.query(rewardsQuery, [memberId]);
-  
+
       // Render the member profile page with the fetched data
       res.render('member.pug', {
         member: memberData[0],
@@ -121,7 +83,395 @@ app.get('/member/:username', async (req, res) => {
       res.status(500).send('Error retrieving data');
     }
   });
-  
+
+//proposed pug template code
+app.get('/member/id/:memberId', async (req, res) => {
+    try {
+      const memberId = req.params.memberId;
+
+      const memberQuery = `SELECT * FROM member WHERE id = ?`;
+      const memberData = await db.query(memberQuery, [memberId]);
+
+      // Check if the member exists
+      if (memberData.length === 0) {
+        return res.status(404).send('Member not found');
+      }
+
+      // Now, fetch the data for activities, comments.pug, likes, etc.
+      const activitiesQuery = `SELECT * FROM activity WHERE member_id = ?`;
+      const activities = await db.query(activitiesQuery, [memberId]);
+
+      const commentsQuery = `SELECT * FROM comment WHERE member_id = ?`;
+      const comments = await db.query(commentsQuery, [memberId]);
+
+      const communitiesQuery = `SELECT * FROM community WHERE id in (SELECT community_id FROM post WHERE writer_id = ?);`
+      const communities = await db.query(communitiesQuery, [memberId]);
+
+     /* const likesQuery = `SELECT * FROM likes_table WHERE member_id = ?`;
+      const likes = await db.query(likesQuery, [memberId]);*/
+
+      const postsQuery = `SELECT text FROM post WHERE writer_id = ?`;
+      const posts = await db.query(postsQuery, [memberId]);
+
+      const rewardsQuery = `SELECT * FROM reward WHERE community_id in (SELECT community_id FROM post WHERE writer_id = ?)`;
+      const rewards = await db.query(rewardsQuery, [memberId]);
+
+      // Render the member profile page with the fetched data
+      res.render('member.pug', {
+        member: memberData[0],
+        activities: activities,
+        comments: comments,
+        communities: communities,
+        //likes: likes,
+        posts: posts,
+        rewards: rewards
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error retrieving data');
+    }
+  });
+
+//proposed pug template code
+app.get('/members', async (req, res) => {
+    try {
+        const memberQuery = `SELECT * FROM member`;
+        const memberData = await db.query(memberQuery);
+
+        // Check if the member exists
+        if (memberData.length === 0) {
+            return res.status(404).send('Member not found');
+        }
+
+        // Render the member profile page with the fetched data
+        res.render('members.pug', { memberData });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving data');
+    }
+});
+
+app.get('/activities/:username', async (req, res) => {
+    try {
+        const username = req.params.username;
+
+        // First, get the member's ID using their username
+        const memberQuery = `SELECT * FROM member WHERE username = ?`;
+        const memberData = await db.query(memberQuery, [username]);
+
+        // Check if the member exists
+        if (memberData.length === 0) {
+            return res.status(404).send('Member not found');
+        }
+
+        // Get the member's ID
+        const memberId = memberData[0].id;
+        const activityQuery = `SELECT * FROM activity WHERE member_id = ?`;
+        const activityData = await db.query(activityQuery, [memberId]);
+
+        // Check if the member exists
+        if (activityData.length === 0) {
+            return res.status(404).send('Member not found');
+        }
+
+        // Render the member profile page with the fetched data
+        res.render('activities.pug', { username: username, activities: activityData });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving data');
+    }
+});
+
+app.get('/posts/:username', async (req, res) => {
+    try {
+        const username = req.params.username;
+
+        // First, get the member's ID using their username
+        const memberQuery = `SELECT * FROM member WHERE username = ?`;
+        const memberData = await db.query(memberQuery, [username]);
+
+        // Check if the member exists
+        if (memberData.length === 0) {
+            return res.status(404).send('Member not found');
+        }
+
+        // Get the member's ID
+        const memberId = memberData[0].id;
+        const postQuery = `SELECT * FROM post WHERE writer_id = ?`;
+        const postData = await db.query(postQuery, [memberId]);
+
+        // Check if the member exists
+        if (postData.length === 0) {
+            return res.status(404).send('Member not found');
+        }
+
+        // Render the member profile page with the fetched data
+        res.render('posts.pug', {
+            member: memberData[0],
+            posts: postData });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving data');
+    }
+});
+
+app.get('/comments/:username', async (req, res) => {
+    try {
+        const username = req.params.username;
+
+        // First, get the member's ID using their username
+        const memberQuery = `SELECT * FROM member WHERE username = ?`;
+        const memberData = await db.query(memberQuery, [username]);
+
+        // Check if the member exists
+        if (memberData.length === 0) {
+            return res.status(404).send('Member not found');
+        }
+
+        // Get the member's ID
+        const memberId = memberData[0].id;
+        const commentQuery = `SELECT * FROM comment WHERE member_id = ?`;
+        const commentData = await db.query(commentQuery, [memberId]);
+
+        const postQuery = `SELECT * FROM post WHERE comment_id in (SELECT id FROM comment where)`;
+        const postData = await db.query(commentQuery, [memberId]);
+
+        // Check if the member exists
+        if (commentData.length === 0) {
+            return res.status(404).send('Member not found');
+        }
+
+        // Render the member profile page with the fetched data
+        res.render('comments.pug', {
+            member: memberData[0],
+            comments: commentData,
+            posts: postData,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving data');
+    }
+});
+
+app.get('/comment/:commentId', async (req, res) => {
+    try {
+        const commentId = req.params.commentId;
+
+        // First, get the member's ID using their username
+        const memberQuery = `SELECT * FROM member WHERE id in (SELECT member_id FROM comment WHERE id = ?)`;
+        const memberData = await db.query(memberQuery, [commentId]);
+
+        // Check if the member exists
+        if (memberData.length === 0) {
+            return res.status(404).send('Member not found');
+        }
+
+        // Get the member's ID
+        const memberId = memberData[0].id;
+        const commentQuery = `SELECT * FROM comment WHERE member_id = ?`;
+        const commentData = await db.query(commentQuery, [memberId]);
+
+        // Check if the member exists
+        if (commentData.length === 0) {
+            return res.status(404).send('Member not found');
+        }
+
+        // Render the member profile page with the fetched data
+        res.render('comment.pug', {
+            member: memberData[0],
+            comments: commentData });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving data');
+    }
+});
+
+app.get('/post/:postId/:username', async (req, res) => {
+    try {
+        const postId = req.params.postId;
+        const username = req.params.username;
+
+        // First, get the member's ID using their username
+        const memberQuery = `SELECT * FROM member WHERE username = ?`;
+        const memberData = await db.query(memberQuery, [username]);
+
+        // Check if the member exists
+        if (memberData.length === 0) {
+            return res.status(404).send('Member not found');
+        }
+
+        // Get the member's ID
+        const memberId = memberData[0].id;
+        const postQuery = `SELECT * FROM post WHERE id = ?`;
+        const postData = await db.query(postQuery, [postId]);
+
+        console.log("This is the postData: ", postData)
+
+        // Check if the member exists
+        if (postData.length === 0) {
+            return res.status(404).send('Member not found');
+        }
+
+        // Render the member profile page with the fetched data
+        res.render('post.pug', {
+            member: memberData[0],
+            posts: postData });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving data');
+    }
+});
+
+app.get('/comment/:commentId/:username', async (req, res) => {
+    try {
+        const commentId = req.params.commentId;
+        const username = req.params.username;
+
+        // First, get the member's ID using their username
+        const memberQuery = `SELECT * FROM member WHERE username = ?`;
+        const memberData = await db.query(memberQuery, [username]);
+
+        // Check if the member exists
+        if (memberData.length === 0) {
+            return res.status(404).send('Member not found');
+        }
+
+        // Get the member's ID
+        const memberId = memberData[0].id;
+        const commentQuery = `SELECT * FROM comment WHERE id = ?`;
+        const commentData = await db.query(commentQuery, [commentId]);
+
+        console.log("This is the postData: ", commentData)
+
+        // Check if the member exists
+        if (commentData.length === 0) {
+            return res.status(404).send('Comment not found');
+        }
+
+        // Render the member profile page with the fetched data
+        res.render('comment.pug', {
+            member: memberData[0],
+            comment: commentData });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving data');
+    }
+});
+
+app.get('/comments/:username', async (req, res) => {
+    try {
+        const username = req.params.username;
+
+        // First, get the member's ID using their username
+        const memberQuery = `SELECT * FROM member WHERE username = ?`;
+        const memberData = await db.query(memberQuery, [username]);
+
+        // Check if the member exists
+        if (memberData.length === 0) {
+            return res.status(404).send('Member not found');
+        }
+
+        // Get the member's ID
+        const memberId = memberData[0].id;
+        const commentQuery = `SELECT * FROM comment WHERE member_id = ?`;
+        const commentData = await db.query(commentQuery, [memberId]);
+
+        console.log("This is the postData: ", commentData)
+
+        // Check if the member exists
+        if (commentData.length === 0) {
+            return res.status(404).send('Comment not found');
+        }
+
+        // Render the member profile page with the fetched data
+        res.render('comments.pug', {
+            member: memberData[0],
+            comments: commentData });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving data');
+    }
+});
+
+// TODO: Another endpoint should be implemented after the connection between the community and member is designed and implemented in the database. that connection should store all the members joined in each community.
+app.get('/community/:communityId', async (req, res) => {
+    try {
+        const communityId = req.params.communityId;
+
+        const communityQuery = `SELECT * FROM community WHERE id = ?`;
+        const communityData = await db.query(communityQuery, [communityId]);
+
+        console.log("This is the postData: ", communityData)
+
+        // Check if the member exists
+        if (communityData.length === 0) {
+            return res.status(404).send('Community not found');
+        }
+
+        // Render the member profile page with the fetched data
+        res.render('community.pug', {
+            community: communityData });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving data');
+    }
+});
+
+app.get('/communities', async (req, res) => {
+    try {
+        const communityQuery = `SELECT * FROM community`;
+        const communityData = await db.query(commentQuery);
+
+        console.log("This is the postData: ", commentData)
+
+        // Check if the member exists
+        if (communityData.length === 0) {
+            return res.status(404).send('Community not found');
+        }
+
+        // Render the member profile page with the fetched data
+        res.render('communities.pug', {
+            communities: communityData });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving data');
+    }
+});
+
+app.get('/activity/:activityId/:username', async (req, res) => {
+    try {
+        const activityId = req.params.activityId;
+        const username = req.params.username;
+
+        const memberQuery = `SELECT * FROM member WHERE username = ?`;
+        const memberData = await db.query(memberQuery, [username]);
+
+        // Check if the member exists
+        if (memberData.length === 0) {
+            return res.status(404).send('Member not found');
+        }
+
+        // Get the member's ID
+        const memberId = memberData[0].id;
+        const activityQuery = `SELECT * FROM activity WHERE id = ?`;
+        const activityData = await db.query(activityQuery, [activityId]);
+
+
+        console.log("This is the postData: ", activityData)
+
+        // Check if the member exists
+        if (activityData.length === 0) {
+            return res.status(404).send('Activity not found');
+        }
+
+        // Render the member profile page with the fetched data
+        res.render('activity.pug', {
+            activity: activityData[0] });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving data');
+    }
+});
 
 // feed route
 app.get('/feed/:username', async (req, res) => {
@@ -136,9 +486,12 @@ app.get('/feed/:username', async (req, res) => {
       }
       
     const postsQuery = `
-    SELECT p.text, m.username
+    SELECT p.text, m.username, COUNT(DISTINCT c.id) AS comment_count, COUNT(DISTINCT l.id) AS like_count
     FROM post p
     JOIN member m ON p.writer_id = m.id
+    LEFT JOIN comment c ON p.id = c.post_id
+    LEFT JOIN likes_table l ON p.id = l.post_id
+    GROUP BY p.id, p.text, m.username
     ORDER BY p.id DESC
      `;
     const posts = await db.query(postsQuery);
@@ -152,6 +505,7 @@ app.get('/feed/:username', async (req, res) => {
       // e.g. const commentsQuery = `...`; etc.
   
       // Render feed.pug
+      console.log(posts);
       res.render('feed.pug', {
         member: memberData[0],
         posts: posts

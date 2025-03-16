@@ -1,1 +1,14 @@
-p Communities: #{communities.length}
+extends index.pug
+
+block content
+  h1= `${community.name} Community`
+
+  table
+    tr
+      th ID
+      th Name
+      th Description
+    tr
+      td= community && community.id ? community.id : 'N/A'
+      td= community && community.name ? community.name : 'N/A'
+      td= community && community.description ? community.description : 'N/A'

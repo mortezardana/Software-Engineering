@@ -14,6 +14,10 @@ block content
 
           // Display the username from each post
           .feed-username= post.username
+        
+        .feed-image
+          //the image contained in the post
+          img.post-pic(src="/images/default-profile.png", alt="Post Picture")
 
         .feed-content
           // The main text of the post
@@ -21,5 +25,5 @@ block content
 
         .feed-footer
           // For now, just show placeholder likes/comments or actual fields if you have them
-          span.likes 0 Likes
-          span.comments 0 Comments
+          .likes Likes: #{post.like_count}
+          .comments Comments: #{post.comment_count}

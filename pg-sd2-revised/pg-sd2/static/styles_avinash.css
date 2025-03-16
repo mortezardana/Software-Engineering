@@ -1,0 +1,226 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f2f5;
+  color: #333;
+}
+
+/* Header Styling */
+header {
+  background: #007bff;
+  color: white;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: center; /* Center title */
+  align-items: center; /* Center content vertically */
+  height: 60px; /* Increase header height to fit the buttons */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+header h1 {
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+/* Navbar Layout */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: absolute;
+  right: 20px;
+}
+
+/* Hamburger Button */
+.menu-toggle {
+  background: transparent;
+  color: white;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 50%; /* Center vertically */
+  left: 15px; /* Position from the left */
+  transform: translateY(-50%); /* Center the button vertically */
+  z-index: 1000;
+}
+
+/* Post Button */
+.post-btn {
+  background: #28a745;
+  color: white;
+  border-radius: 5px;
+  padding: 10px 15px;
+}
+
+/* Account Button (Profile Pic) */
+.account-btn {
+  background: transparent;
+  border: none;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.account-btn img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Sidebar Navigation */
+.sidebar {
+  background: #343a40;
+  color: white;
+  width: 220px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: -220px; /* Initially hidden */
+  padding-top: 60px;
+  transition: left 0.3s ease-in-out;
+}
+
+.sidebar.open {
+  left: 0; /* Show sidebar when open */
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 15px;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.sidebar ul li a:hover {
+  background: #495057;
+}
+
+/* Main Content */
+.content {
+  margin-left: 240px;
+  padding: 20px;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* Adjust content when sidebar is hidden */
+.sidebar:not(.open) ~ .content {
+  margin-left: 0;
+}
+
+/* Profile Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background: #007bff;
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  header {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    left: -100%; /* Hide sidebar */
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .content {
+    margin-left: 0;
+  }
+/* Feed Container */
+.feed-container {
+  max-width: 600px; /* Adjust as needed */
+  margin: 0 auto;   /* Center horizontally */
+  margin-top: 20px; /* Some spacing from header */
+}
+
+/* Each Feed Item (like an Instagram post) */
+.feed-item {
+  background: #fff;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+/* Header area: profile pic + username */
+.feed-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover; /* If you have a real image, this helps fill the circle */
+}
+
+.feed-username {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Post text area */
+.feed-content {
+  margin-bottom: 10px;
+}
+
+/* Footer (likes/comments) */
+.feed-footer {
+  display: flex;
+  gap: 15px; /* spacing between likes and comments */
+}
+
+.feed-footer .likes, 
+.feed-footer .comments {
+  color: #888;
+  font-size: 14px;
+}
+
+}
