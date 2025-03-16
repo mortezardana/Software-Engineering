@@ -18,12 +18,12 @@ header {
     justify-content: space-between; /* Center content horizontally */
     align-items: center; 
     width: 100%;    /* Center content vertically */
-    padding: 10px;
+    padding: 0px;
+    padding-bottom: 10px;
     height: 60px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     font-size: 2rem;
     font-weight: bold;
-    outline: 1px solid red;
 }
 
 /* Center the header text */
