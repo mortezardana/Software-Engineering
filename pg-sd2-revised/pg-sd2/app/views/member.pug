@@ -13,7 +13,8 @@ block content
       th Comments
       th Communities
       th Posts
-      th Rewards
+      // For sprint 3 rewards is commented and it will be implemented for sprint 4.
+      //th Rewards
     tr
       td= member && member.id ? member.id : 'N/A'
       td= member && member.username ? member.username : 'N/A'
@@ -27,5 +28,8 @@ block content
         a(href=`/communities/${member.username}`) View Communities
       td
         a(href=`/posts/${member.username}`) View Posts
-      td
+
+      // For sprint 3 rewards is commented and it will be implemented for sprint 4.
+      //-td
         a(href=`/rewards/${member.username}`) View Rewards
+        -//

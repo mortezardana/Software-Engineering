@@ -8,7 +8,10 @@ block content
       th ID
       th Name
       th Description
+      th Members
     tr
       td= community && community.id ? community.id : 'N/A'
       td= community && community.name ? community.name : 'N/A'
       td= community && community.description ? community.description : 'N/A'
+      td
+        a(href= `/communities-membership/${community.id}`) View Members
