@@ -319,7 +319,31 @@ app.get('/post/:postId/:username', async (req, res) => {
         // Render the member profile page with the fetched data
         res.render('post.pug', {
             member: memberData[0],
-            posts: postData });
+            post: postData[0] });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving data');
+    }
+});
+
+app.get('/post/id/:postId', async (req, res) => {
+    try {
+        const postId = req.params.postId;
+
+        const postQuery = `SELECT * FROM post WHERE id = ?`;
+        const postData = await db.query(postQuery, [postId]);
+
+        console.log("This is the postData: ", postData)
+
+        // Check if the member exists
+        if (postData.length === 0) {
+            return res.status(404).send('Member not found');
+        }
+
+        // Render the member profile page with the fetched data
+        res.render('post.pug', {
+            member: memberData[0],
+            post: postData[0] });
     } catch (err) {
         console.error(err);
         res.status(500).send('Error retrieving data');
