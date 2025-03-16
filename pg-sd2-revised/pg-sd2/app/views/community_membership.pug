@@ -1,0 +1,18 @@
+extends index.pug
+
+block content
+  h1= `${communityName}'s' Members`
+
+  table
+    tr
+      th Member ID
+      th Community ID
+      th Join Date
+      th Role
+    tr
+      td
+        a(href= `/member/${community.id} View Members`)
+      td= community && community.name ? community.name : 'N/A'
+      td= community && community.description ? community.description : 'N/A'
+      td
+        a(href= `/communities-membership/${community.id} View Members`)
