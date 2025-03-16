@@ -11,22 +11,30 @@ html(lang="en")
         let username = "john_doe"; // Replace this dynamically if needed
         window.location.href = "/member/" + username;
       }
+      function goHome() {
+        window.location.href = "/";
+      }
 
   body
     script(src="/script.js")
     header
       button.menu-toggle#menuToggle ☰
-      h1 Momentum
+      h1
+        button.title-btn(onclick="goHome()") Momentum
       .nav-right
-        button.post-btn#postBtn Post
+        //button.post-btn#postBtn Post
         button.account-btn#accountBtn(onclick="goToProfile()") 👤
 
     nav.sidebar#sidebar
       ul
         li
+          a(href="/") Home
+        li
           a(href="/feed/john_doe") Feed
         li
-          a(href="/#") Communities
+          a(href="/communities") Communities
+        li
+          a(href="/about-us") About Us
 
     div.content
       block content
