@@ -89,22 +89,22 @@ CREATE TABLE reward
 );
 
 -- Insert members
-INSERT INTO member (id, email, name, password, username)
-VALUES ('f2f5c081-6c97-4e8e-9a2d-b08d2c09c567', 'john.doe@example.com', 'John Doe', 'password123', 'john_doe'),
-       ('1b7f9f76-1c07-4e9b-a5a0-15c89e56f34a', 'jane.smith@example.com', 'Jane Smith', 'password456', 'jane_smith'),
-       ('b0cdeabe-4c43-4314-9f5c-b2419a2bff66', 'alex.jones@example.com', 'Alex Jones', 'password789', 'alex_jones'),
+INSERT INTO member (id, email, name, password, username, bio)
+VALUES ('f2f5c081-6c97-4e8e-9a2d-b08d2c09c567', 'john.doe@example.com', 'John Doe', 'password123', 'john_doe', 'John Doe bio'),
+       ('1b7f9f76-1c07-4e9b-a5a0-15c89e56f34a', 'jane.smith@example.com', 'Jane Smith', 'password456', 'jane_smith', 'Jane Smith bio'),
+       ('b0cdeabe-4c43-4314-9f5c-b2419a2bff66', 'alex.jones@example.com', 'Alex Jones', 'password789', 'alex_jones', 'Alex Jones bio'),
        ('ad041052-527b-4a5c-b6d2-222a86a810be', 'maria.gonzalez@example.com', 'Maria Gonzalez', 'password321',
-        'maria_gonzalez'),
+        'maria_gonzalez', 'Maria Gonzalez bio'),
        ('7c61b056-1ec4-4dbd-bbc1-6d01c9d4e033', 'chris.wilson@example.com', 'Chris Wilson', 'password654',
-        'chris_wilson');
+        'chris_wilson', 'Chris Wilson bio');
 
 -- Insert activities
-INSERT INTO activity (id, averageSpeed, distance, elevation, movingTime, member_id)
-VALUES ('a2f3c0c1-27f1-4660-b462-8b6d7e88a62d', 15.5, 100.0, 50.0, '01:30:00', 'f2f5c081-6c97-4e8e-9a2d-b08d2c09c567'),
-       ('459d8135-3f96-4eeb-b78d-f35c96ae76f1', 12.0, 80.0, 30.0, '02:00:00', '1b7f9f76-1c07-4e9b-a5a0-15c89e56f34a'),
-       ('d5fe4ed5-2e47-45b9-b58d-3a61d6bb6e5d', 18.0, 120.0, 75.0, '01:45:00', 'b0cdeabe-4c43-4314-9f5c-b2419a2bff66'),
-       ('6de72f9e-631f-4df0-88d0-b53ab57ca8a3', 10.0, 50.0, 25.0, '03:00:00', 'ad041052-527b-4a5c-b6d2-222a86a810be'),
-       ('c39e8729-b885-48d7-b728-7eaed084d5d1', 14.0, 90.0, 40.0, '01:15:00', '7c61b056-1ec4-4dbd-bbc1-6d01c9d4e033');
+INSERT INTO activity (id, type, averageSpeed, distance, elevation, movingTime, member_id)
+VALUES ('a2f3c0c1-27f1-4660-b462-8b6d7e88a62d', 'RUN', 15.5, 100.0, 50.0, '01:30:00', 'f2f5c081-6c97-4e8e-9a2d-b08d2c09c567'),
+       ('459d8135-3f96-4eeb-b78d-f35c96ae76f1', 'CYCLE', 12.0, 80.0, 30.0, '02:00:00', '1b7f9f76-1c07-4e9b-a5a0-15c89e56f34a'),
+       ('d5fe4ed5-2e47-45b9-b58d-3a61d6bb6e5d', 'RUN', 18.0, 120.0, 75.0, '01:45:00', 'b0cdeabe-4c43-4314-9f5c-b2419a2bff66'),
+       ('6de72f9e-631f-4df0-88d0-b53ab57ca8a3', 'CYCLE', 10.0, 50.0, 25.0, '03:00:00', 'ad041052-527b-4a5c-b6d2-222a86a810be'),
+       ('c39e8729-b885-48d7-b728-7eaed084d5d1', 'RUN', 14.0, 90.0, 40.0, '01:15:00', '7c61b056-1ec4-4dbd-bbc1-6d01c9d4e033');
 
 -- Insert communities
 INSERT INTO community (id, name, description)
