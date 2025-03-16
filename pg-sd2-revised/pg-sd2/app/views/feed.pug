@@ -10,14 +10,16 @@ block content
       .feed-item
         .feed-header
           // Placeholder profile pic (replace with actual user image if available)
-          img.profile-pic(src="/images/default-profile.png", alt="Profile Picture")
+          i(class="fa-light fa-circle-user")
+          //img.profile-pic(src="/images/default-profile.png", alt="Profile Picture")
 
           // Display the username from each post
           .feed-username= post.username
         
         .feed-image
           //the image contained in the post
-          img.post-pic(src="/images/default-profile.png", alt="Post Picture")
+          i(class="fa-regular fa-image fa-2xl")
+          //img.post-pic(src="/images/default-profile.png", alt="Post Picture")
 
         .feed-content
           // The main text of the post

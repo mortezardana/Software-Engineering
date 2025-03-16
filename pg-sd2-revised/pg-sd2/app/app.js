@@ -471,6 +471,36 @@ app.get('/communities-membership/:communityId', async (req, res) => {
     }
 });
 
+app.get('/member-communities/:memberId', async (req, res) => {
+    try {
+        const memberId = req.params.memberId;
+
+        const communityMembershipQuery = `SELECT community_id FROM community_membership WHERE member_id = ?`;
+        const communityMembershipData = await db.query(communityMembershipQuery, [memberId]);
+
+        console.log("member-communities: ", communityMembershipData)
+
+
+        const communityQuery = `SELECT * FROM community WHERE id in (SELECT community_id FROM community_membership WHERE member_id = ?)`;
+        const communityData = await db.query(communityQuery, [memberId]);
+
+        console.log("This is the postData: ", communityMembershipData)
+
+        // Check if the member exists
+        if (communityMembershipData.length === 0) {
+            return res.status(404).send('Community not found');
+        }
+
+        // Render the member profile page with the fetched data
+        res.render('communities.pug', {
+            communities: communityData,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving data');
+    }
+});
+
 app.get('/activity/:activityId/:username', async (req, res) => {
     try {
         const activityId = req.params.activityId;
