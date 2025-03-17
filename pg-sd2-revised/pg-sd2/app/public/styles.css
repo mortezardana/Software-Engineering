@@ -97,7 +97,7 @@ header h1 {
     background: #E6505F;
     color: white;
     transition: left 0.6s ease-in-out;
-    padding-top: 0px;
+    top: 70px;
     z-index: 1;
 }
 
@@ -109,24 +109,32 @@ header h1 {
 
 .sidebar ul {
     list-style-type: none;
-    padding: 0;
+    padding: 15;
 }
 
 .sidebar ul li {
-    padding: 15px;
     border-bottom: 1px solid #ddd;
+    padding: 15px;
 }
 
 .sidebar ul li a {
     color: white;
     text-decoration: none;
     font-size: 18px;
+    padding-top: 15px;
+    padding-right:40px;
+    padding-left: 40px;
+    box-sizing: border-box;
 }
 
-.sidebar ul li a:hover {
-    background: #333;
+.sidebar ul li:hover{
+    border-bottom: 1px solid #ddd;
+    background: #bf434f;
     display: block;
+    padding: 15px;
 }
+
+
 
 /* Account button styling */
 .account-btn {
@@ -305,6 +313,7 @@ table {
 
 .card:hover {
     transform: scale(1.05);
+    background-color: #50E673;
 }
 
 .header a {
@@ -314,6 +323,7 @@ table {
 
 .header a:hover {
     text-decoration: underline;
+    color: 
 }
 
 .about-text {
