@@ -1,0 +1,23 @@
+extends index.pug
+
+block content
+  h1 Activity Page
+
+  table
+    tr
+      th ID
+      th Type
+      th Average Speed
+      th Distance
+      th Elevation
+      th Moving Time
+      th Member ID
+    tr
+      td= activity && activity.id ? activity.id : 'N/A'
+      td= activity && activity.type ? activity.type : 'N/A'
+      td= activity && activity.averageSpeed ? activity.averageSpeed : 'N/A'
+      td= activity && activity.distance ? activity.distance : 'N/A'
+      td= activity && activity.elevation ? activity.elevation : 'N/A'
+      td= activity && activity.movingTime ? activity.movingTime : 'N/A'
+      td
+        a(href=`/member/id/${activity.member_id}`) View Member

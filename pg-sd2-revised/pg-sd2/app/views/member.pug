@@ -1,0 +1,35 @@
+extends index.pug
+
+block content
+  h1 Member Profile
+
+  table
+    tr
+      th ID
+      th Username
+      th Name
+      th Email
+      th Activities
+      th Comments
+      th Communities
+      th Posts
+      // For sprint 3 rewards is commented and it will be implemented for sprint 4.
+      //th Rewards
+    tr
+      td= member && member.id ? member.id : 'N/A'
+      td= member && member.username ? member.username : 'N/A'
+      td= member && member.name ? member.name : 'N/A'
+      td= member && member.email ? member.email : 'N/A'
+      td
+        a(href=`/activities/${member.username}`) View Activities
+      td
+        a(href=`/comments/${member.username}`) View Comments
+      td
+        a(href=`/member-communities/${member.id}`) View Communities
+      td
+        a(href=`/posts/${member.username}`) View Posts
+
+      // For sprint 3 rewards is commented and it will be implemented for sprint 4.
+      //-td
+        a(href=`/rewards/${member.username}`) View Rewards
+        -//
