@@ -9,6 +9,14 @@ class MemberService {
         return await MemberRepository.getMemberById(id);
     }
 
+    static async getMemberByUsername(username) {
+        return await MemberRepository.getMemberByUsername(username);
+    }
+
+    static async getMemberByUsername(username) {
+        return await MemberRepository.getMemberByUsername(username);
+    }
+
     static async createMember(data) {
         return await MemberRepository.createMember(data);
     }

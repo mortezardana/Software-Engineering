@@ -34,7 +34,58 @@ router.get("/:id", async (req, res) => {
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send("An error occurred while fetching the member.");
+        res.status(500).send("An error occurred while fetching the member by id.");
+    }
+});
+
+
+// Get a member by Username
+router.get("/:username", async (req, res) => {
+    try {
+        const member = await MemberService.getMemberById(req.params.id);
+
+        if (member) {
+            res.json(member);
+        } else {
+            res.status(404).send("Member not found.");
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("An error occurred while fetching the member by username.");
+    }
+});
+
+
+// Get activities of a member by username
+router.get("/activities/:username", async (req, res) => {
+    try {
+        const member = await MemberService.getMemberById(req.params.id);
+
+        if (member) {
+            res.json(member);
+        } else {
+            res.status(404).send("Member not found.");
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("An error occurred while fetching the member's activities.");
+    }
+});
+
+
+// Get posts of a member by username
+router.get("/posts/:username", async (req, res) => {
+    try {
+        const member = await MemberService.getMemberById(req.params.id);
+
+        if (member) {
+            res.json(member);
+        } else {
+            res.status(404).send("Member not found.");
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("An error occurred while fetching the member's activities.");
     }
 });
 

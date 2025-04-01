@@ -96,6 +96,40 @@ class MemberRepository {
     });
   }
 
+  // Get a member by Username
+  static getMemberByUsername(username) {
+    return new Promise((resolve, reject) => {
+      const query = 'SELECT * FROM member WHERE username = ?';
+      connection.query(query, [username], (err, results) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        if (results.length > 0) {
+          const memberData = results[0];
+          const member = new Member(
+              memberData.id,
+              memberData.username,
+              memberData.name,
+              memberData.bio,
+              memberData.email,
+              memberData.password,
+              [], // activities
+              [], // comments
+              [], // communities
+              [], // likes
+              [], // posts
+              []  // rewards
+          );
+          resolve(member);
+        } else {
+          resolve(null); // No member found
+        }
+      });
+    });
+  }
+
   // Add a new member
   static addMember(member) {
     return new Promise((resolve, reject) => {
