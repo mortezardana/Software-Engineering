@@ -61,6 +61,35 @@ class PostRepository {
     });
   }
 
+  // Get a post by ID
+  static getPostByMemberId(memberId) {
+    return new Promise((resolve, reject) => {
+      const query = 'SELECT * FROM post WHERE writer_id = ?';
+      connection.query(query, [memberId], (err, results) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        // Map results to Post instances
+        const posts = results.map((postData) => {
+          return new Post(
+              postData.id,
+              postData.date,
+              postData.text,
+              postData.pics,
+              postData.activity,  // Assuming activity is mapped separately
+              postData.writer,    // Assuming member is mapped separately
+              postData.comments,  // Assuming comments are mapped separately
+              postData.community  // Assuming community is mapped separately
+          );
+        });
+
+        resolve(posts);
+      });
+    });
+  }
+
   // Add a new post
   static addPost(post) {
     return new Promise((resolve, reject) => {

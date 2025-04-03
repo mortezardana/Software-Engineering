@@ -1,6 +1,7 @@
 // Import express.js
 const express = require("express");
 const MemberService = require("../service/MemberService");
+const PostService = require("../service/PostService");
 
 const router = express.Router();
 
@@ -16,6 +17,25 @@ router.get("/", async (req, res) => {
         });
 
         res.json(members);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("An error occurred while fetching members.");
+    }
+});
+
+// Get all members with optional filtering and pagination
+router.get("/feed/:username", async (req, res) => {
+    try {
+        const { page = 1, pageSize = 10, search = "" } = req.query;
+
+        const member = await MemberService.getMemberByUsername(req.params.username);
+
+        const posts = await PostService.getPostByMemberId(member.id);
+
+        res.render('feed.pug', {
+            member: member[0],
+            posts: posts
+        });
     } catch (error) {
         console.error(error);
         res.status(500).send("An error occurred while fetching members.");

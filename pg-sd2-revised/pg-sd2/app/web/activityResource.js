@@ -1,7 +1,7 @@
 const express = require("express");
 const ActivityService = require("../service/ActivityService");
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 // Get all activities with optional filtering and pagination
 router.get("/", async (req, res) => {

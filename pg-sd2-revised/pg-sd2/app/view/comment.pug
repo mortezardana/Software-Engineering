@@ -1,0 +1,20 @@
+extends index.pug
+
+block content
+  h1 Comment Page
+
+  table
+    tr
+      th ID
+      th Date
+      th Text
+      th Member ID
+      th Post ID
+    tr
+      td= comment && comment.id ? comment.id : 'N/A'
+      td= comment && comment.date ? comment.date : 'N/A'
+      td= comment && comment.text ? comment.text : 'N/A'
+      td
+        a(href=`/member/${comment.member_id}`) View Member
+      td
+        a(href=`/post/id/${comment.post_id}`) View Post

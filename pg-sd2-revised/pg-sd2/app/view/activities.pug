@@ -1,0 +1,23 @@
+extends index.pug
+
+block content
+    h1= `${username}'s Activities`
+
+    table
+        tr
+            th ID
+            th Average Speed
+            th Distance
+            th Elevation
+            th Moving Time
+            th Member ID
+
+        each activity in activities
+            tr
+                td= activity.id || 'N/A'
+                td= activity.averageSpeed || 'N/A'
+                td= activity.distance || 'N/A'
+                td= activity.elevation || 'N/A'
+                td= activity.movingTime || 'N/A'
+                td
+                    a(href=`/member/${username}`) View Profile

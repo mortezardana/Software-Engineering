@@ -1,0 +1,333 @@
+/* General body styling */
+body {
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background: #faecec;
+    text-align: center;
+}
+
+/* Header styling */
+header {
+    background: #E6505F;
+    color: white;
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: space-between; /* Center content horizontally */
+    align-items: center;
+    width: 100%;    /* Center content vertically */
+    padding: 0px;
+    padding-bottom: 10px;
+    height: 60px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* Center the header text */
+header h1 {
+    color: white;
+    font-size: 28px;
+    margin: 0;
+    z-index: 1;
+    text-align: center;
+}
+
+.header-title{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.nav-right{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-right: 10px;
+}
+/* Hamburger menu icon */
+.menu-toggle {
+    position: fixed;
+    left: 15px;
+    top: 15px;
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    z-index: 1;
+    margin-left: 10px;
+}
+
+/* Rectangular Post Button */
+.post-btn {
+    position: fixed;
+    top: 20px;
+    right: 75px; /* Adjust the position of the Post button */
+    width: 60px;
+    height: 30px;
+    background-color: #50E673;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px; /* Slight rounded corners for the rectangular button */
+    transition: background 0.3s;
+}
+
+.post-btn:hover {
+    background-color: #777;
+}
+
+/* Sidebar styling */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    left: -250px;
+    background: #E6505F;
+    color: white;
+    transition: left 0.6s ease-in-out;
+    top: 70px;
+    z-index: 1;
+}
+
+.sidebar.open {
+    left: 0;
+    top: 70px;
+    z-index: 1;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 15;
+}
+
+.sidebar ul li {
+    border-bottom: 1px solid #ddd;
+    padding: 15px;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding-top: 15px;
+    padding-right:40px;
+    padding-left: 40px;
+    box-sizing: border-box;
+}
+
+.sidebar ul li:hover{
+    border-bottom: 1px solid #ddd;
+    background: #bf434f;
+    display: block;
+    padding: 15px;
+}
+
+
+
+/* Account button styling */
+.account-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    background-color: #FFFFFF;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: background 0.3s;
+}
+
+.account-btn:hover {
+    background-color: #777;
+}
+/* Feed Container */
+.feed-container {
+    max-width: 600px; /* Adjust as needed */
+    margin: 0 auto;   /* Center horizontally */
+    margin-top: 50px; /* Some spacing from header */
+}
+
+/* Each Feed Item (like an Instagram post) */
+.feed-item {
+    background: #fff;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+/* Header area: profile pic + username */
+.feed-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover; /* If you have a real image, this helps fill the circle */
+}
+
+.feed-username {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Post text area */
+.feed-content {
+    margin-bottom: 10px;
+}
+
+/* Footer (likes/comments) */
+.feed-footer {
+    display: flex;
+    gap: 15px; /* spacing between likes and comments */
+}
+
+.feed-footer .likes,
+.feed-footer .comments {
+    color: #888;
+    font-size: 14px;
+}
+
+/* Profile Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #50E673;
+    color: black;
+}
+/* Account Button (Profile Pic) */
+.account-btn {
+    background: transparent;
+    border: none;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.account-btn img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Post Button */
+.post-btn {
+    background: #28a745;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 15px;
+}
+
+.content {
+    margin-left: 240px;
+    padding: 20px;
+    padding-top: 90px;
+    transition: margin-left 0.6s ease-in-out;
+}
+
+/* Adjust content when sidebar is hidden */
+.sidebar:not(.open) ~ .content {
+    margin-left: 0;
+    transition: margin-left 0.6s ease-in-out;
+}
+
+.h1 {
+    color: #E6505F;
+    font-size: 3rem;
+    margin: 50px 0;
+}
+.title-btn {
+    background: transparent;
+    border: transparent;
+    color: white;
+    font-size: 28px;
+    margin: 0;
+    z-index: 1;
+    text-align: center;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    background-color: #E6505F;
+    color: white;
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    background-color: #50E673;
+}
+
+.header a {
+    color: white;
+    text-decoration: none;
+}
+
+.header a:hover {
+    text-decoration: underline;
+    color: green
+}
+
+.about-text {
+    color: #E6505F;
+    font-size: 2rem;
+    margin-top: 20px;
+}

@@ -1,0 +1,19 @@
+extends index.pug
+
+block content
+    h1= `Communities list`
+
+    table
+        tr
+          th ID
+          th Name
+          th Description
+          th Actions
+
+        each community in communities
+            tr
+              td= community && community.id ? community.id : 'N/A'
+              td= community && community.name ? community.name : 'N/A'
+              td= community && community.description ? community.description : 'N/A'
+              td
+                a(href=`/community/${community.id}`) View Community

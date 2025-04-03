@@ -22,6 +22,17 @@ class PostService {
                 throw new Error('Error retrieving post by ID: ' + err.message);
             });
     }
+
+    // Function to get a post by ID
+    static getPostByMemberId(memberId) {
+        return PostRepository.getPostByMemberId(memberId)
+            .then(posts => {
+                return posts;
+            })
+            .catch(err => {
+                throw new Error('Error retrieving post by ID: ' + err.message);
+            });
+    }
 }
 
 module.exports = PostService;

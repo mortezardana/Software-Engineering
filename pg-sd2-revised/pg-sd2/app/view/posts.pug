@@ -1,0 +1,25 @@
+extends index.pug
+
+block content
+    h1= `${member.username}'s Posts`
+
+    table
+        tr
+            th ID
+            th Date
+            th Text
+            th Community ID
+            th Member ID
+            th Activity ID
+
+        each post in posts
+            tr
+                td= post.id || 'N/A'
+                td= post.date || 'N/A'
+                td= post.text || 'N/A'
+                td
+                    a(href=`/community/${post.communityId}`) View Community
+                td
+                    a(href=`/member/${member.username}`) View Profile
+                td
+                    a(href=`/activity/${post.activity_id}/${member.username}`) View Activity
