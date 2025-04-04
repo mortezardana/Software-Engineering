@@ -1,6 +1,8 @@
 extends index.pug
 block content
     h1 Login here
+    if error
+        p(style="color: red") #{error}
     form(action='/authenticate' method='POST')
         label(for='email') Enter your email: 
         input(name='email' id='email') 

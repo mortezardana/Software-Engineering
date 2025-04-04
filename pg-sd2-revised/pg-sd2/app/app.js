@@ -709,7 +709,7 @@ app.post('/set-password', async function (req, res) {
             // If no existing user is found, add a new one
             console.log(member);
             newId = await member.addMember(params.password, params.username);
-            res.send('Perhaps a page where a new user sets a programme would be good here');
+            res.redirect('/login');
         }
     } catch (err) {
         console.error(`Error while adding password `, err.message);
@@ -732,11 +732,11 @@ app.post('/authenticate', async function (req, res) {
             }
             else {
                 // TODO improve the user journey here
-                res.send('invalid password');
+                res.render("login.pug", {error: "Invalid Password", email: params.email});
             }
         }
         else {
-            res.send('invalid email');
+            res.render("login.pug", {error: "Invalid Email", email: params.email});
         }
     } catch (err) {
         console.error(`Error while comparing `, err.message);

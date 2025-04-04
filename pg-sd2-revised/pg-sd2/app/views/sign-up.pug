@@ -3,12 +3,12 @@ block content
     h1 Register here
     form(action='/set-password' method='POST')
         label(for='email') Enter your email: 
-        input(name='email' id='email') 
+        input(name='email' id='email' required) 
 
         label(for ='username') Enter your Username:
-        input(name='username' id='username')
+        input(name='username' id='username' required)
 
         label(for='password') Enter your password: 
-        input(name='password' id= 'password' type = 'password')
+        input(name='password' id= 'password' type = 'password' required)
 
         input(type='submit' value='Submit')
