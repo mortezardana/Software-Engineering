@@ -1,10 +1,12 @@
 // Import express.js
 const path = require("path");
 const express = require("express");
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
+
 
 // Create express app
 const app = express();
+app.use(express.urlencoded({ extended: true }));
 
 // Add static files location
 app.use(express.static(path.join(__dirname, 'public')));
@@ -15,7 +17,7 @@ app.set("views", __dirname + "/views");
 // Get the functions in the db.js file to use
 const db = require('./services/db');
 const { createPool } = require("mysql2");
-const { members } = require("./entities/members");
+const { Member } = require("./entity/member");
 
 var session = require('express-session');
 app.use(session({
@@ -691,18 +693,20 @@ app.get("/sign-up", function(req,res){
 
 app.post('/set-password', async function (req, res) {
     params = req.body;
-    var user = new User(params.email);
+    var member = new Member(null, null, null, params.email, null, [], [], [], [], [], []);
+    console.log(params.email);
     try {
-        uId = await user.getIdFromEmail();
+        uId = await member.getIdFromEmail();
+        console.log(uId);
         if (uId) {
             // If a valid, existing user is found, set the password and redirect to the users single-student page
-            await user.setUserPassword(params.password);
+            await member.setMemberPassword(params.password);
             console.log(req.session.id);
-            res.send('Password set successfully');
+            res.redirect('/login');
         }
         else {
             // If no existing user is found, add a new one
-            newId = await user.addUser(params.email);
+            newId = await member.addMember(params.email);
             res.send('Perhaps a page where a new user sets a programme would be good here');
         }
     } catch (err) {
@@ -712,15 +716,17 @@ app.post('/set-password', async function (req, res) {
 
 app.post('/authenticate', async function (req, res) {
     params = req.body;
-    var user = new User(params.email);
+    console.log(Member)
+    console.log("Request body:", req.body);
+    var member = new Member(null, null, null, params.email, null, [], [], [], [], [], []);
     try {
-        uId = await user.getIdFromEmail();
-        if (uId) {
-            match = await user.authenticate(params.password);
+        username = await member.getUsernameFromEmail();
+        if (username) {
+            match = await member.authenticate(params.password);
             if (match) {
-                req.session.uid = uId;
+                req.session.username = username;
                 req.session.loggedIn = true;
-                res.redirect('/single-student/' + uId);
+                res.redirect('/feed' + username);
             }
             else {
                 // TODO improve the user journey here

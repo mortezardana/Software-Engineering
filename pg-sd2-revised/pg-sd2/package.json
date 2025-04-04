@@ -10,13 +10,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "dotenv": "^10.0.0",
     "express": "^4.21.2",
+    "express-session": "^1.18.1",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.0",
+    "node": "^23.11.0",
     "pug": "^3.0.3",
     "session": "^0.1.0",
+    "sessions": "^0.0.2-7",
     "sqlite3": "^5.0.2",
     "supervisor": "^0.12.0"
   }
