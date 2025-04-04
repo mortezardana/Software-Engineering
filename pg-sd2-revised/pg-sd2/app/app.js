@@ -46,6 +46,12 @@ app.get("/", function(req, res) {
     res.render('index.pug', { loggedIn, username });
 });
 
+app.get("/home-page", function(req, res){
+    const loggedIn = req.session.loggedIn || false;
+    const username = req.session.username || null;
+    res.render("home-page.pug", {loggedIn, username} );
+});
+
 app.get("/about-us", function(req, res) {
     res.render('about-us.pug');
 });
@@ -64,7 +70,7 @@ app.get("/userlistpage", function(req,res){
 //proposed pug template code
 app.get('/member/:username', async (req, res) => {
     try {
-      const username = req.params.username;
+      //const username = req.params.username;
 
       // First, get the member's ID using their username
       const memberQuery = `SELECT * FROM member WHERE username = ?`;
@@ -691,7 +697,7 @@ app.get("/login", function(req,res){
 
 app.get('/logout', function (req, res) {
     const loggedIn = req.session.loggedIn || false;
-    res.render('signup.pug', { loggedIn });
+    res.render('login.pug', { loggedIn });
   });
 
   

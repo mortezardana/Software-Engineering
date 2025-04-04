@@ -12,7 +12,7 @@ html(lang="en")
         window.location.href = "/member/#{username}";  // Here, username will be injected by Pug
       }
       function goHome() {
-        window.location.href = "/";
+        window.location.href = "/home-page";
       }
 
   body
@@ -31,7 +31,7 @@ html(lang="en")
     nav.sidebar#sidebar
       ul
         li
-          a(href="/") Home
+          a(href="/home-page") Home
         li
           a(href='/feed/' + username) Feed
         li
