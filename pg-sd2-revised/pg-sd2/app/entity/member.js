@@ -46,10 +46,10 @@ class Member {
     return true;
   }
 
-  async addMember(password){
+  async addMember(password, username){
     const pw = await bcrypt.hash(password, 10);
-    var sql = "INSERT INTO member (email, password) VALUES (? , ?)";
-    const result = await db.query(sql, [this.email, pw]);
+    var sql = "INSERT INTO member (email, password, username) VALUES (? , ? , ?)";
+    const result = await db.query(sql, [this.email, pw, username]);
     console.log(result.insertId);
     this.id = result.insertId;
     return true;

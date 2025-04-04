@@ -693,20 +693,22 @@ app.get("/sign-up", function(req,res){
 
 app.post('/set-password', async function (req, res) {
     params = req.body;
-    var member = new Member(null, null, null, params.email, null, [], [], [], [], [], []);
-    console.log(params.email);
+    var member = new Member(null, params.username, null, params.email, null, [], [], [], [], [], []);
+    console.log(params.username);
     try {
         uId = await member.getIdFromEmail();
         console.log(uId);
         if (uId) {
             // If a valid, existing user is found, set the password and redirect to the users single-student page
+            
             await member.setMemberPassword(params.password);
             console.log(req.session.id);
             res.redirect('/login');
         }
         else {
             // If no existing user is found, add a new one
-            newId = await member.addMember(params.email);
+            console.log(member);
+            newId = await member.addMember(params.password, params.username);
             res.send('Perhaps a page where a new user sets a programme would be good here');
         }
     } catch (err) {
@@ -718,7 +720,7 @@ app.post('/authenticate', async function (req, res) {
     params = req.body;
     console.log(Member)
     console.log("Request body:", req.body);
-    var member = new Member(null, null, null, params.email, null, [], [], [], [], [], []);
+    var member = new Member(null, params.username, null, params.email, null, [], [], [], [], [], []);
     try {
         username = await member.getUsernameFromEmail();
         if (username) {
@@ -726,7 +728,7 @@ app.post('/authenticate', async function (req, res) {
             if (match) {
                 req.session.username = username;
                 req.session.loggedIn = true;
-                res.redirect('/feed' + username);
+                res.redirect('/feed/' + username);
             }
             else {
                 // TODO improve the user journey here
