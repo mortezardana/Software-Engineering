@@ -6,11 +6,15 @@ html(lang="en")
     title Momentum
     link(rel="stylesheet", href="/styles.css")
     script(src="https://kit.fontawesome.com/ba2a21cca0.js" crossorigin="anonymous")
+    
+    // Inject server variable into JavaScript
     script.
+      const username = "#{username}";
+
       function goToProfile() {
-        // Correct the JavaScript URL to use the username properly from locals
-        window.location.href = "/member/#{username}";  // Here, username will be injected by Pug
+        window.location.href = "/member/" + username;
       }
+
       function goHome() {
         window.location.href = "/home-page";
       }
@@ -18,13 +22,11 @@ html(lang="en")
   body
     script(src="/script.js")
     header
-      // Only show the burger menu if logged in
       if (loggedIn)
         button.menu-toggle#menuToggle ☰
       .header-title
         button.title-btn(onclick="goHome()") Momentum
       .nav-right
-        // Only show account button if logged in
         if (loggedIn)
           button.account-btn#accountBtn(onclick="goToProfile()") 👤
 
@@ -33,7 +35,7 @@ html(lang="en")
         li
           a(href="/home-page") Home
         li
-          a(href='/feed/' + username) Feed
+          a(href="/feed/" + username) Feed
         li
           a(href="/communities") Communities
         li

@@ -696,8 +696,15 @@ app.get("/login", function(req,res){
 
 
 app.get('/logout', function (req, res) {
-    const loggedIn = req.session.loggedIn || false;
-    res.render('login.pug', { loggedIn });
+    // Destroy the session to log out the user
+    req.session.destroy(function (err) {
+      if (err) {
+        return res.status(500).send('Failed to log out');
+      }
+  
+      // Redirect to the login page or home page after logging out
+      res.redirect('/login');  // You can change this to wherever you want the user to go
+    });
   });
 
   
