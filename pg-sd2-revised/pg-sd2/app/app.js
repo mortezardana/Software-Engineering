@@ -693,6 +693,12 @@ app.get("/sign-up", function(req,res){
 
 app.post('/set-password', async function (req, res) {
     params = req.body;
+    const {email, username, password} = params;
+    console.log("request body: ", req.body);
+
+    if(!email || !username || !password){
+        return res.render("sign-up.pug", {error: "All fields are required."});
+    }
     var member = new Member(null, params.username, null, params.email, null, [], [], [], [], [], []);
     console.log(params.username);
     try {

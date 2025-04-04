@@ -1,6 +1,8 @@
 extends index.pug
 block content
     h1 Register here
+    if error
+        p(style="color: red") #{error}
     form(action='/set-password' method='POST')
         label(for='email') Enter your email: 
         input(name='email' id='email' required) 
