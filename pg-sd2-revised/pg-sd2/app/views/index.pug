@@ -8,8 +8,7 @@ html(lang="en")
     script(src="https://kit.fontawesome.com/ba2a21cca0.js" crossorigin="anonymous")
     script.
       function goToProfile() {
-        let username = "john_doe"; // Replace this dynamically if needed
-        window.location.href = "/member/" + username;
+        window.location.href = "/member/#{currentUser}";  // Navigate to current user profile
       }
       function goHome() {
         window.location.href = "/";
@@ -18,19 +17,22 @@ html(lang="en")
   body
     script(src="/script.js")
     header
-      button.menu-toggle#menuToggle ☰
+      // Only show the burger menu if logged in
+      if (loggedIn)
+        button.menu-toggle#menuToggle ☰
       .header-title
         button.title-btn(onclick="goHome()") Momentum
       .nav-right
-        //button.post-btn#postBtn Post
-        button.account-btn#accountBtn(onclick="goToProfile()") 👤
+        // Only show account button if logged in
+        if (loggedIn)
+          button.account-btn#accountBtn(onclick="goToProfile()") 👤
 
     nav.sidebar#sidebar
       ul
         li
           a(href="/") Home
         li
-          a(href="/feed/john_doe") Feed
+          a(href="/feed/#{currentUser}") Feed
         li
           a(href="/communities") Communities
         li

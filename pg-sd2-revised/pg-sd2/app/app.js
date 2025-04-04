@@ -30,7 +30,9 @@ app.use(session({
 // TODO: Need to implement a home page with buttons/cards for each entity listing page and render it here in the root route.
 // Create a route for root - /
 app.get("/", function(req, res) {
-    res.render('home-page.pug');
+    const loggedIn = req.session.loggedIn || false;
+    const username = req.session.username || null;
+    res.render('index.pug', { loggedIn, username });
 });
 
 app.get("/about-us", function(req, res) {
@@ -618,7 +620,10 @@ app.get('/feed/:username', async (req, res) => {
     ORDER BY p.id DESC
      `;
     const posts = await db.query(postsQuery);
-      const memberId = memberData[0].id;
+    const memberId = memberData[0].id;
+
+    const loggedIn = req.session.loggedIn || false;
+    const currentUser = req.session.username || null;
   
       // For demonstration, let's just select the posts from this member.
       // If you want an "Instagram-like" feed from multiple members, you'd
@@ -631,7 +636,9 @@ app.get('/feed/:username', async (req, res) => {
       console.log(posts);
       res.render('feed.pug', {
         member: memberData[0],
-        posts: posts
+        posts: posts,
+        loggedIn: loggedIn,
+        currentUser: currentUser
       });
     } catch (err) {
       console.error(err);
@@ -676,13 +683,14 @@ app.listen(3000,function(){
 });
 
 app.get("/login", function(req,res){
-    res.render("login.pug");
+    const loggedIn = req.session.loggedIn || false;
+    res.render('login.pug', { loggedIn });
 });
 
 
 app.get('/logout', function (req, res) {
-    req.session.destroy();
-    res.redirect('/login');
+    const loggedIn = req.session.loggedIn || false;
+    res.render('signup.pug', { loggedIn });
   });
 
   
