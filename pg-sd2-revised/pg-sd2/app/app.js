@@ -4,9 +4,13 @@ const express = require("express");
 const bcrypt = require('bcryptjs');
 
 
+
+
 // Create express app
 const app = express();
 app.use(express.urlencoded({ extended: true }));
+
+
 
 // Add static files location
 app.use(express.static(path.join(__dirname, 'public')));
@@ -27,6 +31,13 @@ app.use(session({
   cookie: { secure: false }
 }));
 
+
+// Middleware to set the login status globally
+app.use((req, res, next) => {
+    res.locals.loggedIn = req.session.loggedIn || false;  // Default to false if not logged in
+    res.locals.username = req.session.username || null;   // Default to null if no username
+    next();  // Continue processing the request
+});
 // TODO: Need to implement a home page with buttons/cards for each entity listing page and render it here in the root route.
 // Create a route for root - /
 app.get("/", function(req, res) {
@@ -602,49 +613,39 @@ app.get('/activity-id/:activityId', async (req, res) => {
 app.get('/feed/:username', async (req, res) => {
     try {
 
-      const username = req.params.username;
+      const username = req.session.username;  // Access the username from the sessionr
       const memberQuery = `SELECT * FROM member WHERE username = ?`;
       const memberData = await db.query(memberQuery, [username]);
-  
+
       if (memberData.length === 0) {
         return res.status(404).send('Member not found in feed with username');
       }
-      
-    const postsQuery = `
-    SELECT p.text, m.username, COUNT(DISTINCT c.id) AS comment_count, COUNT(DISTINCT l.id) AS like_count
-    FROM post p
-    JOIN member m ON p.writer_id = m.id
-    LEFT JOIN comment c ON p.id = c.post_id
-    LEFT JOIN likes_table l ON p.id = l.post_id
-    GROUP BY p.id, p.text, m.username
-    ORDER BY p.id DESC
-     `;
-    const posts = await db.query(postsQuery);
-    const memberId = memberData[0].id;
 
-    const loggedIn = req.session.loggedIn || false;
-    const currentUser = req.session.username || null;
-  
-      // For demonstration, let's just select the posts from this member.
-      // If you want an "Instagram-like" feed from multiple members, you'd
-      // fetch more data. For now, we'll keep it simple.
-      // Comments, likes, communities, etc. can also be fetched here if you want
-      // to display them on the feed. For now, we’ll keep them minimal.
-      // e.g. const commentsQuery = `...`; etc.
-  
+      const postsQuery = `
+        SELECT p.text, m.username, COUNT(DISTINCT c.id) AS comment_count, COUNT(DISTINCT l.id) AS like_count
+        FROM post p
+        JOIN member m ON p.writer_id = m.id
+        LEFT JOIN comment c ON p.id = c.post_id
+        LEFT JOIN likes_table l ON p.id = l.post_id
+        GROUP BY p.id, p.text, m.username
+        ORDER BY p.id DESC
+      `;
+      const posts = await db.query(postsQuery);
+
+      const memberId = memberData[0].id;
+
       // Render feed.pug
-      console.log(posts);
+      console.log("testing again: ", username);
       res.render('feed.pug', {
         member: memberData[0],
         posts: posts,
-        loggedIn: loggedIn,
-        currentUser: currentUser
+        username: username
       });
     } catch (err) {
       console.error(err);
       res.status(500).send('Error retrieving data');
     }
-  });
+});
   
 
 
@@ -742,7 +743,7 @@ app.post('/authenticate', async function (req, res) {
             if (match) {
                 req.session.username = username;
                 req.session.loggedIn = true;
-                res.redirect('/feed/' + username);
+                res.redirect('/feed/' + req.session.username);
             }
             else {
                 // TODO improve the user journey here

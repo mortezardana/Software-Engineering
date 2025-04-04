@@ -8,7 +8,8 @@ html(lang="en")
     script(src="https://kit.fontawesome.com/ba2a21cca0.js" crossorigin="anonymous")
     script.
       function goToProfile() {
-        window.location.href = "/member/#{currentUser}";  // Navigate to current user profile
+        // Correct the JavaScript URL to use the username properly from locals
+        window.location.href = "/member/#{username}";  // Here, username will be injected by Pug
       }
       function goHome() {
         window.location.href = "/";
@@ -32,7 +33,7 @@ html(lang="en")
         li
           a(href="/") Home
         li
-          a(href="/feed/#{currentUser}") Feed
+          a(href='/feed/' + username) Feed
         li
           a(href="/communities") Communities
         li
