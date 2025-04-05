@@ -1,0 +1,18 @@
+extends index.pug
+
+block content
+  h1 Login here
+  if error
+    p(style="color: red") #{error}
+  form(action='/authenticate' method='POST')
+    
+    label(for='email') Email
+    input(type='email' name='email' id='email' required)
+
+
+    label(for='password') Password
+    input(type='password' name='password' id='password' required)
+
+    input(type='submit' value='Submit')
+
+  button(onclick="window.location.href='/sign-up'") Sign up
