@@ -532,3 +532,28 @@ input, select {
     list-style: none;
     padding: 0;
 }
+
+.profile-columns {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.left-column,
+.right-column {
+    flex: 1;
+}
+
+.left-column {
+    max-width: 48%;
+}
+
+.right-column {
+    max-width: 48%;
+}
+
+.activity-card,
+.feed-item {
+    margin-bottom: 20px;
+}
