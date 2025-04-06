@@ -457,47 +457,47 @@ app.get('/comments/:username', async (req, res) => {
 // TODO: Another endpoint should be implemented after the connection between the community and member is designed and implemented in the database. that connection should store all the members joined in each community.
 app.get('/community/:communityId', async (req, res) => {
     try {
-        const communityId = req.params.communityId;
-
-        const communityQuery = `SELECT * FROM community WHERE id = ?`;
-        const communityData = await db.query(communityQuery, [communityId]);
-
-        console.log("This is the postData: ", communityData)
-
-        // Check if the member exists
-        if (communityData.length === 0) {
-            return res.status(404).send('Community not found with id');
-        }
-
-        // Render the member profile page with the fetched data
-        res.render('community.pug', {
-            community: communityData[0] });
+      const communityId = req.params.communityId;
+  
+      const community = await db.query("SELECT * FROM community WHERE id = ?", [communityId]);
+      const members = await db.query(`
+        SELECT m.username, m.name FROM member m
+        JOIN community_membership cm ON m.id = cm.member_id
+        WHERE cm.community_id = ?
+      `, [communityId]);
+  
+      res.render('community.pug', {
+        community: community[0],
+        members
+      });
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Error retrieving data');
+      console.error(err);
+      res.status(500).send("Error loading community");
     }
-});
+  });
+  
 
 app.get('/communities', async (req, res) => {
     try {
-        const communityQuery = `SELECT * FROM community`;
-        const communityData = await db.query(communityQuery);
-
-        console.log("This is the postData: ", communityData)
-
-        // Check if the member exists
-        if (communityData.length === 0) {
-            return res.status(404).send('Communities not found');
-        }
-
-        // Render the member profile page with the fetched data
-        res.render('communities.pug', {
-            communities: communityData });
+      const username = req.session.username;
+      const memberRes = await db.query("SELECT id FROM member WHERE username = ?", [username]);
+      const memberId = memberRes[0]?.id;
+  
+      const communities = await db.query("SELECT * FROM community");
+      const joined = await db.query("SELECT community_id FROM community_membership WHERE member_id = ?", [memberId]);
+      const joinedIds = joined.map(j => j.community_id);
+  
+      res.render('communities.pug', {
+        communities,
+        memberId,
+        joinedIds
+      });
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Error retrieving data');
+      console.error(err);
+      res.status(500).send("Error retrieving communities");
     }
-});
+  });
+  
 
 app.get('/communities-membership/:communityId', async (req, res) => {
     try {
@@ -772,3 +772,80 @@ app.post('/authenticate', async function (req, res) {
         console.error(`Error while comparing `, err.message);
     }
 });
+
+
+app.get("/add-activity", (req, res) => {
+    if (!req.session.loggedIn) return res.redirect("/login");
+    res.render("add-activity");
+  });
+  
+ 
+  app.post("/add-activity", async function(req, res) {
+    try {
+      const { type, averageSpeed, distance, elevation, movingTime } = req.body;
+  
+      // Ensure session is set up properly
+      const username = req.session.username;
+      if (!username) return res.status(401).send("Not logged in");
+  
+      // Get member ID
+      const memberData = await db.query("SELECT id FROM member WHERE username = ?", [username]);
+      const memberId = memberData[0]?.id;
+  
+      if (!memberId) return res.status(404).send("Member not found");
+  
+      // Insert new activity
+      console.log("INSERTING:", { type, averageSpeed, distance, elevation, movingTime, memberId });
+
+      await db.query(`
+        INSERT INTO activity (type, averageSpeed, distance, elevation, movingTime, member_id)
+        VALUES (?, ?, ?, ?, ?, ?)`,
+        [type, averageSpeed, distance, elevation, movingTime, memberId]
+      );
+  
+      res.redirect(`/activities/${username}`);
+    } catch (err) {
+      console.error("Failed to add activity:", err);
+      res.status(500).send("Error adding activity");
+    }
+  });
+  
+  app.post('/join-community/:communityId', async (req, res) => {
+    try {
+      const communityId = req.params.communityId;
+  
+      // Make sure user is logged in
+      const username = req.session.username;
+      if (!username) {
+        return res.status(401).send("You must be logged in to join a community.");
+      }
+  
+      // Get the member ID using the username
+      const memberResult = await db.query("SELECT id FROM member WHERE username = ?", [username]);
+      const memberId = memberResult[0]?.id;
+  
+      if (!memberId) {
+        return res.status(404).send("Member not found.");
+      }
+  
+      // Get current timestamp
+      const joinDate = new Date();
+  
+      // Assign default role as "member"
+      const role = "member";
+  
+      // Insert into community_membership table
+      console.log("Joining community:", { memberId, communityId, joinDate, role });
+  
+      await db.query(
+        "INSERT INTO community_membership (member_id, community_id, join_date, role) VALUES (?, ?, ?, ?)",
+        [memberId, communityId, joinDate, role]
+      );
+  
+      res.redirect(`/community/${communityId}`);
+    } catch (err) {
+      console.error("Error joining community:", err);
+      res.status(500).send("Failed to join community.");
+    }
+  });
+  
