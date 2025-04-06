@@ -1,0 +1,8 @@
+mixin activityCard(activity)
+    .activity-card
+        h3 #{activity.type}
+        ul
+            li Distance: #{activity.distance} km
+            li Speed: #{activity.averageSpeed} km/h
+            li Time: #{activity.movingTime} min
+            li Elevation Gain: #{activity.elevation} m
