@@ -1,0 +1,26 @@
+extends layout
+include components/_activityCard.pug
+
+block content
+    .profile-container
+        .profile-header
+            img.profile-pic(src=member.avatar || "/images/default-avatar.png", alt="avatar")
+            h1 #{member.name || member.username}
+            p= member.bio || "No bio provided."
+
+        .stats-section
+            h2 Lifetime Stats
+            ul.stats-list
+                li Total Distance: #{stats.totalDistance} km
+                li Total Time: #{stats.totalTime} minutes
+                li Average Speed: #{stats.avgSpeed} km/h
+                li Total Elevation: #{stats.totalElevation} m
+                li Activities Logged: #{activities.length}
+
+        .activities-feed
+            h2 Activities
+            if activities.length
+                each activity in activities
+                    +activityCard(activity)
+            else
+                p No activities yet.
