@@ -2,10 +2,14 @@
 body {
     margin: 0px;
     padding: 0px;
-    height: 100%;
     font-family: Arial, sans-serif;
     background: #faecec;
+    min-height: 100vh;
     text-align: center;
+}
+
+main {
+    padding-top: 80px; /* give breathing room under fixed header */
 }
 
 /* Header styling */
@@ -18,12 +22,13 @@ header {
     justify-content: space-between; /* Center content horizontally */
     align-items: center;
     width: 100%;    /* Center content vertically */
-    padding: 0px;
+    padding: 0 20px;
     padding-bottom: 10px;
     height: 60px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     font-size: 2rem;
     font-weight: bold;
+    z-index: 1000;
 }
 
 /* Center the header text */
@@ -161,18 +166,19 @@ header h1 {
 }
 /* Feed Container */
 .feed-container {
-    max-width: 600px; /* Adjust as needed */
-    margin: 0 auto;   /* Center horizontally */
-    margin-top: 50px; /* Some spacing from header */
+    max-width: 700px; /* Adjust as needed */
+    margin: auto;   /* Center horizontally */
+    margin-top: 20px; /* Some spacing from header */
 }
 
 /* Each Feed Item (like an Instagram post) */
 .feed-item {
-    background: #fff;
+    background: white;
     margin-bottom: 20px;
     padding: 15px;
-    border-radius: 8px;
+    border-radius: 10px;
     box-shadow: 0 0 4px rgba(0,0,0,0.1);
+    text-align: left;
 }
 
 /* Header area: profile pic + username */
@@ -210,6 +216,49 @@ header h1 {
 .feed-footer .comments {
     color: #888;
     font-size: 14px;
+}
+
+
+.feed-header img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+
+.feed-username {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.feed-body {
+    margin: 10px 0;
+}
+
+.activity-summary {
+    background: #f1f1f1;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.feed-footer {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    font-size: 0.9rem;
+    color: #555;
+    margin-top: 10px;
+}
+
+.feed-footer button {
+    background: none;
+    border: none;
+    color: #E6505F;
+    cursor: pointer;
+}
+
+.feed-footer button:hover {
+    color: #50E673;
 }
 
 /* Profile Table */
@@ -331,3 +380,101 @@ th {
     font-size: 2rem;
     margin-top: 20px;
 }
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+    color: #50E673;
+}
+
+@media screen and (max-width: 768px) {
+    .feed-container {
+        padding: 10px;
+    }
+
+    .sidebar {
+        width: 200px;
+    }
+
+    .card {
+        width: 120px;
+        height: 120px;
+        font-size: 1.2rem;
+    }
+
+    header {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 10px 0;
+    }
+
+    .post-btn {
+        top: 75px;
+        right: 20px;
+    }
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 15px;
+    margin: 0;
+}
+
+.btn-primary {
+    background: #E6505F;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background: #bf434f;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    max-width: 500px;
+    margin: auto;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 1rem;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+
+
