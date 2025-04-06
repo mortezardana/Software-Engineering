@@ -1,19 +1,31 @@
 extends index.pug
 
 block content
-    h1= `Communities list`
+  h1 Communities list
 
-    table
+  table
+    thead
+      tr
+        th ID
+        th Name
+        th Description
+        th Status
+        th Actions
+    tbody
+      each community in communities
         tr
-          th ID
-          th Name
-          th Description
-          th Actions
-
-        each community in communities
-            tr
-              td= community && community.id ? community.id : 'N/A'
-              td= community && community.name ? community.name : 'N/A'
-              td= community && community.description ? community.description : 'N/A'
-              td
-                a(href=`/community/${community.id}`) View Community
+          td= community.id
+          td 
+            a(href=`/community/${community.id}`)= community.name
+          td= community.description
+          td
+            if joinedIds.includes(community.id)
+              span(style="color: green") Joined ✅
+            else
+              span(style="color: gray") Not Joined
+          td
+            if !joinedIds.includes(community.id)
+              form(action=`/join-community/${community.id}`, method="POST")
+                button(type="submit") Join
+            else
+              span N/A
