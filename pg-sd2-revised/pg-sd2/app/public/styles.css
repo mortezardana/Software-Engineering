@@ -22,7 +22,7 @@ header {
     justify-content: space-between; /* Center content horizontally */
     align-items: center;
     width: 100%;    /* Center content vertically */
-    padding: 0 20px;
+    padding: 0px;
     padding-bottom: 10px;
     height: 60px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
