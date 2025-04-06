@@ -41,10 +41,12 @@ app.use((req, res, next) => {
 // TODO: Need to implement a home page with buttons/cards for each entity listing page and render it here in the root route.
 // Create a route for root - /
 app.get("/", function(req, res) {
-    const loggedIn = req.session.loggedIn || false;
-    const username = req.session.username || null;
-    res.render('index.pug', { loggedIn, username });
+    if (!req.session.loggedIn) {
+        return res.render("landing");
+    }
+    res.redirect("/feed/" + req.session.username);
 });
+
 
 app.get("/home-page", function(req, res){
     const loggedIn = req.session.loggedIn || false;
