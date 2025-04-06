@@ -4,8 +4,8 @@ const ActivityType = require('../model/ActivityType');
 
 class ActivityRepository {
     // Get all activities
-    static getAllActivities(filters = {}, page = 1, limit = 10) {
-        return new Promise((resolve, reject) => {
+    static async getAllActivities(filters = {}, page = 1, limit = 10) {
+        return new Promise(async (resolve, reject) => {
             let whereClause = 'WHERE 1=1';
             let queryParams = [];
 
@@ -25,18 +25,20 @@ class ActivityRepository {
 
             queryParams.push(limit, offset);
 
-            connection.query(query, queryParams, (err, results) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-
-                const activities = results.map((activityData) => {
-                    return new Activity(activityData.id, activityData.type, activityData.averageSpeed, activityData.distance, activityData.elevation, activityData.member, activityData.movingTime);
-                });
-
-                resolve(activities);
+            const results = await connection.query(query, [queryParams]);
+            const activities = results.map((activityData) => {
+                return new Activity(
+                    activityData.id,
+                    activityData.type,
+                    activityData.averageSpeed,
+                    activityData.distance,
+                    activityData.elevation,
+                    activityData.member,
+                    activityData.movingTime
+                );
             });
+
+            resolve(activities);
         });
     }
 
@@ -53,8 +55,14 @@ class ActivityRepository {
 
                     const validType = Object.values(ActivityType).includes(activityData.type) ? activityData.type : null;
 
-                    const activity = new Activity(activityData.id, validType, activityData.averageSpeed, activityData.distance, activityData.elevation, activityData.member, // Assuming member is mapped separately
-                        activityData.movingTime);
+                    const activity = new Activity(
+                        activityData.id, validType,
+                        activityData.averageSpeed,
+                        activityData.distance,
+                        activityData.elevation,
+                        activityData.member, // Assuming member is mapped separately
+                        activityData.movingTime
+                    );
                     resolve(activity);
                 } else {
                     resolve(null); // No activity found
@@ -66,47 +74,35 @@ class ActivityRepository {
     }
 
     // Add a new activity
-    static addActivity(activity) {
-        return new Promise((resolve, reject) => {
+    static async addActivity(activity) {
+        return new Promise(async (resolve, reject) => {
             const query = 'INSERT INTO activity (averageSpeed, distance, elevation, member, movingTime) VALUES (?, ?, ?, ?, ?)';
-            console.log("Executing query:", query, "with params:", [activity.getAverageSpeed(), activity.getDistance(), activity.getElevation(), activity.getMember(), activity.getMovingTime()]);
-            connection.query(query, [activity.getAverageSpeed(), activity.getDistance(), activity.getElevation(), activity.getMember(), activity.getMovingTime()], (err, results) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                resolve(results.insertId); // Return the new activity's ID
-            });
+            const results = await connection.query(query, [activity.getAverageSpeed(), activity.getDistance(), activity.getElevation(), activity.getMember(), activity.getMovingTime()]);
+            resolve(results.insertId); // Return the new activity's ID
         });
     }
 
     // Update an activity
-    static updateActivity(id, activity) {
-        return new Promise((resolve, reject) => {
+    static async updateActivity(id, activity) {
+        return new Promise(async (resolve, reject) => {
             const query = 'UPDATE activity SET averageSpeed = ?, distance = ?, elevation = ?, movingTime = ? WHERE id = ?';
             console.log("Executing query:", query, "with params:", [activity.getAverageSpeed(), activity.getDistance(), activity.getElevation(), activity.getMovingTime(), id]);
-            connection.query(query, [activity.getAverageSpeed(), activity.getDistance(), activity.getElevation(), activity.getMovingTime(), id], (err, results) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                resolve(results.affectedRows);
-            });
+            const results = await connection.query(query, [activity.getAverageSpeed(), activity.getDistance(), activity.getElevation(), activity.getMovingTime(), id]);
+            resolve(results.affectedRows);
         });
     }
 
     // Delete an activity
-    static deleteActivity(id) {
-        return new Promise((resolve, reject) => {
+    static async deleteActivity(id) {
+        return new Promise(async (resolve, reject) => {
             const query = 'DELETE FROM activity WHERE id = ?';
             console.log("Executing query:", query, "with params:", id);
-            connection.query(query, [id], (err, results) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                resolve(results.affectedRows);
-            });
+            const results = await connection.query(query, [id], (err, results));
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(results.affectedRows);
         });
     }
 
