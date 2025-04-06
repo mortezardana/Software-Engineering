@@ -21,13 +21,13 @@ block content
       td= member && member.name ? member.name : 'N/A'
       td= member && member.email ? member.email : 'N/A'
       td
-        a(href=`/activities/${member.username}`) View Activities
+        a(href=`/activity/${member.username}`) View Activities
       td
-        a(href=`/comments/${member.username}`) View Comments
+        a(href=`/comment/${member.username}`) View Comments
       td
         a(href=`/member-communities/${member.id}`) View Communities
       td
-        a(href=`/posts/${member.username}`) View Posts
+        a(href=`/post/${member.username}`) View Posts
 
       // For sprint 3 rewards is commented and it will be implemented for sprint 4.
       //-td
