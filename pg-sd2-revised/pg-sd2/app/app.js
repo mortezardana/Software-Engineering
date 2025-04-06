@@ -24,7 +24,7 @@ const ActivityResource = require('./web/ActivityResource');
 const CommentResource = require("./web/CommentResource");
 const CommunityResource = require("./web/CommunityResource");
 const LikeResource = require("./web/LikeResource");
-const MemberResource = require("./web/MemberResource");
+const MemberResource = require("./web/memberResource");
 const PostResource = require("./web/PostResource");
 const Member = require("./model/Member");
 const MemberService = require("./service/MemberService");
@@ -40,6 +40,14 @@ app.use(session({
 
 const router = express.Router();
 
+app.use((req, res, next) => {
+    res.locals.loggedIn = req.session.loggedIn || false;
+    res.locals.username = req.session.username || null;
+    next();
+});
+
+
+
 // Mount API routes
 app.use("/api", router);
 
@@ -51,12 +59,6 @@ app.use('/member', MemberResource);
 app.use('/post', PostResource);
 // router.use('/reward', RewardResource);
 
-// Middleware to set the login status globally
-app.use((req, res, next) => {
-    res.locals.loggedIn = req.session.loggedIn || false;  // Default to false if not logged in
-    res.locals.username = req.session.username || null;   // Default to null if no username
-    next();  // Continue processing the request
-});
 
 // Create a route for root - /
 app.get("/", function(req, res) {
@@ -99,6 +101,12 @@ app.get("/sign-up", function(req,res){
     }
     res.render("sign-up.pug");
 
+});
+
+app.get("/about-us", function(req,res){
+    if (req.session.loggedIn && req.session.username) {
+        res.render("about-us.pug");
+    }
 });
 
 app.post('/set-password', async function (req, res) {

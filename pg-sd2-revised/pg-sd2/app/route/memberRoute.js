@@ -1,5 +1,5 @@
 const express = require('express');
-const MemberResource = require('../web/MemberResource');
+const MemberResource = require('../web/memberResource');
 
 const router = express.Router();
 
