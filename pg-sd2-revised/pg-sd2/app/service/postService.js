@@ -29,10 +29,8 @@ class PostService {
         const posts = await PostRepository.getPostByMemberId(memberId);
         const postsWithActivity = await Promise.all(
             posts.map(async (post) => {
-                console.log("Post service: ", post)
                 if (post.activity) {
                     const activity = await ActivityRepository.getActivityById(post.activity);
-                    console.log("Activity in post service: ", activity)
                     return { ...post, activity };
                 }
                 return { ...post, activity: null}

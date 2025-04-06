@@ -51,7 +51,6 @@ class MemberService {
     static async addMember(password, username, email){
         const pw = await bcrypt.hash(password, 10);
         const result = await MemberRepository.addMember(username, email, pw)
-        console.log(result.insertId);
         return true;
     }
 
@@ -59,7 +58,6 @@ class MemberService {
     static async authenticate(submitted, username) {
         // Get the stored, hashed password for the user
         const result = await this.getMemberByUsername(username);
-        console.log("result in member service: ", result)
         const match = await bcrypt.compare(submitted, result.password);
         return match;
     }

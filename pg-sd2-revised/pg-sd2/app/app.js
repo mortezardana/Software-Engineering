@@ -105,20 +105,16 @@ app.get("/sign-up", function(req,res){
 app.post('/set-password', async function (req, res) {
     params = req.body;
     const {email, username, password} = params;
-    console.log("request body: ", req.body);
 
     if(!email || !username || !password){
         return res.render("sign-up.pug", {error: "All fields are required."});
     }
-    console.log(username);
     try {
         uId = await MemberService.getIdFromEmail(email);
-        console.log(uId);
         if (uId) {
             // If a valid, existing user is found, set the password and redirect to the users single-student page
 
             await MemberService.setMemberPassword(password, uId);
-            console.log(req.session.id);
             res.redirect('/login');
         }
         else {
@@ -133,13 +129,10 @@ app.post('/set-password', async function (req, res) {
 
 app.post('/authenticate', async function (req, res) {
     params = req.body;
-    console.log("Request body:", req.body);
     try {
         const username = await MemberService.getUsernameFromEmail(params.email);
-        console.log("Username in authenticate: ", username)
         if (username) {
             const match = await MemberService.authenticate(params.password, username);
-            console.log("match: ", match)
             if (match) {
                 req.session.username = username;
                 req.session.loggedIn = true;
