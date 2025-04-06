@@ -16,7 +16,9 @@ router.get("/", async (req, res) => {
             search: search,
         });
 
-        res.json(members);
+        res.render("members.pug", {
+            memberData: members
+        });
     } catch (error) {
         console.error(error);
         res.status(500).send("An error occurred while fetching members.");
@@ -28,13 +30,18 @@ router.get("/feed/:username", async (req, res) => {
     try {
         const { page = 1, pageSize = 10, search = "" } = req.query;
 
-        const member = await MemberService.getMemberByUsername(req.params.username);
+        const username = req.session.username;
+
+        const member = await MemberService.getMemberByUsername(username);
 
         const posts = await PostService.getPostByMemberId(member.id);
 
+        console.log("posts: ", posts);
+
         res.render('feed.pug', {
-            member: member[0],
-            posts: posts
+            member: member,
+            posts: posts,
+            username: username
         });
     } catch (error) {
         console.error(error);
@@ -43,7 +50,7 @@ router.get("/feed/:username", async (req, res) => {
 });
 
 // Get a member by ID
-router.get("/:id", async (req, res) => {
+router.get("/id/:id", async (req, res) => {
     try {
         const member = await MemberService.getMemberById(req.params.id);
 
@@ -62,10 +69,13 @@ router.get("/:id", async (req, res) => {
 // Get a member by Username
 router.get("/:username", async (req, res) => {
     try {
-        const member = await MemberService.getMemberById(req.params.id);
+        const username = req.session.username;
+        const member = await MemberService.getMemberByUsername(username);
 
         if (member) {
-            res.json(member);
+            res.render("member.pug", {
+                member: member,
+            });
         } else {
             res.status(404).send("Member not found.");
         }
@@ -121,7 +131,7 @@ router.post("/", async (req, res) => {
 });
 
 // Update a member by ID
-router.put("/:id", async (req, res) => {
+router.put("/id/:id", async (req, res) => {
     try {
         const updatedMember = await MemberService.updateMember(req.params.id, req.body);
         if (updatedMember) {
@@ -136,7 +146,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete a member by ID
-router.delete("/:id", async (req, res) => {
+router.delete("/id/:id", async (req, res) => {
     try {
         const deleted = await MemberService.deleteMember(req.params.id);
         if (deleted) {
