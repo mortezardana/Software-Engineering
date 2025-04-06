@@ -1,16 +1,15 @@
 // Import express.js
 const path = require("path");
 const express = require("express");
-const bodyParser = require("body-parser");
 
 // Import routes
 // const routes = require((path.join(__dirname, "./route")));
 
 // Create express app
-var app = express();
+const app = express();
 
 // Middleware
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Add static files location
@@ -22,13 +21,22 @@ app.set("views", __dirname + "/view");
 // Get the functions in the db.js file to use
 const db = require('./service/db');
 const ActivityResource = require('./web/ActivityResource');
-console.log("Activity Resource: ", ActivityResource);
 const CommentResource = require("./web/CommentResource");
 const CommunityResource = require("./web/CommunityResource");
 const LikeResource = require("./web/LikeResource");
 const MemberResource = require("./web/MemberResource");
 const PostResource = require("./web/PostResource");
+const Member = require("./model/Member");
+const MemberService = require("./service/MemberService");
 // const RewardResource = require("./web/RewardResource");
+
+var session = require('express-session');
+app.use(session({
+    secret: 'secretkeysdfjsflyoifasd',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+}));
 
 const router = express.Router();
 
@@ -43,10 +51,115 @@ app.use('/member', MemberResource);
 app.use('/post', PostResource);
 // router.use('/reward', RewardResource);
 
+// Middleware to set the login status globally
+app.use((req, res, next) => {
+    res.locals.loggedIn = req.session.loggedIn || false;  // Default to false if not logged in
+    res.locals.username = req.session.username || null;   // Default to null if no username
+    next();  // Continue processing the request
+});
 
 // Create a route for root - /
 app.get("/", function(req, res) {
-    res.render("home-page.pug");
+    const loggedIn = req.session.loggedIn || false;
+    const username = req.session.username || null;
+    res.render('index.pug', { loggedIn, username });
+});
+
+app.get("/home", function(req, res){
+    const loggedIn = req.session.loggedIn || false;
+    const username = req.session.username || null;
+    res.render("home-page.pug", {loggedIn, username} );
+});
+
+app.get("/login", function(req,res){
+    if (req.session.loggedIn && req.session.username) {
+        return res.redirect(`/member/feed/${req.session.username}`);
+    }
+    const loggedIn = req.session.loggedIn || false;
+    res.render('login.pug', { loggedIn });
+});
+
+
+app.get('/logout', function (req, res) {
+    // Destroy the session to log out the user
+    req.session.destroy(function (err) {
+        if (err) {
+            return res.status(500).send('Failed to log out');
+        }
+
+        // Redirect to the login page or home page after logging out
+        res.redirect('/login');  // You can change this to wherever you want the user to go
+    });
+});
+
+
+app.get("/sign-up", function(req,res){
+    if (req.session.loggedIn && req.session.username) {
+        return res.redirect(`/member/feed/${req.session.username}`);
+    }
+    res.render("sign-up.pug");
+
+});
+
+app.post('/set-password', async function (req, res) {
+    params = req.body;
+    const {email, username, password} = params;
+    console.log("request body: ", req.body);
+
+    if(!email || !username || !password){
+        return res.render("sign-up.pug", {error: "All fields are required."});
+    }
+    console.log(username);
+    try {
+        uId = await MemberService.getIdFromEmail(email);
+        console.log(uId);
+        if (uId) {
+            // If a valid, existing user is found, set the password and redirect to the users single-student page
+
+            await MemberService.setMemberPassword(password, uId);
+            console.log(req.session.id);
+            res.redirect('/login');
+        }
+        else {
+            // If no existing user is found, add a new one
+            await MemberService.addMember(password, username, email);
+            res.redirect('/login');
+        }
+    } catch (err) {
+        console.error(`Error while adding password `, err.message);
+    }
+});
+
+app.post('/authenticate', async function (req, res) {
+    params = req.body;
+    console.log("Request body:", req.body);
+    try {
+        const username = await MemberService.getUsernameFromEmail(params.email);
+        console.log("Username in authenticate: ", username)
+        if (username) {
+            const match = await MemberService.authenticate(params.password, username);
+            console.log("match: ", match)
+            if (match) {
+                req.session.username = username;
+                req.session.loggedIn = true;
+                res.redirect('/member/feed/' + req.session.username);
+            }
+            else {
+                // TODO improve the user journey here
+                res.render("login.pug", {error: "Invalid Password", email: params.email});
+            }
+        }
+        else {
+            res.render("login.pug", {error: "Invalid Email", email: params.email});
+        }
+    } catch (err) {
+        console.error(`Error while comparing `, err.message);
+    }
+});
+
+app.use((err, req, res, next) => {
+    console.error("Unhandled error:", err);
+    res.status(500).send("Internal Server Error");
 });
 
 // Start server on port 3000
