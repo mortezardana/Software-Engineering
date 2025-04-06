@@ -27,16 +27,19 @@ block content
       td
         a(href=`/posts/${member.username}`) View Posts
 
-  // Create Post button below the table
-  .post-button-container
-    a.btn-create-post(href="/create-post") + Create Post
+  // Create Post and Add Activity buttons below the table
+  .button-container
+    a.btn-action(href="/create-post") + Create Post
+    a.btn-action(href="/add-activity")  Add Activity
 
   style.
-    .post-button-container {
+    .button-container {
       margin-top: 20px;
+      display: flex;
+      gap: 15px;
     }
 
-    .btn-create-post {
+    .btn-action {
       background: #50E673;
       color: white;
       padding: 10px 20px;
@@ -48,6 +51,6 @@ block content
       transition: background-color 0.3s ease;
     }
 
-    .btn-create-post:hover {
+    .btn-action:hover {
       background-color: #3ac662;
     }
