@@ -1,0 +1,31 @@
+//- Single post card component
+mixin postCard(post)
+    .feed-item
+        .feed-header
+            img.profile-pic(src="/images/default-avatar.png")
+            span.feed-username #{member.name || 'Unknown'} (@#{member.username || 'anon'})
+            span.date &middot; #{post.date || 'Unknown Date'}
+
+        .feed-body
+            if post.text
+                p= post.text
+
+            if post.pics && post.pics.length
+                .images
+                    each pic in post.pics
+                        img.post-image(src=pic)
+
+            if post.activity
+                .activity-summary
+                    h4 Activity Summary
+                    ul
+                        li Type: #{post.activity.type || 'N/A'}
+                        li Distance: #{post.activity.distance || 0} km
+                        li Speed: #{post.activity.averageSpeed || 0} km/h
+                        li Time: #{post.activity.movingTime || 0} mins
+                        li Elevation: #{post.activity.elevation || 0} m
+
+        .feed-footer
+            form(action=`/likes/${post.id}`, method="post")
+                button Like (#{(post.likes || []).length})
+            a(href=`/comments/${post.id}`) Comments (#{(post.comments || []).length})
