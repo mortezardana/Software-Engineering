@@ -12,11 +12,11 @@ html(lang="en")
       const username = "#{username}";
 
       function goToProfile() {
-        window.location.href = "/member/" + username;
+        window.location.href = "/member/profile/" + username;
       }
 
       function goHome() {
-        window.location.href = "/home-page";
+        window.location.href = "/home";
       }
 
   body
@@ -33,11 +33,11 @@ html(lang="en")
     nav.sidebar#sidebar
       ul
         li
-          a(href="/home-page") Home
+          a(href="/home") Home
         li
-          a(href="/feed/" + username) Feed
+          a(href="member/feed/" + username) Feed
         li
-          a(href="/communities") Communities
+          a(href="/community/") Communities
         li
           a(href="/about-us") About Us
 
