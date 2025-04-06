@@ -63,30 +63,25 @@ class PostRepository {
 
   // Get a post by ID
   static getPostByMemberId(memberId) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const query = 'SELECT * FROM post WHERE writer_id = ?';
-      connection.query(query, [memberId], (err, results) => {
-        if (err) {
-          reject(err);
-          return;
-        }
+      const results = await connection.query(query, [memberId]);
 
         // Map results to Post instances
-        const posts = results.map((postData) => {
-          return new Post(
-              postData.id,
-              postData.date,
-              postData.text,
-              postData.pics,
-              postData.activity,  // Assuming activity is mapped separately
-              postData.writer,    // Assuming member is mapped separately
-              postData.comments,  // Assuming comments are mapped separately
-              postData.community  // Assuming community is mapped separately
-          );
-        });
-
-        resolve(posts);
+      const posts = results.map((postData) => {
+        return new Post(
+            postData.id,
+            new Date(postData.date).toLocaleDateString(),
+            postData.text,
+            postData.pics,
+            postData.activity_id,  // Assuming activity is mapped separately
+            postData.writer_id,    // Assuming member is mapped separately
+            postData.comments,  // Assuming comments are mapped separately
+            postData.community_id  // Assuming community is mapped separately
+        );
       });
+
+      resolve(posts);
     });
   }
 
