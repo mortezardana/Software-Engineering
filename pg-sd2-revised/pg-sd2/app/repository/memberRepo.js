@@ -5,34 +5,7 @@ class MemberRepository {
   // Get all members with pagination and filtering
   static getAllMembers(filters = {}, page = 1, limit = 10) {
     return new Promise(async (resolve, reject) => {
-      // Build the WHERE clause for filtering dynamically
-      // let whereClause = 'WHERE 1=1';  // Default "always true" condition for base query
-      let queryParams = [];
-
-      // if (filters.username) {
-      //   whereClause += ' AND username LIKE ?';
-      //   queryParams.push(`%${filters.username}%`); // Example of filtering by username
-      // }
-
-      // if (filters.email) {
-      //   whereClause += ' AND email LIKE ?';
-      //   queryParams.push(`%${filters.email}%`); // Example of filtering by email
-      // }
-      //
-      // if (filters.name) {
-      //   whereClause += ' AND name LIKE ?';
-      //   queryParams.push(`%${filters.name}%`); // Example of filtering by name
-      // }
-
-      // Calculate offset based on the page number and limit
-      // const offset = (page - 1) * limit;
-
-      // SQL query with pagination and filtering
-      // const query = `// SELECT * FROM member ${whereClause} LIMIT ? OFFSET ?`;
       const query = `SELECT * FROM member`;
-
-      // Add pagination parameters
-      // queryParams.push(limit, offset);
 
       console.log("Executing query:", query);
       const results = await connection.query(query);
