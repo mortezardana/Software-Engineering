@@ -1,5 +1,6 @@
 const connection = require('../service/db');
 const Activity = require('../model/Activity');
+const ActivityType = require('../model/ActivityType');
 
 class ActivityRepository {
   // Get all activities
@@ -47,18 +48,21 @@ class ActivityRepository {
 
   // Get an activity by ID
   static getActivityById(id) {
-    return new Promise((resolve, reject) => {
-      const query = 'SELECT * FROM activity WHERE id = ?';
-      connection.query(query, [id], (err, results) => {
-        if (err) {
-          reject(err);
-          return;
-        }
+    return new Promise(async (resolve, reject) => {
+      try {
+        const query = 'SELECT * FROM activity WHERE id = ?';
+        const results = await connection.query(query, [id]);
 
         if (results.length > 0) {
           const activityData = results[0];
+
+          const validType = Object.values(ActivityType).includes(activityData.type)
+              ? activityData.type
+              : null;
+
           const activity = new Activity(
               activityData.id,
+              validType,
               activityData.averageSpeed,
               activityData.distance,
               activityData.elevation,
@@ -69,7 +73,9 @@ class ActivityRepository {
         } else {
           resolve(null); // No activity found
         }
-      });
+      } catch (error) {
+        reject(error);
+      }
     });
   }
 

@@ -32,16 +32,6 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-// Create an activity
-router.post("/", async (req, res) => {
-    try {
-        const newActivity = await ActivityService.createActivity(req.body);
-        res.status(201).json(newActivity);
-    } catch (error) {
-        res.status(500).send("Error creating activity.");
-    }
-});
-
 // Update an activity
 router.put("/:id", async (req, res) => {
     try {
@@ -69,5 +59,31 @@ router.delete("/:id", async (req, res) => {
         res.status(500).send("Error deleting activity.");
     }
 });
+
+// GET form
+router.get("/new", (req, res) => {
+    if (!req.session.user) return res.redirect("/login");
+
+    res.render("newActivity.pug", {
+        user: req.session.user,
+        title: "Add Activity"
+    });
+});
+
+// POST handler (simplified)
+router.post("/", async (req, res) => {
+    try {
+        const activity = {
+            ...req.body,
+            member: req.session.user.id
+        };
+        await ActivityService.createActivity(activity);
+        res.redirect(`/members/feed/${req.session.user.username}`);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error creating activity.");
+    }
+});
+
 
 module.exports = router;
