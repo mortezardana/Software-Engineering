@@ -20,6 +20,10 @@ class ActivityService {
     static async deleteActivity(id) {
         return await ActivityRepository.deleteActivity(id);
     }
+
+    static async getActivitiesByMemberId(memberId) {
+        return await ActivityRepository.getActivitiesByMemberId(memberId);
+    }
 }
 
 module.exports = ActivityService;
