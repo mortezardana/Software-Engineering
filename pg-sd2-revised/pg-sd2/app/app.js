@@ -1,6 +1,7 @@
 // Import express.js
 const path = require("path");
 const express = require("express");
+const { requireLogin } = require("./middleware/auth");
 
 // Import routes
 // const routes = require((path.join(__dirname, "./route")));
@@ -43,12 +44,12 @@ const router = express.Router();
 // Mount API routes
 app.use("/api", router);
 
-app.use('/activity', ActivityResource);
-app.use('/comment', CommentResource);
-app.use('/community', CommunityResource);
-app.use('/like', LikeResource);
-app.use('/member', MemberResource);
-app.use('/post', PostResource);
+app.use('/activity', requireLogin, ActivityResource);
+app.use('/comment', requireLogin, CommentResource);
+app.use('/community', requireLogin, CommunityResource);
+app.use('/like', requireLogin, LikeResource);
+app.use('/member', requireLogin, MemberResource);
+app.use('/post', requireLogin, PostResource);
 // router.use('/reward', RewardResource);
 
 // Middleware to set the login status globally
@@ -65,7 +66,7 @@ app.get("/", function(req, res) {
     res.render('index.pug', { loggedIn, username });
 });
 
-app.get("/home", function(req, res){
+app.get("/home", requireLogin, function(req, res){
     const loggedIn = req.session.loggedIn || false;
     const username = req.session.username || null;
     res.render("home-page.pug", {loggedIn, username} );
