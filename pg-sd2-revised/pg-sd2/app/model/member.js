@@ -110,3 +110,5 @@ class Member {
     this._rewards = value;
   }
 }
+
+module.exports = Member;

@@ -74,3 +74,5 @@ class Post {
     this._community = value;
   }
 }
+
+module.exports = Post;

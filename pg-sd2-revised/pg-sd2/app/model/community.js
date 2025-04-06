@@ -56,3 +56,5 @@ class Community {
     this._badges = value;
   }
 }
+
+module.exports = Community;

@@ -56,3 +56,5 @@ class Comment {
     this._text = value;
   }
 }
+
+module.exports = Comment;

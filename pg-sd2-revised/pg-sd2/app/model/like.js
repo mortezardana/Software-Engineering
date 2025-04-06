@@ -38,3 +38,5 @@ class Like {
     this._likes = value;
   }
 }
+
+module.exports = Like;
