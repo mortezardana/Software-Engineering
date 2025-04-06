@@ -164,33 +164,41 @@ router.delete("/id/:id", requireLogin, async (req, res) => {
 router.get("/profile/:username", requireLogin, async (req, res) => {
     try {
         const member = await MemberService.getMemberByUsername(req.session.username);
-        const activities = await ActivityService.getActivitiesByMemberId(member.id);
+        const allActivities = await ActivityService.getActivitiesByMemberId(member.id);
+        const posts = await PostService.getPostByMemberId(member.id);
+
+        const activities = allActivities.slice(0, 3); // limit to 3 for initial view
+        const hasMore = allActivities.length > 3;
 
         // Calculate stats
         const stats = {
-            totalDistance: 0,
-            totalTime: 0,
-            totalElevation: 0,
-            avgSpeed: 0,
+            totalDistance: allActivities.reduce((acc, a) => acc + a.distance, 0),
+            totalTime: allActivities.reduce((acc, a) => acc + a.movingTime, 0),
+            totalElevation: allActivities.reduce((acc, a) => acc + a.elevation, 0),
+            avgSpeed: (allActivities.reduce((acc, a) => acc + a.averageSpeed, 0) / allActivities.length || 0).toFixed(1),
         };
-
-        if (activities.length) {
-            stats.totalDistance = activities.reduce((acc, a) => acc + a.distance, 0);
-            stats.totalTime = activities.reduce((acc, a) => acc + a.movingTime, 0);
-            stats.totalElevation = activities.reduce((acc, a) => acc + a.elevation, 0);
-            stats.avgSpeed = (activities.reduce((acc, a) => acc + a.averageSpeed, 0) / activities.length).toFixed(1);
-        }
 
         res.render("profile.pug", {
             member,
             activities,
-            stats
+            stats,
+            hasMore,
+            posts
         });
 
     } catch (err) {
         console.error(err);
         res.status(500).send("Error loading profile");
     }
+});
+
+router.get("/profile/:username/activities", async (req, res) => {
+    const member = await MemberService.getMemberByUsername(req.params.username);
+    const activities = await ActivityService.getActivitiesByMemberId(member.id);
+    res.render("activity-list.pug", {
+        activities,
+        member
+    });
 });
 
 
