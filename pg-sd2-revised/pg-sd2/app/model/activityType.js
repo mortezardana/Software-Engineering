@@ -1,6 +1,6 @@
 const ActivityType = Object.freeze({
-  RUN: 'Run',
-  CYCLE: 'Cycle'
+  RUN: 'RUN',
+  CYCLE: 'CYCLE'
 });
 
 module.exports = ActivityType;
