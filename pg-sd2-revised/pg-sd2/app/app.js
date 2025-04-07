@@ -1,6 +1,8 @@
 // Import express.js
 const path = require("path");
 const express = require("express");
+const http = require("http");
+const socketIO = require("socket.io");
 const { requireLogin } = require("./middleware/auth");
 
 // Import routes
@@ -8,6 +10,8 @@ const { requireLogin } = require("./middleware/auth");
 
 // Create express app
 const app = express();
+const server = http.createServer(app); // <--- use http server
+const io = socketIO(server);           // <--- attach Socket.IO to server
 
 // Middleware
 app.use(express.json());
@@ -165,6 +169,34 @@ app.use((err, req, res, next) => {
 });
 
 // Start server on port 3000
-app.listen(3000,function(){
-    console.log(`Server running at http://127.0.0.1:3000/`);
+server.listen(3000, () => {
+    console.log("Server running at http://localhost:3000/");
+});
+
+const activeUsers = {};
+
+io.on("connection", (socket) => {
+    console.log("Socket connected:", socket.id);
+
+    socket.on("register", (username) => {
+        activeUsers[username] = socket.id;
+        console.log(`User registered: ${username}`);
+    });
+
+    socket.on("private_message", ({ to, from, message }) => {
+        const target = activeUsers[to];
+        if (target) {
+            io.to(target).emit("private_message", { from, message });
+        }
+    });
+
+    socket.on("disconnect", () => {
+        for (const username in activeUsers) {
+            if (activeUsers[username] === socket.id) {
+                delete activeUsers[username];
+                break;
+            }
+        }
+        console.log("Socket disconnected:", socket.id);
+    });
 });

@@ -38,7 +38,6 @@ class MemberService {
 
     static async getUsernameFromEmail(email){
         const member = await this.getMemberByEmail(email);
-        console.log("Member in service: ", member)
         return member.username
     }
 

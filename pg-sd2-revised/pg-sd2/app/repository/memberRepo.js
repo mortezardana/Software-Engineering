@@ -115,7 +115,6 @@ class MemberRepository {
             [], // posts
             []  // rewards
         );
-        console.log("member in repo: ", member)
         resolve(member);
       } else {
         resolve(null); // No member found

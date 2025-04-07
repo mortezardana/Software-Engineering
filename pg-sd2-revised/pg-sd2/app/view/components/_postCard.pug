@@ -1,31 +1,33 @@
-//- Single post card component
 mixin postCard(post)
-    .feed-item
-        .feed-header
-            img.profile-pic(src="/images/default-avatar.png")
-            span.feed-username #{member.name || 'Unknown'} (@#{member.username || 'anon'})
-            span.date &middot; #{post.date || 'Unknown Date'}
+    .unified-card
+        .card-header
+            img.profile-pic(src=member.avatar || "/images/default-avatar.png")
+            .card-meta
+                span.name #{member.name || 'Unknown'}
+                span.username @#{member.username || 'anon'}
+                if post.date
+                    span.date &middot; #{new Date(post.date).toLocaleDateString()}
 
-        .feed-body
+        .card-body
             if post.text
-                p= post.text
+                p.card-text= post.text
 
             if post.pics && post.pics.length
-                .images
+                .card-images
                     each pic in post.pics
-                        img.post-image(src=pic)
+                        img.card-image(src=pic)
 
             if post.activity
-                .activity-summary
+                .activity-details
                     h4 Activity Summary
                     ul
-                        li Type: #{post.activity.type || 'N/A'}
-                        li Distance: #{post.activity.distance || 0} km
-                        li Speed: #{post.activity.averageSpeed || 0} km/h
-                        li Time: #{post.activity.movingTime || 0} mins
-                        li Elevation: #{post.activity.elevation || 0} m
+                        li Type: #{post.activity.type}
+                        li Distance: #{post.activity.distance} km
+                        li Speed: #{post.activity.averageSpeed} km/h
+                        li Time: #{post.activity.movingTime} min
+                        li Elevation: #{post.activity.elevation} m
 
-        .feed-footer
-            form(action=`/likes/${post.id}`, method="post")
-                button Like (#{(post.likes || []).length})
-            a(href=`/comments/${post.id}`) Comments (#{(post.comments || []).length})
+        .card-footer
+            form(action=`/like/${post.id}`, method="POST")
+                button.card-action Like (#{(post.likes || []).length})
+            a.card-action(href=`/comments/${post.id}`) Comment (#{(post.comments || []).length})
