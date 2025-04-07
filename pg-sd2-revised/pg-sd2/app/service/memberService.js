@@ -50,7 +50,7 @@ class MemberService {
     static async addMember(password, username, email){
         const pw = await bcrypt.hash(password, 10);
         const result = await MemberRepository.addMember(username, email, pw)
-        return true;
+        return result;
     }
 
     // Test a submitted password against a stored password

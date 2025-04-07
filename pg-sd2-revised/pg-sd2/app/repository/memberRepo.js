@@ -123,17 +123,12 @@ class MemberRepository {
   }
 
   // Add a new member
-  static addMember(member) {
+  static async addMember(username, email, pw) {
     return new Promise(async (resolve, reject) => {
       const query = 'INSERT INTO member (username, email, password) VALUES (?, ?, ?)';
-      console.log("Executing query:", query, "with params:", [member.username, member.email, member.password]);
-      await connection.query(query, [member.username, member.email, member.password], (err, results) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(results.insertId); // Return the new member's ID
-      });
+      console.log("Executing query:", query, "with params:", [username, email, pw]);
+      const results = await connection.query(query, [username, email, pw]);
+      resolve(results.insertId); // Return the new member's ID
     });
   }
 
