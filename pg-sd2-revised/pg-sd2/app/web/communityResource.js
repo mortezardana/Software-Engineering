@@ -12,7 +12,9 @@ router.get("/", async (req, res) => {
             pageSize: parseInt(pageSize),
             search: search,
         });
-        res.json(communities);
+        res.render('communities.pug', {
+            communities: communities
+        });
     } catch (error) {
         res.status(500).send("Error fetching communities.");
     }
@@ -22,8 +24,12 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
     try {
         const community = await CommunityService.getCommunityById(req.params.id);
+        const members = await CommunityService.getAllMembersOfCommunity(community.id);
         if (community) {
-            res.json(community);
+            res.render('community.pug', {
+                community: community,
+                members: members
+            });
         } else {
             res.status(404).send("Community not found.");
         }
