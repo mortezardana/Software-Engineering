@@ -10,6 +10,7 @@ block content
             th Name
             th Email
             th Actions
+            th Message
 
         each member in memberData
             tr
@@ -19,3 +20,5 @@ block content
                 td= member.email || 'N/A'
                 td
                     a(href=`/member/${member.username}`) View Profile
+                td
+                    a(href=`/member/chat/${member.username}`) Message Them

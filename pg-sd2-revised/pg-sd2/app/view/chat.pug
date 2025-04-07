@@ -1,0 +1,46 @@
+extends index
+
+block content
+    .chat-container
+        h2 Chat with #{partner}
+
+        #chat-box
+        form#chat-form
+            input(type="text", id="message", placeholder="Type a message")
+            button(type="submit") Send
+
+    script(src="/socket.io/socket.io.js")
+    script.
+        const socket = io();
+        const partner = "#{partner}";
+        console.log("username:", username, "partner:", partner);
+
+
+        socket.emit("register", username);
+
+        const form = document.getElementById("chat-form");
+        const chatBox = document.getElementById("chat-box");
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const msgInput = document.getElementById("message");
+            const msg = msgInput.value.trim();
+            if (!msg) return;
+
+            socket.emit("private_message", {
+                to: partner,
+                from: username,
+                message: msg
+            });
+
+            // 👇 This is what shows your own message locally
+            chatBox.innerHTML += `<div><strong>You:</strong> ${msg}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            msgInput.value = "";
+        });
+
+        socket.on("private_message", ({from, message}) => {
+            chatBox.innerHTML += `<div><strong>${from}:</strong> ${message}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
