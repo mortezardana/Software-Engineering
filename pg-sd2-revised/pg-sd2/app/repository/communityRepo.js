@@ -117,6 +117,20 @@ class CommunityRepository {
       }
     });
   }
+
+  static async getAllJoinedCommunitiesOfMember(id) {
+    return new Promise(async (resolve, reject) => {
+      const query = 'SELECT community_id FROM community_membership WHERE member_id = ?';  // SQL query to get community by ID
+
+      const results = await connection.query(query, [id]);
+
+      if (results.length > 0) {
+        resolve(results);
+      } else {
+        resolve(null); // No community found with the given ID
+      }
+    });
+  }
 }
 
 module.exports = CommunityRepository;

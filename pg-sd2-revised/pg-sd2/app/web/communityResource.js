@@ -8,23 +8,32 @@ const router = express.Router();
 router.get("/", async (req, res) => {
     try {
         const { page = 1, pageSize = 10, search = "" } = req.query;
+
         const communities = await CommunityService.getAllCommunities({
             page: parseInt(page),
             pageSize: parseInt(pageSize),
             search: search,
         });
 
-        console.log("Here are all the communities", communities)
+        const member = await MemberService.getMemberByUsername(req.session.username);
 
-        // Render the communities page
-        res.render('communities.pug', {
-            communities: communities,  // Convert to JSON if needed
-            joinedIds: []  // Empty, as this is for all communities (not member-specific)
+        const communityOfMember = await CommunityService.getAllJoinedCommunitiesOfMember(member.id);
+
+        console.log("Community member:", communityOfMember);
+        const joinedIds = communityOfMember.map(c => c.community_id);
+
+        console.log("Joined community IDs:", joinedIds);
+
+        res.render("communities.pug", {
+            communities,
+            joinedIds
         });
     } catch (error) {
+        console.error(error);
         res.status(500).send("Error fetching communities.");
     }
 });
+
 
 // Get a community by ID
 router.get("/:id", async (req, res) => {
