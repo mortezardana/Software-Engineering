@@ -1,5 +1,6 @@
 const express = require("express");
 const ActivityService = require("../service/ActivityService");
+const MemberService = require("../service/MemberService");
 require('dotenv').config();
 
 const router = express.Router();
@@ -26,6 +27,8 @@ router.get("/add-activity", (req, res) => {
 });
 
 router.post("/add-activity", async (req, res) => {
+    const member = await MemberService.getMemberByUsername(req.session.username);
+    const memberId = member.id;
     const {
         type,
         averageSpeed,
@@ -42,6 +45,7 @@ router.post("/add-activity", async (req, res) => {
         type,
         averageSpeed,
         distance,
+        memberId,
         elevation,
         movingTime,
         routeGeoJson
@@ -58,6 +62,7 @@ router.get("/:id", async (req, res) => {
         if (activity.routeGeoJson) {
             try {
                 routeGeoJson = JSON.parse(activity.routeGeoJson);
+                activity.routeGeoJson = JSON.stringify(routeGeoJson);
             } catch (err) {
                 console.error("Failed to parse GeoJSON:", err);
             }
