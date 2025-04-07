@@ -1,0 +1,11 @@
+extends index.pug
+
+block content
+  h1 Edit Post
+
+  form(method="POST", action=`/edit-post/${post.id}`)
+    label(for="text") Edit Text:
+    textarea(name="text", required)= post.text
+
+    br
+    button(type="submit") Save Changes
