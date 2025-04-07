@@ -1,0 +1,23 @@
+extends index.pug
+
+block content
+  h1 Post Page
+
+  table
+    tr
+      th ID
+      th Date
+      th Text
+      th Community ID
+      th Writer ID
+      th Activity ID
+    tr
+      td= post && post.id ? post.id : 'N/A'
+      td= post && post.date ? post.date : 'N/A'
+      td= post && post.text ? post.text : 'N/A'
+      td
+        a(href=`/community/${post.community_id}`) View Community
+      td
+        a(href=`/member/id/${post.writer_id}`) View Member
+      td
+        a(href=`/activity-id/${post.activity_id}`) View Activity

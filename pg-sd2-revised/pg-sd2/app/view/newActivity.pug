@@ -1,0 +1,30 @@
+extends index
+
+block content
+    .feed-container
+        h2 Log New Activity
+
+        form(action="/activities", method="POST")
+            .form-group
+                label(for="type") Activity Type:
+                select(name="type", required)
+                    option(value="RUN") Run
+                    option(value="CYCLE") Cycle
+
+            .form-group
+                label(for="distance") Distance (km):
+                input(type="number", name="distance", step="0.01", required)
+
+            .form-group
+                label(for="averageSpeed") Average Speed (km/h):
+                input(type="number", name="averageSpeed", step="0.1", required)
+
+            .form-group
+                label(for="elevation") Elevation Gain (m):
+                input(type="number", name="elevation", required)
+
+            .form-group
+                label(for="movingTime") Moving Time (minutes):
+                input(type="number", name="movingTime", required)
+
+            button.btn-primary(type="submit") Save Activity

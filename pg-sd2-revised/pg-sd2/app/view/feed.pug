@@ -1,0 +1,31 @@
+extends index.pug
+
+block content
+  h2 Feed
+
+  // Container for all feed items
+  .feed-container
+    // Loop through each post in "posts"
+    each post in posts
+      .feed-item
+        .feed-header
+          // Placeholder profile pic (replace with actual user image if available)
+          i(class="fa-light fa-circle-user")
+          //img.profile-pic(src="/images/default-profile.png", alt="Profile Picture")
+
+          // Display the username from each post
+          .feed-username= post.username
+        
+        .feed-image
+          //the image contained in the post
+          i(class="fa-regular fa-image fa-2xl")
+          //img.post-pic(src="/images/default-profile.png", alt="Post Picture")
+
+        .feed-content
+          // The main text of the post
+          p= post.text
+
+        .feed-footer
+          // For now, just show placeholder likes/comments or actual fields if you have them
+          .likes Likes: #{post.like_count}
+          .comments Comments: #{post.comment_count}

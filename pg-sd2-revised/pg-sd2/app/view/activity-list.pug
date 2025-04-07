@@ -1,0 +1,8 @@
+extends index
+include components/_activityCard.pug
+
+block content
+    .profile-container
+        h2 All Activities for #{member.name}
+        each activity in activities
+            +activityCard(activity)

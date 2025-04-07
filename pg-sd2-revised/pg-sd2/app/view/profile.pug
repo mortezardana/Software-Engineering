@@ -1,0 +1,55 @@
+extends index
+include components/_activityCard.pug
+include components/_postCard.pug
+
+block content
+    .profile-container
+        .profile-header
+            img.profile-pic(src=member.avatar || "/images/default-avatar.png", alt="avatar")
+            h1 #{member.name || member.username}
+            p= member.bio || "No bio provided."
+
+        .stats-section
+            h2 Lifetime Stats
+
+            .stats-grid
+                .stat-card
+                    h3 Total Distance
+                    p #{stats.totalDistance} km
+
+                .stat-card
+                    h3 Total Time
+                    p #{stats.totalTime}
+
+                .stat-card
+                    h3 Avg Speed
+                    p #{stats.avgSpeed} km/h
+
+                .stat-card
+                    h3 Elevation Gain
+                    p #{stats.totalElevation} m
+
+                .stat-card
+                    h3 Activities
+                    p #{activityCount}
+
+        .profile-columns
+            .left-column
+                h2 Recent Activities
+                if activities.length
+                    each activity in activities
+                        +activityCard(activity)
+                else
+                    p No activities yet.
+
+                if hasMore
+                    form(action=`/member/profile/${member.username}/activities`, method="get")
+                        button(type="submit").btn-primary Show More
+
+            .right-column
+                h2 Posts
+                if posts.length
+                    each post in posts
+                        +postCard(post)
+                else
+                    p No posts yet.

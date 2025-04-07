@@ -1,0 +1,45 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Momentum
+    link(rel="stylesheet", href="/styles.css")
+    script(src="https://kit.fontawesome.com/ba2a21cca0.js" crossorigin="anonymous")
+
+    // Inject server variable into JavaScript
+    script.
+      const username = "#{username}";
+
+      function goToProfile() {
+        window.location.href = "/member/profile/" + username;
+      }
+
+      function goHome() {
+        window.location.href = "/home";
+      }
+
+  body
+    script(src="/script.js")
+    header
+      if (loggedIn)
+        button.menu-toggle#menuToggle ☰
+      .header-title
+        button.title-btn(onclick="goHome()") Momentum
+      .nav-right
+        if (loggedIn)
+          button.account-btn#accountBtn(onclick="goToProfile()") 👤
+
+    nav.sidebar#sidebar
+      ul
+        li
+          a(href="/home") Home
+        li
+          a(href="/member/feed/" + username) Feed
+        li
+          a(href="/community/") Communities
+        li
+          a(href="/about-us") About Us
+
+    div.content
+      block content

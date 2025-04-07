@@ -1,0 +1,75 @@
+extends index
+
+block content
+    .activity-form-container
+        h1 Add New Activity
+
+        form(action="/activity/add-activity", method="POST", onsubmit="return saveDrawnRoute()")
+            .form-group
+                label(for="type") Activity Type
+                select(name="type", required)
+                    option(value="RUN") RUN
+                    option(value="CYCLE") CYCLE
+
+            .form-group
+                label(for="averageSpeed") Average Speed (km/h)
+                input(type="number", step="0.1", name="averageSpeed", required)
+
+            .form-group
+                label(for="distance") Distance (km)
+                input(type="number", step="0.1", name="distance", required)
+
+            .form-group
+                label(for="elevation") Elevation (m)
+                input(type="number", name="elevation", required)
+
+            .form-group
+                label(for="movingTime") Moving Time (HH:MM:SS)
+                input(type="text", name="movingTime", required)
+
+            .form-group
+                label Draw your route
+                #map
+
+            input(type="hidden", name="routeGeoJson", id="routeGeoJson")
+
+            button(type="submit", class="submit-btn") Add Activity
+
+    // Load Mapbox + Draw
+    link(rel="stylesheet", href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css")
+    link(rel="stylesheet", href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.4.2/mapbox-gl-draw.css")
+    script(src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js")
+    script(src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.4.2/mapbox-gl-draw.js")
+
+    // Map and drawing logic
+    script.
+        document.addEventListener("DOMContentLoaded", () => {
+            mapboxgl.accessToken = "!{mapboxToken}";
+            const map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v11',
+                center: [0, 0],
+                zoom: 2
+            });
+
+            const draw = new MapboxDraw({
+                displayControlsDefault: false,
+                controls: {
+                    line_string: true,
+                    trash: true
+                },
+                defaultMode: 'draw_line_string'
+            });
+
+            map.addControl(draw);
+
+            window.saveDrawnRoute = function () {
+                const data = draw.getAll();
+                if (data.features.length === 0) {
+                    alert("Please draw your route.");
+                    return false;
+                }
+                document.getElementById("routeGeoJson").value = JSON.stringify(data);
+                return true;
+            }
+        });

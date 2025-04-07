@@ -1,0 +1,20 @@
+extends index.pug
+
+block content
+    h1 Register here
+    if error
+        p(style="color: red") #{error}
+    form(action='/set-password' method='POST')
+        input(type='email' name='email' id='email' required)
+        label(for='email') Email
+
+        input(type='text' name='username' id='username' required)
+        label(for='username') Username
+
+
+        input(type='password' name='password' id='password' required)
+        label(for='password') Password
+
+        input(type='submit' value='Submit')
+
+    button(onclick="window.location.href='/login'") Log in

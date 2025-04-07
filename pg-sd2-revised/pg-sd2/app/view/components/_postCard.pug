@@ -1,0 +1,33 @@
+mixin postCard(post)
+    .unified-card
+        .card-header
+            img.profile-pic(src=member.avatar || "/images/default-avatar.png")
+            .card-meta
+                span.name #{member.name || 'Unknown'}
+                span.username @#{member.username || 'anon'}
+                if post.date
+                    span.date &middot; #{new Date(post.date).toLocaleDateString()}
+
+        .card-body
+            if post.text
+                p.card-text= post.text
+
+            if post.pics && post.pics.length
+                .card-images
+                    each pic in post.pics
+                        img.card-image(src=pic)
+
+            if post.activity
+                .activity-details
+                    h4 Activity Summary
+                    ul
+                        li Type: #{post.activity.type}
+                        li Distance: #{post.activity.distance} km
+                        li Speed: #{post.activity.averageSpeed} km/h
+                        li Time: #{post.activity.movingTime} min
+                        li Elevation: #{post.activity.elevation} m
+
+        .card-footer
+            form(action=`/like/${post.id}`, method="POST")
+                button.card-action Like (#{(post.likes || []).length})
+            a.card-action(href=`/comments/${post.id}`) Comment (#{(post.comments || []).length})
