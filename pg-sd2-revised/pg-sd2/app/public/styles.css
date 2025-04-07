@@ -746,3 +746,25 @@ button {
 button:hover {
     background: #c9434f;
 }
+
+.button-container {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+}
+
+.btn-action {
+    background: #50E673;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.btn-action:hover {
+    background-color: #3ac662;
+}
