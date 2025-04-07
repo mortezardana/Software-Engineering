@@ -12,8 +12,8 @@ block content
 
         each community in communities
             tr
-              td= community && community.id ? community.id : 'N/A'
-              td= community && community.name ? community.name : 'N/A'
-              td= community && community.description ? community.description : 'N/A'
+              td= community && community._id ? community._id : 'N/A'
+              td= community && community._name ? community._name : 'N/A'
+              td= community && community._description ? community._description : 'N/A'
               td
                 a(href=`/community/${community.id}`) View Community

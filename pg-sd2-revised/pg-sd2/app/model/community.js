@@ -55,6 +55,17 @@ class Community {
   set badges(value) {
     this._badges = value;
   }
+  
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      description: this.description,
+      members: this.members,
+      posts: this.posts,
+      badges: this.badges
+    };
+  }
 }
 
 module.exports = Community;

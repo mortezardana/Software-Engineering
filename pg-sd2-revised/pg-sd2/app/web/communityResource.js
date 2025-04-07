@@ -12,9 +12,10 @@ router.get("/", async (req, res) => {
             pageSize: parseInt(pageSize),
             search: search,
         });
+
         res.render('communities.pug', {
-            communities: communities
-        });
+            communities: communities.map(c => c.toJSON())
+          });
     } catch (error) {
         res.status(500).send("Error fetching communities.");
     }
