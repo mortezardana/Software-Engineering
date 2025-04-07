@@ -3,7 +3,7 @@ require("dotenv").config();
 const mysql = require('mysql2/promise');
 
 const config = {
-  db: { /* do not put password or any sensitive info here, done only for demo */
+  db: { /* do not put password or any sensitive info here, done only for demoes */
     host: process.env.DB_CONTAINER,
     port: process.env.DB_PORT,
     user: process.env.MYSQL_ROOT_USER,

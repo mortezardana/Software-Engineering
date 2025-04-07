@@ -37,7 +37,7 @@ const getMembers = () => {
   });
 };
 
-// Function to get a member by ID
+// Function to get a member by their ID
 const getMemberById = (id) => {
   return new Promise((resolve, reject) => {
     const query = 'SELECT * FROM members WHERE id = ?';  // SQL query to get member by id

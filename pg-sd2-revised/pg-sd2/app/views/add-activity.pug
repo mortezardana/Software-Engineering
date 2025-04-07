@@ -24,8 +24,8 @@ block content
         input(type="number", name="elevation", required)
 
       .form-group
-        label(for="movingTime") Moving Time (HH:MM:SS)
-        input(type="text", name="movingTime", placeholder="e.g. 01:30:00", required)
+        label(for="movingTime") Moving Time (hours)
+        input(type="number", step="0.01", name="movingTime", placeholder="e.g. 1.5", required)
 
       button(type="submit" class="submit-btn") Add Activity 
 

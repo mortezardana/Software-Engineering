@@ -13,7 +13,7 @@ header {
   color: white;
   padding: 15px 30px;
   display: flex;
-  justify-content: center; /* Center title */
+  justify-content: center; /* Center Title */
   align-items: center; /* Center content vertically */
   height: 60px; /* Increase header height to fit the buttons */
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
