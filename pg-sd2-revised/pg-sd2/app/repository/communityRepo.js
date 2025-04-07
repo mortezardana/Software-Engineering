@@ -8,18 +8,20 @@ class CommunityRepository {
       const query = 'SELECT * FROM community';  // SQL query to get all communities
 
       try {
+
+        console.log("Executing query:", query, "in get all communities");
         const results = await connection.query(query);
 
-        const communities = results.map(async communityData => {
+        const communities = results.map((communityData) => {
 
-          const CMQuery= 'SELECT member_id FROM community_membership WHERE community_id = ?';
-          const members = await connection.query(CMQuery, [communityData.id]);
+          // const CMQuery= 'SELECT member_id FROM community_membership WHERE community_id = ?';
+          // const members = await connection.query(CMQuery, [communityData.id]);
 
           return new Community(
               communityData.id,
               communityData.name,
               communityData.description,
-              members,
+              communityData.members,
               communityData.posts,
               communityData.badges
           );
@@ -37,7 +39,12 @@ class CommunityRepository {
     return new Promise(async (resolve, reject) => {
       const query = 'SELECT * FROM community WHERE id = ?';  // SQL query to get community by ID
 
+      console.log("Executing query:", query, "with params:", id);
+
       const results = await connection.query(query, [id]);
+
+      const CMQuery= 'SELECT member_id FROM community_membership WHERE community_id = ?';
+      const members = await connection.query(CMQuery, [id]);
 
       if (results.length > 0) {
         const communityData = results[0];
@@ -45,7 +52,7 @@ class CommunityRepository {
             communityData.id,
             communityData.name,
             communityData.description,
-            communityData.members,
+            members,
             communityData.posts,
             communityData.badges
         );
@@ -81,8 +88,6 @@ class CommunityRepository {
       }
     });
   }
-
-
 
   static async getCommunityMembership(id) {
     return new Promise(async (resolve, reject) => {

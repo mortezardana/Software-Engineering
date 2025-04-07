@@ -14,9 +14,11 @@ router.get("/", async (req, res) => {
             search: search,
         });
 
+        console.log("Here are all the communities", communities)
+
         // Render the communities page
         res.render('communities.pug', {
-            communities: communities.map(c => c.toJSON()),  // Convert to JSON if needed
+            communities: communities,  // Convert to JSON if needed
             joinedIds: []  // Empty, as this is for all communities (not member-specific)
         });
     } catch (error) {
@@ -28,11 +30,9 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
     try {
         const community = await CommunityService.getCommunityById(req.params.id);
-        const members = await CommunityService.getAllMembersOfCommunity(community.id);
         if (community) {
             res.render('community.pug', {
-                community: community,
-                members: members
+                community: community
             });
         } else {
             res.status(404).send("Community not found.");
