@@ -1,5 +1,6 @@
 const express = require("express");
 const CommunityService = require("../service/CommunityService");
+const MemberService = require("../service/MemberService");
 
 const router = express.Router();
 
@@ -13,9 +14,11 @@ router.get("/", async (req, res) => {
             search: search,
         });
 
+        // Render the communities page
         res.render('communities.pug', {
-            communities: communities.map(c => c.toJSON())
-          });
+            communities: communities.map(c => c.toJSON()),  // Convert to JSON if needed
+            joinedIds: []  // Empty, as this is for all communities (not member-specific)
+        });
     } catch (error) {
         res.status(500).send("Error fetching communities.");
     }
@@ -74,6 +77,23 @@ router.delete("/:id", async (req, res) => {
         }
     } catch (error) {
         res.status(500).send("Error deleting community.");
+    }
+});
+
+router.get("/my-communities/:memberId", async (req, res) => {
+    try {
+        const member = await MemberService.getMemberByUsername(req.session.username);
+
+        // Get the communities the user is a part of
+        const { communities, joinedIds } = await CommunityService.getMyCommunities(member.id);
+
+        // Render the page with the communities and joinedIds
+        res.render("communities.pug", {
+            communities: communities.map(c => c.toJSON()),  // Convert to JSON
+            joinedIds: joinedIds  // Pass the joinedIds
+        });
+    } catch (error) {
+        res.status(500).send("Error fetching communities.");
     }
 });
 
