@@ -4,29 +4,23 @@ const Community = require('../model/Community');  // Import the Community class
 class CommunityRepository {
   // Method to get all communities
   static getCommunities() {
-    return new Promise((resolve, reject) => {
+    return new Promise(async(resolve, reject) => {
       const query = 'SELECT * FROM community';  // SQL query to get all communities
 
-      connection.query(query, (err, results) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        const communities = results.map(communityData => {
-          return new Community(
-              communityData.id,
-              communityData.name,
-              communityData.description,
-              communityData.members,
-              communityData.posts,
-              communityData.badges
-          );
-        });
-
+      console.log("Executing query: ", query);
+      const results = await connection.query(query);
+      const communities = results.map(communityData => {
+        return new Community(
+            communityData.id,
+            communityData.name,
+            communityData.description,
+            communityData.members,
+            communityData.posts,
+            communityData.badges
+        );
+      });
         resolve(communities);
       });
-    });
   }
 
   // Method to get a community by ID
