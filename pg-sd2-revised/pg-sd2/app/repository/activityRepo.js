@@ -116,6 +116,7 @@ class ActivityRepository {
             resolve(results.affectedRows);
         });
     }
+    
 
     static async getActivitiesByMemberId(memberId) {
         return new Promise(async (resolve, reject) => {
@@ -137,5 +138,7 @@ class ActivityRepository {
         });
     }
 }
+
+
 
 module.exports = ActivityRepository;

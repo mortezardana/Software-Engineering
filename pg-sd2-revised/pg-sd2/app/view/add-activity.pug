@@ -4,7 +4,8 @@ block content
     .activity-form-container
         h1 Add New Activity
 
-        form(action="/activity/add-activity", method="POST", onsubmit="return saveDrawnRoute()")
+        form(action="/activity/new", method="POST", onsubmit="return saveDrawnRoute()")
+
             .form-group
                 label(for="type") Activity Type
                 select(name="type", required)
@@ -41,10 +42,64 @@ block content
     script(src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js")
     script(src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.4.2/mapbox-gl-draw.js")
 
-    // Map and drawing logic
+    // Styles
+    style.
+        #map {
+            height: 400px;
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+        }
+
+        .activity-form-container {
+            max-width: 600px;
+            margin: 80px auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .submit-btn {
+            background: #50E673;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: #40c05a;
+        }
+
+    // Map logic
     script.
         document.addEventListener("DOMContentLoaded", () => {
             mapboxgl.accessToken = "!{mapboxToken}";
+
             const map = new mapboxgl.Map({
                 container: 'map',
                 style: 'mapbox://styles/mapbox/streets-v11',
@@ -63,6 +118,15 @@ block content
 
             map.addControl(draw);
 
+            // Try to center on user's location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const { longitude, latitude } = position.coords;
+                    map.setCenter([longitude, latitude]);
+                    map.setZoom(13);
+                });
+            }
+
             window.saveDrawnRoute = function () {
                 const data = draw.getAll();
                 if (data.features.length === 0) {
@@ -71,5 +135,5 @@ block content
                 }
                 document.getElementById("routeGeoJson").value = JSON.stringify(data);
                 return true;
-            }
+            };
         });

@@ -1,11 +1,12 @@
 const express = require("express");
+const requireLogin = require("../middleware/auth").requireLogin;
 const ActivityService = require("../service/ActivityService");
 const MemberService = require("../service/MemberService");
 require('dotenv').config();
 
 const router = express.Router();
 
-// Get all activities with optional filtering and pagination
+// GET: All activities with filtering and pagination
 router.get("/", async (req, res) => {
     try {
         const { page = 1, pageSize = 10, search = "" } = req.query;
@@ -20,7 +21,8 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/add-activity", (req, res) => {
+// GET: Show add-activity form
+router.get("/new", requireLogin, (req, res) => {
     res.render("add-activity.pug", {
         mapboxToken: process.env.MAPBOX_PUBLIC_TOKEN
     });
@@ -38,7 +40,15 @@ router.post("/add-activity", async (req, res) => {
         routeGeoJson
     } = req.body;
 
-    console.log("Route drawn:", routeGeoJson); // should be a GeoJSON string
+        const activityData = {
+            type,
+            averageSpeed: parseFloat(averageSpeed),
+            distance: parseFloat(distance),
+            elevation: parseFloat(elevation),
+            movingTime,
+            member: member.id,
+            routeGeoJson
+        };
 
     // Save the routeGeoJson in your DB with the activity
     await ActivityService.createActivity({
@@ -54,11 +64,12 @@ router.post("/add-activity", async (req, res) => {
     res.redirect("/member/feed/" + req.session.username);
 });
 
-// Get an activity by ID
+// GET: View a single activity
 router.get("/:id", async (req, res) => {
     try {
         const activity = await ActivityService.getActivityById(req.params.id);
         let routeGeoJson = null;
+
         if (activity.routeGeoJson) {
             try {
                 routeGeoJson = JSON.parse(activity.routeGeoJson);
@@ -67,11 +78,12 @@ router.get("/:id", async (req, res) => {
                 console.error("Failed to parse GeoJSON:", err);
             }
         }
+
         if (activity) {
             res.render('activity.pug', {
-                activity: activity,
-                routeGeoJson: JSON.stringify(routeGeoJson), // Pass as string for pug
-                mapboxToken: process.env.MAPBOX_PUBLIC_TOKEN
+                activity,
+                routeGeoJson: JSON.stringify(routeGeoJson),
+                mapboxToken: process.env.MAPBOX_TOKEN
             });
         } else {
             res.status(404).send("Activity not found.");
@@ -81,12 +93,12 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-// Update an activity
+// PUT: Update an activity
 router.put("/:id", async (req, res) => {
     try {
-        const updatedActivity = await ActivityService.updateActivity(req.params.id, req.body);
-        if (updatedActivity) {
-            res.json(updatedActivity);
+        const updated = await ActivityService.updateActivity(req.params.id, req.body);
+        if (updated) {
+            res.json(updated);
         } else {
             res.status(404).send("Activity not found.");
         }
@@ -95,7 +107,7 @@ router.put("/:id", async (req, res) => {
     }
 });
 
-// Delete an activity
+// DELETE: Delete an activity
 router.delete("/:id", async (req, res) => {
     try {
         const deleted = await ActivityService.deleteActivity(req.params.id);
@@ -106,31 +118,6 @@ router.delete("/:id", async (req, res) => {
         }
     } catch (error) {
         res.status(500).send("Error deleting activity.");
-    }
-});
-
-// GET form
-router.get("/new", (req, res) => {
-    if (!req.session.user) return res.redirect("/login");
-
-    res.render("newActivity.pug", {
-        user: req.session.user,
-        title: "Add Activity"
-    });
-});
-
-// POST handler (simplified)
-router.post("/", async (req, res) => {
-    try {
-        const activity = {
-            ...req.body,
-            member: req.session.user.id
-        };
-        await ActivityService.createActivity(activity);
-        res.redirect(`/members/feed/${req.session.user.username}`);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send("Error creating activity.");
     }
 });
 

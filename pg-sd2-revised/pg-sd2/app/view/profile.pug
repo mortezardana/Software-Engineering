@@ -9,6 +9,10 @@ block content
             h1 #{member.name || member.username}
             p= member.bio || "No bio provided."
 
+            .button-container
+                a.btn-action(href="/activity/new") + Add Activity
+                a.btn-action(href="/create-post") + Create Post
+
         .stats-section
             h2 Lifetime Stats
 
@@ -53,3 +57,25 @@ block content
                         +postCard(post)
                 else
                     p No posts yet.
+
+    style.
+        .button-container {
+            margin-top: 15px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-action {
+            background: #50E673;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-action:hover {
+            background-color: #3ac662;
+        }
