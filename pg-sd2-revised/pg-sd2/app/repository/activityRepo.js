@@ -76,8 +76,9 @@ class ActivityRepository {
     // Add a new activity
     static async addActivity(activity) {
         return new Promise(async (resolve, reject) => {
-            const query = 'INSERT INTO activity (averageSpeed, distance, elevation, member, movingTime, routeGeoJson) VALUES (?, ?, ?, ?, ?, ?)';
-            const results = await connection.query(query, [activity.averageSpeed, activity.distance, activity.elevation, activity.member, activity.movingTime, activity.getMovingTime()]);
+            const query = 'INSERT INTO activity (type, averageSpeed, distance, elevation, member_id, movingTime, routeGeoJson) VALUES (?, ?, ?, ?, ?, ?, ?)';
+            console.log("Executing query:", query, "with params:", [activity.type, activity.averageSpeed, activity.distance, activity.elevation, activity.memberId, activity.movingTime, activity.movingTime, activity.routeGeoJson]);
+            const results = await connection.query(query, [activity.type, activity.averageSpeed, activity.distance, activity.elevation, activity.memberId, activity.movingTime, activity.movingTime, activity.routeGeoJson]);
             resolve(results.insertId); // Return the new activity's ID
         });
     }
@@ -85,8 +86,9 @@ class ActivityRepository {
     // Add a new activity
     static async createActivity(activity) {
         return new Promise(async (resolve, reject) => {
-            const query = 'INSERT INTO activity (averageSpeed, distance, elevation, member, movingTime, routeGeoJson) VALUES (?, ?, ?, ?, ?, ?)';
-            const results = await connection.query(query, [activity.averageSpeed, activity.distance, activity.elevation, activity.member, activity.movingTime, activity.routeGeoJson]);
+            const query = 'INSERT INTO activity (type, averageSpeed, distance, elevation, member_id, movingTime, routeGeoJson) VALUES (?, ?, ?, ?, ?, ?, ?)';
+            console.log("Executing query:", query, "with params:", [activity.type, activity.averageSpeed, activity.distance, activity.elevation, activity.memberId, activity.movingTime, activity.movingTime, activity.routeGeoJson]);
+            const results = await connection.query(query, [activity.type, activity.averageSpeed, activity.distance, activity.elevation, activity.memberId, activity.movingTime, activity.routeGeoJson]);
             resolve(results.insertId); // Return the new activity's ID
         });
     }

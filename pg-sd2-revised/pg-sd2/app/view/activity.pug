@@ -2,7 +2,7 @@ extends index
 include components/_activityCard.pug
 
 block content
-  +activityCard(activity)
+  +activityCard(activity, mapboxToken)
 
   // Load Mapbox libs
   script(src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js")
@@ -10,7 +10,7 @@ block content
 
   script.
     mapboxgl.accessToken = '!{mapboxToken}';
-    const geoData = !{activity.routeGeoJson || 'null'};
+    const geoData = !{routeGeoJson || 'null'};
 
     if (geoData) {
       const route = typeof geoData === "string" ? JSON.parse(geoData) : geoData;
