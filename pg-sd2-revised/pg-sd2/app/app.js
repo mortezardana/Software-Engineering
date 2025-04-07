@@ -794,13 +794,23 @@ app.get("/add-activity", (req, res) => {
   
       if (!memberId) return res.status(404).send("Member not found");
   
-      // Insert new activity
-      console.log("INSERTING:", { type, averageSpeed, distance, elevation, movingTime, memberId });
-
-      await db.query(`
+      // Convert movingTime to float to ensure correct type for SQL
+      const parsedMovingTime = parseFloat(movingTime);
+  
+      console.log("INSERTING:", {
+        type,
+        averageSpeed,
+        distance,
+        elevation,
+        movingTime: parsedMovingTime,
+        memberId
+      });
+  
+      await db.query(
+        `
         INSERT INTO activity (type, averageSpeed, distance, elevation, movingTime, member_id)
         VALUES (?, ?, ?, ?, ?, ?)`,
-        [type, averageSpeed, distance, elevation, movingTime, memberId]
+        [type, averageSpeed, distance, elevation, parsedMovingTime, memberId]
       );
   
       res.redirect(`/activities/${username}`);
@@ -809,6 +819,7 @@ app.get("/add-activity", (req, res) => {
       res.status(500).send("Error adding activity");
     }
   });
+  
   
   app.post('/join-community/:communityId', async (req, res) => {
     try {
