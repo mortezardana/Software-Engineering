@@ -7,7 +7,7 @@ class CommunityRepository {
     return new Promise(async (resolve, reject) => {
       const query = 'SELECT * FROM community';  // SQL query to get all communities
 
-      const result = await connection.query(query);
+      const results = await connection.query(query);
 
       const communities = results.map(communityData => {
         return new Community(
