@@ -1,9 +1,8 @@
-// Import express.js
 const path = require("path");
 const express = require("express");
 const bcrypt = require('bcryptjs');
-
-
+const multer = require('multer');
+const upload = multer({ dest: 'public/uploads/' });  // for file uploads
 
 
 // Create express app
@@ -859,4 +858,99 @@ app.get("/add-activity", (req, res) => {
       res.status(500).send("Failed to join community.");
     }
   });
+  
+  app.get('/create-post', async (req, res) => {
+    if (!req.session.loggedIn) return res.redirect("/login");
+  
+    const username = req.session.username;
+    const memberRes = await db.query("SELECT id FROM member WHERE username = ?", [username]);
+    const memberId = memberRes[0]?.id;
+  
+    const activities = await db.query("SELECT * FROM activity WHERE member_id = ?", [memberId]);
+    const communities = await db.query(`
+      SELECT c.* FROM community c
+      JOIN community_membership cm ON cm.community_id = c.id
+      WHERE cm.member_id = ?
+    `, [memberId]);
+  
+    res.render('create-post.pug', { activities, communities });
+  });
+  
+  app.post('/create-post', upload.single('image'), async (req, res) => {
+    try {
+      const username = req.session.username;
+      if (!username) return res.redirect("/login");
+  
+      const memberRes = await db.query("SELECT id FROM member WHERE username = ?", [username]);
+      const memberId = memberRes[0]?.id;
+      if (!memberId) return res.status(404).send("Member not found");
+  
+      const { text, activityId, communityId } = req.body;
+      const now = new Date();
+      const imageFilename = req.file ? req.file.filename : null;
+  
+      await db.query(`
+        INSERT INTO post (text, writer_id, activity_id, community_id, date, image)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `, [
+        text,
+        memberId,
+        activityId || null,
+        communityId || null,
+        now,
+        imageFilename
+      ]);
+  
+      res.redirect(`/posts/${username}`);
+    } catch (err) {
+      console.error("Error creating post:", err);
+      res.status(500).send("Failed to create post");
+    }
+  });
+  
+  app.get('/edit-post/:postId', async (req, res) => {
+    const username = req.session.username;
+  
+    const [member] = await db.query("SELECT id FROM member WHERE username = ?", [username]);
+    const [post] = await db.query("SELECT * FROM post WHERE id = ?", [req.params.postId]);
+  
+    if (!post || post.writer_id !== member.id) {
+      return res.status(403).send("You are not allowed to edit this post.");
+    }
+  
+    res.render("edit-post.pug", { post });
+  });
+  
+  
+  app.post('/edit-post/:postId', async (req, res) => {
+    const username = req.session.username;
+    const { text } = req.body;
+  
+    const [member] = await db.query("SELECT id FROM member WHERE username = ?", [username]);
+    const [post] = await db.query("SELECT writer_id FROM post WHERE id = ?", [req.params.postId]);
+  
+    if (!post || post.writer_id !== member.id) {
+      return res.status(403).send("You are not allowed to update this post.");
+    }
+  
+    await db.query("UPDATE post SET text = ? WHERE id = ?", [text, req.params.postId]);
+    res.redirect(`/posts/${username}`);
+  });
+  
+
+  app.post('/delete-post/:postId', async (req, res) => {
+    const username = req.session.username;
+  
+    const [member] = await db.query("SELECT id FROM member WHERE username = ?", [username]);
+    const [post] = await db.query("SELECT writer_id FROM post WHERE id = ?", [req.params.postId]);
+  
+    if (!post || post.writer_id !== member.id) {
+      return res.status(403).send("You are not allowed to delete this post.");
+    }
+  
+    await db.query("DELETE FROM post WHERE id = ?", [req.params.postId]);
+    res.redirect(`/posts/${username}`);
+  });
+  
+  
   
