@@ -90,10 +90,14 @@ router.get("/:username", requireLogin, async (req, res) => {
 // Get activities of a member by username
 router.get("/activities/:username", requireLogin, async (req, res) => {
     try {
-        const member = await MemberService.getMemberById(req.params.id);
+        const member = await MemberService.getMemberByUsername(req.session.username);
 
-        if (member) {
-            res.json(member);
+        const activity = await ActivityService.getActivitiesByMemberId(member.id);
+
+        if (activity) {
+            res.render('activity.pug', {
+                activity: activity
+            });
         } else {
             res.status(404).send("Member not found.");
         }

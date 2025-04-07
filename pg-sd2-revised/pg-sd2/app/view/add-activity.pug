@@ -4,7 +4,7 @@ block content
     .activity-form-container
         h1 Add New Activity
 
-        form(action="/add-activity" method="POST")
+        form(action="/activity/add-activity", method="POST", onsubmit="return saveDrawnRoute()")
             .form-group
                 label(for="type") Activity Type
                 select(name="type", required)
@@ -25,49 +25,51 @@ block content
 
             .form-group
                 label(for="movingTime") Moving Time (HH:MM:SS)
-                input(type="text", name="movingTime", placeholder="e.g. 01:30:00", required)
+                input(type="text", name="movingTime", required)
 
-            button(type="submit" class="submit-btn") Add Activity
+            .form-group
+                label Draw your route
+                #map
 
-    style.
-        .activity-form-container {
-            max-width: 500px;
-            margin: 80px auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
+            input(type="hidden", name="routeGeoJson", id="routeGeoJson")
 
-        .form-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
+            button(type="submit", class="submit-btn") Add Activity
 
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
+    // Load Mapbox + Draw
+    link(rel="stylesheet", href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css")
+    link(rel="stylesheet", href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.4.2/mapbox-gl-draw.css")
+    script(src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js")
+    script(src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.4.2/mapbox-gl-draw.js")
 
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
+    // Map and drawing logic
+    script.
+        document.addEventListener("DOMContentLoaded", () => {
+            mapboxgl.accessToken = "!{mapboxToken}";
+            const map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v11',
+                center: [0, 0],
+                zoom: 2
+            });
 
-        .submit-btn {
-            background: #50E673;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-        }
+            const draw = new MapboxDraw({
+                displayControlsDefault: false,
+                controls: {
+                    line_string: true,
+                    trash: true
+                },
+                defaultMode: 'draw_line_string'
+            });
 
-        .submit-btn:hover {
-            background: #40c05a;
-        }
+            map.addControl(draw);
+
+            window.saveDrawnRoute = function () {
+                const data = draw.getAll();
+                if (data.features.length === 0) {
+                    alert("Please draw your route.");
+                    return false;
+                }
+                document.getElementById("routeGeoJson").value = JSON.stringify(data);
+                return true;
+            }
+        });

@@ -1,5 +1,6 @@
 const express = require("express");
 const ActivityService = require("../service/ActivityService");
+require('dotenv').config();
 
 const router = express.Router();
 
@@ -18,12 +19,55 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/add-activity", (req, res) => {
+    res.render("add-activity.pug", {
+        mapboxToken: process.env.MAPBOX_PUBLIC_TOKEN
+    });
+});
+
+router.post("/add-activity", async (req, res) => {
+    const {
+        type,
+        averageSpeed,
+        distance,
+        elevation,
+        movingTime,
+        routeGeoJson
+    } = req.body;
+
+    console.log("Route drawn:", routeGeoJson); // should be a GeoJSON string
+
+    // Save the routeGeoJson in your DB with the activity
+    await ActivityService.createActivity({
+        type,
+        averageSpeed,
+        distance,
+        elevation,
+        movingTime,
+        routeGeoJson
+    });
+
+    res.redirect("/member/feed/" + req.session.username);
+});
+
 // Get an activity by ID
 router.get("/:id", async (req, res) => {
     try {
         const activity = await ActivityService.getActivityById(req.params.id);
+        let routeGeoJson = null;
+        if (activity.routeGeoJson) {
+            try {
+                routeGeoJson = JSON.parse(activity.routeGeoJson);
+            } catch (err) {
+                console.error("Failed to parse GeoJSON:", err);
+            }
+        }
         if (activity) {
-            res.json(activity);
+            res.render('activity.pug', {
+                activity: activity,
+                routeGeoJson: JSON.stringify(routeGeoJson), // Pass as string for pug
+                mapboxToken: process.env.MAPBOX_PUBLIC_TOKEN
+            });
         } else {
             res.status(404).send("Activity not found.");
         }
@@ -84,6 +128,5 @@ router.post("/", async (req, res) => {
         res.status(500).send("Error creating activity.");
     }
 });
-
 
 module.exports = router;

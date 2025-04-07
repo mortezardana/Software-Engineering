@@ -1,8 +1,55 @@
-mixin activityCard(activity)
+mixin activityCard(activity, mapboxToken)
     .activity-card
-        h3 #{activity.type}
-        ul
-            li Distance: #{activity.distance} km
-            li Speed: #{activity.averageSpeed} km/h
-            li Time: #{activity.movingTime} min
-            li Elevation Gain: #{activity.elevation} m
+        // 🗺️ Map container (unique ID)
+        .activity-map(id=`map-${activity.id}`)
+
+        .activity-info
+            h3 #{activity.type}
+            ul
+                li Distance: #{activity.distance} km
+                li Speed: #{activity.averageSpeed} km/h
+                li Time: #{activity.movingTime} mins
+                li Elevation: #{activity.elevation} m
+
+        // ✅ Mapbox libs
+        script(src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js")
+        link(rel="stylesheet", href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css")
+
+        // ✅ Inline render function + init
+        script.
+            mapboxgl.accessToken = '#{mapboxToken}';
+
+            (function renderActivityMap() {
+                const containerId = 'map-#{activity.id}';
+                const routeData = !{activity.routeGeoJson};
+
+                if (!routeData || !routeData.features || !routeData.features.length) return;
+
+                const map = new mapboxgl.Map({
+                    container: containerId,
+                    style: 'mapbox://styles/mapbox/streets-v11',
+                    center: [0, 0],
+                    zoom: 2
+                });
+
+                map.on('load', () => {
+                    map.addSource('route-#{activity.id}', {
+                        type: 'geojson',
+                        data: routeData
+                    });
+
+                    map.addLayer({
+                        id: 'route-line-#{activity.id}',
+                        type: 'line',
+                        source: 'route-#{activity.id}',
+                        paint: {
+                            'line-color': '#E6505F',
+                            'line-width': 4
+                        }
+                    });
+
+                    const coords = routeData.features[0].geometry.coordinates;
+                    const bounds = coords.reduce((b, c) => b.extend(c), new mapboxgl.LngLatBounds(c, c));
+                    map.fitBounds(bounds, { padding: 30 });
+                });
+            })();

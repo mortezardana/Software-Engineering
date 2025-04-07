@@ -76,8 +76,17 @@ class ActivityRepository {
     // Add a new activity
     static async addActivity(activity) {
         return new Promise(async (resolve, reject) => {
-            const query = 'INSERT INTO activity (averageSpeed, distance, elevation, member, movingTime) VALUES (?, ?, ?, ?, ?)';
-            const results = await connection.query(query, [activity.getAverageSpeed(), activity.getDistance(), activity.getElevation(), activity.getMember(), activity.getMovingTime()]);
+            const query = 'INSERT INTO activity (averageSpeed, distance, elevation, member, movingTime, routeGeoJson) VALUES (?, ?, ?, ?, ?, ?)';
+            const results = await connection.query(query, [activity.averageSpeed, activity.distance, activity.elevation, activity.member, activity.movingTime, activity.getMovingTime()]);
+            resolve(results.insertId); // Return the new activity's ID
+        });
+    }
+
+    // Add a new activity
+    static async createActivity(activity) {
+        return new Promise(async (resolve, reject) => {
+            const query = 'INSERT INTO activity (averageSpeed, distance, elevation, member, movingTime, routeGeoJson) VALUES (?, ?, ?, ?, ?, ?)';
+            const results = await connection.query(query, [activity.averageSpeed, activity.distance, activity.elevation, activity.member, activity.movingTime, activity.routeGeoJson]);
             resolve(results.insertId); // Return the new activity's ID
         });
     }
@@ -86,8 +95,8 @@ class ActivityRepository {
     static async updateActivity(id, activity) {
         return new Promise(async (resolve, reject) => {
             const query = 'UPDATE activity SET averageSpeed = ?, distance = ?, elevation = ?, movingTime = ? WHERE id = ?';
-            console.log("Executing query:", query, "with params:", [activity.getAverageSpeed(), activity.getDistance(), activity.getElevation(), activity.getMovingTime(), id]);
-            const results = await connection.query(query, [activity.getAverageSpeed(), activity.getDistance(), activity.getElevation(), activity.getMovingTime(), id]);
+            console.log("Executing query:", query, "with params:", [activity.averageSpeed, activity.distance, activity.elevation, activity.member, activity.movingTime, id]);
+            const results = await connection.query(query, [activity.averageSpeed, activity.distance, activity.elevation, activity.member, activity.movingTime, id]);
             resolve(results.affectedRows);
         });
     }

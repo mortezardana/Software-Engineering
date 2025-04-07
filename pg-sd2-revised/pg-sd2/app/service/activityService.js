@@ -6,7 +6,9 @@ class ActivityService {
     }
 
     static async getActivityById(id) {
-        return await ActivityRepository.getActivityById(id);
+        const activity = await ActivityRepository.getActivityById(id);
+        activity.routeGeoJson = JSON.parse(activity.routeGeoJson);
+        return activity;
     }
 
     static async createActivity(data) {

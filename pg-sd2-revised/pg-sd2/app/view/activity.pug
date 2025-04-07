@@ -1,23 +1,46 @@
-extends index.pug
+extends index
+include components/_activityCard.pug
 
 block content
-  h1 Activity Page
+  +activityCard(activity)
 
-  table
-    tr
-      th ID
-      th Type
-      th Average Speed
-      th Distance
-      th Elevation
-      th Moving Time
-      th Member ID
-    tr
-      td= activity && activity.id ? activity.id : 'N/A'
-      td= activity && activity.type ? activity.type : 'N/A'
-      td= activity && activity.averageSpeed ? activity.averageSpeed : 'N/A'
-      td= activity && activity.distance ? activity.distance : 'N/A'
-      td= activity && activity.elevation ? activity.elevation : 'N/A'
-      td= activity && activity.movingTime ? activity.movingTime : 'N/A'
-      td
-        a(href=`/member/id/${activity.member_id}`) View Member
+  // Load Mapbox libs
+  script(src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js")
+  link(rel="stylesheet", href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css")
+
+  script.
+    mapboxgl.accessToken = '!{mapboxToken}';
+    const geoData = !{activity.routeGeoJson || 'null'};
+
+    if (geoData) {
+      const route = typeof geoData === "string" ? JSON.parse(geoData) : geoData;
+
+      const map = new mapboxgl.Map({
+        container: "map-#{activity.id}",
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: [0, 0],
+        zoom: 2
+      });
+
+      map.on("load", () => {
+        map.addSource("route", {
+          type: "geojson",
+          data: route
+        });
+
+        map.addLayer({
+          id: "route-line",
+          type: "line",
+          source: "route",
+          paint: {
+            "line-color": "#E6505F",
+            "line-width": 4
+          }
+        });
+
+        // Fit bounds to route
+        const coords = route.features[0].geometry.coordinates;
+        const bounds = coords.reduce((b, c) => b.extend(c), new mapboxgl.LngLatBounds(coords[0], coords[0]));
+        map.fitBounds(bounds, { padding: 20 });
+      });
+    }

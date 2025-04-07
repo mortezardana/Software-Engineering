@@ -1,7 +1,7 @@
 const ActivityType = require('./ActivityType');  // Import the ActivityType enum
 
 class Activity {
-  constructor(id, type, averageSpeed, distance, elevation, member, movingTime) {
+  constructor(id, type, averageSpeed, distance, elevation, member, movingTime, routeGeoJson) {
     this._id = id || null; // UUID
     this._type = type || ActivityType.RUN; // ActivityType enum, default to RUN if not provided
     this._averageSpeed = averageSpeed || null; // Double
@@ -9,6 +9,7 @@ class Activity {
     this._elevation = elevation || null; // Double
     this._member = member || null; // Member instance
     this._movingTime = movingTime || null; // String
+    this._routeGeoJson = routeGeoJson || null; // String
   }
 
   // Getter and Setter for id
