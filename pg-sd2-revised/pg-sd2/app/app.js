@@ -69,7 +69,7 @@ app.use('/post', requireLogin, PostResource);
 app.get("/", function(req, res) {
     const loggedIn = req.session.loggedIn || false;
     const username = req.session.username || null;
-    res.render('index.pug', { loggedIn, username });
+    res.render('landing.pug', { loggedIn, username });
 });
 
 app.get("/home", requireLogin, function(req, res){
