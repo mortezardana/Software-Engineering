@@ -1,0 +1,98 @@
+extends index.pug
+
+block content
+  .post-form-container
+    h1 Create a New Post
+
+    form(method="POST", action="/create-post", enctype="multipart/form-data")
+      .form-group
+        label(for="text") Body:
+        textarea(name="text", placeholder="What’s on your mind?", required)
+
+      .form-group
+        label(for="image") Upload a photo:
+        input(type="file", name="image")
+
+      .form-group
+        label(for="useActivity") Choose a prerecorded activity?
+        input(type="checkbox", name="useActivity", id="useActivity", onchange="toggleActivitySection()")
+
+      .form-group.activity-section(style="display: none;")
+        label(for="activityId") Select an activity:
+        select(name="activityId")
+          option(value="") -- Choose One --
+          each activity in activities
+            option(value=activity.id)= `${activity.type} (${activity.distance}km, ${activity.averageSpeed}km/h)`
+
+      .form-group
+        label(for="postInCommunity") Post to a community?
+        input(type="checkbox", name="postInCommunity", id="postInCommunity", onchange="toggleCommunitySection()")
+
+      .form-group.community-section(style="display: none;")
+        label(for="communityId") Select a community:
+        select(name="communityId")
+          option(value="") -- Choose One --
+          each community in communities
+            option(value=community.id)= community.name
+
+      button.submit-btn(type="submit") Submit Post
+
+  style.
+    .post-form-container {
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .post-form-container h1 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    textarea, select, input[type="file"] {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .submit-btn {
+      background-color: #e74c3c;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1em;
+    }
+
+    .submit-btn:hover {
+      background-color: #c0392b;
+    }
+
+  script.
+    function toggleActivitySection() {
+      const checkbox = document.getElementById('useActivity');
+      document.querySelector('.activity-section').style.display = checkbox.checked ? 'block' : 'none';
+    }
+
+    function toggleCommunitySection() {
+      const checkbox = document.getElementById('postInCommunity');
+      document.querySelector('.community-section').style.display = checkbox.checked ? 'block' : 'none';
+    }
