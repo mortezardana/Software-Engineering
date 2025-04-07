@@ -11,12 +11,27 @@ block content
 
         .stats-section
             h2 Lifetime Stats
-            ul.stats-list
-                li Total Distance: #{stats.totalDistance} km
-                li Total Time: #{stats.totalTime} minutes
-                li Average Speed: #{stats.avgSpeed} km/h
-                li Total Elevation: #{stats.totalElevation} m
-                li Activities Logged: #{activities.length}
+
+            .stats-grid
+                .stat-card
+                    h3 Total Distance
+                    p #{stats.totalDistance} km
+
+                .stat-card
+                    h3 Total Time
+                    p #{stats.totalTime}
+
+                .stat-card
+                    h3 Avg Speed
+                    p #{stats.avgSpeed} km/h
+
+                .stat-card
+                    h3 Elevation Gain
+                    p #{stats.totalElevation} m
+
+                .stat-card
+                    h3 Activities
+                    p #{activityCount}
 
         .profile-columns
             .left-column
