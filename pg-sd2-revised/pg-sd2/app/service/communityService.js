@@ -19,6 +19,16 @@ class CommunityService {
         
     }
 
+    static joinCommunity(memberId, communityId) {
+      return CommunityRepository.joinCommunity(memberId, communityId)
+        .then(() => {
+          return true;  // Successfully joined the community
+        })
+        .catch(err => {
+          throw new Error('Error joining community: ' + err.message);
+        });
+    }
+
     static getCommunityById(id) {
         return CommunityRepository.getCommunityById(id)
           .then(community => {

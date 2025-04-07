@@ -24,7 +24,7 @@ block content
                   span(style="color:gray") Not Joined
               td 
                 if !joinedIds.includes(community.id)
-                  form(action=`./join-community/${community.id}`, method="POST")
+                  form(action=`community/join-community/${community.id}`, method="POST")
                     button(type="submit") Join 
                 else 
                 span N/A

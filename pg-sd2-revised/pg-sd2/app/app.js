@@ -48,6 +48,7 @@ const router = express.Router();
 app.use((req, res, next) => {
     res.locals.loggedIn = req.session.loggedIn || false;
     res.locals.username = req.session.username || null;
+    res.locals.memberId = req.session.memberId || null;
     next();
 });
 
@@ -143,11 +144,13 @@ app.post('/authenticate', async function (req, res) {
     params = req.body;
     try {
         const username = await MemberService.getUsernameFromEmail(params.email);
+        const memberId = await MemberService.getIdFromEmail(params.email);
         if (username) {
             const match = await MemberService.authenticate(params.password, username);
             if (match) {
                 req.session.username = username;
                 req.session.loggedIn = true;
+                req.session.memberId = memberId;
                 res.redirect('/member/feed/' + req.session.username);
             }
             else {

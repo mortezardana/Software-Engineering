@@ -34,6 +34,21 @@ class CommunityRepository {
     });
   }
 
+  static async joinCommunity(memberId, communityId) {
+    try {
+      const joinDate = new Date();
+      const query = `
+        INSERT INTO community_membership (member_id, community_id, join_date, role )
+        VALUES (?, ?, ?, 'member')
+      `;
+      await connection.query(query, [memberId, communityId, joinDate]);
+      return true;  // Successfully joined the community
+    } catch (error) {
+      throw new Error("Error joining community: " + error.message);  // Handle errors
+    }
+  }
+
+
   // Method to get a community by ID
   static async getCommunityById(id) {
     return new Promise(async (resolve, reject) => {

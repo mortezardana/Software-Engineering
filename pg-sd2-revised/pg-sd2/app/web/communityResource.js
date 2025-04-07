@@ -52,6 +52,26 @@ router.post("/", async (req, res) => {
     }
 });
 
+router.post("/join-community/:communityId", async (req, res) => {
+    try {
+        
+        console.log("Attempting to join community...");
+        const memberId = req.session.memberId;  // Assuming you're storing the user ID in `req.user`
+        const communityId = req.params.communityId;  // Get the communityId from the URL parameter
+        console.log("memberId: ", memberId);
+        console.log("communityId: ", communityId);
+      
+      // Join the community
+        await CommunityService.joinCommunity(memberId, communityId);
+  
+      // Redirect back to the communities page or show a success message
+        res.redirect('/community');  // Or whichever URL you want to redirect to
+        } catch (error) {
+        console.log(error);  // Log the error for debugging
+        res.status(500).send("Error joining the community.");
+        }
+    });
+
 // Update a community
 router.put("/:id", async (req, res) => {
     try {
