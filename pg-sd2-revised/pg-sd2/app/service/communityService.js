@@ -22,6 +22,17 @@ class CommunityService {
                 throw new Error('Error retrieving community by ID: ' + err.message);
             });
     }
+
+    // Function to get a community by ID
+    static getCommunityMembership(id) {
+        return CommunityRepository.getCommunityMembership(id)
+            .then(community => {
+                return community;
+            })
+            .catch(err => {
+                throw new Error('Error retrieving community by ID: ' + err.message);
+            });
+    }
 }
 
 module.exports = CommunityService;

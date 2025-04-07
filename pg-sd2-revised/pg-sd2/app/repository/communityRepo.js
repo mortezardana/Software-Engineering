@@ -9,12 +9,16 @@ class CommunityRepository {
 
       const results = await connection.query(query);
 
-      const communities = results.map(communityData => {
+      const communities = results.map(async communityData => {
+
+        const CMQuery = 'SELECT member_id FROM community_membership WHERE community_id = ?';
+        const members = await connection.query(CMQuery, [communityData.id]);
+
         return new Community(
             communityData.id,
             communityData.name,
             communityData.description,
-            communityData.members,
+            members,
             communityData.posts,
             communityData.badges
         );
@@ -42,6 +46,20 @@ class CommunityRepository {
             communityData.badges
         );
         resolve(community);
+      } else {
+        resolve(null); // No community found with the given ID
+      }
+    });
+  }
+
+  static async getCommunityMembership(id) {
+    return new Promise(async (resolve, reject) => {
+      const query = 'SELECT * FROM community_membership WHERE community_id = ?';  // SQL query to get community by ID
+
+      const results = await connection.query(query, [id]);
+
+      if (results.length > 0) {
+        resolve(results);
       } else {
         resolve(null); // No community found with the given ID
       }

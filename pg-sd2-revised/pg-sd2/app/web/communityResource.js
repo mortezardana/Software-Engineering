@@ -77,4 +77,19 @@ router.delete("/:id", async (req, res) => {
     }
 });
 
+router.get("/communities-membership/:communityId", async (req, res) => {
+    try {
+        const communityMembership = await CommunityService.getCommunityMembership(req.params.communityId);
+        const community = await CommunityService.getCommunityById(req.params.communityId);
+        if (communityMembership) {
+            res.render("community_membership.pug", {
+                communitiesMembership: communityMembership,
+                communityName: community.name
+            });
+        }
+    } catch (e) {
+        res.status(500).send("Error fetching community members" + e);
+    }
+});
+
 module.exports = router;
