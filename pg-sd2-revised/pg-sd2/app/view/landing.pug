@@ -1,0 +1,77 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Momentum | Welcome
+        link(rel="stylesheet", href="/styles.css")
+        style.
+            .landing-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                background-color: #faecec;
+                text-align: center;
+                padding: 2rem;
+            }
+
+            .landing-box {
+                background: white;
+                padding: 2.5rem;
+                border-radius: 16px;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+                max-width: 500px;
+                width: 100%;
+            }
+
+            .landing-box h1 {
+                color: #E6505F;
+                margin-bottom: 1rem;
+                font-size: 2.8rem;
+            }
+
+            .landing-box p {
+                color: #333;
+                margin-bottom: 2rem;
+                font-size: 1.1rem;
+            }
+
+            .landing-buttons a {
+                display: inline-block;
+                margin: 0 10px;
+                padding: 12px 24px;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+                font-size: 1rem;
+            }
+
+            .btn-signup {
+                background-color: #50E673;
+                color: white;
+            }
+
+            .btn-signup:hover {
+                background-color: #45c163;
+            }
+
+            .btn-login {
+                background-color: #E6505F;
+                color: white;
+            }
+
+            .btn-login:hover {
+                background-color: #bf434f;
+            }
+
+    body
+        .landing-container
+            .landing-box
+                h1 Welcome to Momentum
+                p Find your running & cycling community. Capture and Share your progress. Stay Healthy.
+                .landing-buttons
+                    a.btn-signup(href="/sign-up") Sign Up
+                    a.btn-login(href="/login") Log In

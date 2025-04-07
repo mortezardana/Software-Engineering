@@ -1,0 +1,73 @@
+extends index
+
+block content
+    .activity-form-container
+        h1 Add New Activity
+
+        form(action="/add-activity" method="POST")
+            .form-group
+                label(for="type") Activity Type
+                select(name="type", required)
+                    option(value="RUN") RUN
+                    option(value="CYCLE") CYCLE
+
+            .form-group
+                label(for="averageSpeed") Average Speed (km/h)
+                input(type="number", step="0.1", name="averageSpeed", required)
+
+            .form-group
+                label(for="distance") Distance (km)
+                input(type="number", step="0.1", name="distance", required)
+
+            .form-group
+                label(for="elevation") Elevation (m)
+                input(type="number", name="elevation", required)
+
+            .form-group
+                label(for="movingTime") Moving Time (HH:MM:SS)
+                input(type="text", name="movingTime", placeholder="e.g. 01:30:00", required)
+
+            button(type="submit" class="submit-btn") Add Activity
+
+    style.
+        .activity-form-container {
+            max-width: 500px;
+            margin: 80px auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .submit-btn {
+            background: #50E673;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .submit-btn:hover {
+            background: #40c05a;
+        }

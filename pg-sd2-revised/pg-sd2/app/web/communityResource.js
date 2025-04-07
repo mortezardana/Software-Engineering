@@ -28,8 +28,16 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
     try {
         const community = await CommunityService.getCommunityById(req.params.id);
+        const members = await CommunityService.getAllMembersOfCommunity(community.id);
         if (community) {
+<<<<<<< HEAD
             res.render("community.pug", {community: community});
+=======
+            res.render('community.pug', {
+                community: community,
+                members: members
+            });
+>>>>>>> 48d1749acd38df47add8174bced7ea3788968be2
         } else {
             res.status(404).send("Community not found.");
         }
