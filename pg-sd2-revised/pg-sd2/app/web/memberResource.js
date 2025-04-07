@@ -170,6 +170,8 @@ router.get("/profile/:username", requireLogin, async (req, res) => {
         const activities = allActivities.slice(0, 3); // limit to 3 for initial view
         const hasMore = allActivities.length > 3;
 
+        const activityCount = allActivities.length;
+
         // Calculate stats
         const stats = {
             totalDistance: allActivities.reduce((acc, a) => acc + a.distance, 0),
@@ -183,7 +185,8 @@ router.get("/profile/:username", requireLogin, async (req, res) => {
             activities,
             stats,
             hasMore,
-            posts
+            posts,
+            activityCount
         });
 
     } catch (err) {
@@ -201,5 +204,18 @@ router.get("/profile/:username/activities", async (req, res) => {
     });
 });
 
+router.get("/chat/:partner", (req, res) => {
+    if (!req.session.username) return res.redirect("/login");
+
+    const username = req.session.username;
+    const partner = req.params.partner;
+
+    if (username === partner) return res.send("Can't chat with yourself 😅");
+
+    res.render("chat.pug", {
+        username,
+        partner
+    });
+});
 
 module.exports = router;
